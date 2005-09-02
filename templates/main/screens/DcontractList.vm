@@ -1,0 +1,19 @@
+#set ( $module = "Main" )
+#listCommon()
+#listHeader(2102 "DcontractList.vm" "DcontractSQL" 8)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+			#rowStatusClass ($!entry.Status)
+				#addToggle($!entry.DcontractId)
+				#addListPic($ui.dcontract)
+				<td width="15%"><span class="llink" onClick="doEdit('$!entry.DcontractId')">$!entry.DcontractCode</span></td>
+				#listCellPrc (30 $!entry.Distributor.DistributorDisplay)
+				#listCellPrcDate (20 $!entry.StartDate)
+				#listCellPrcDate (20 $!entry.EndDate)
+				#listCellPrcDate (15 $!entry.IssuedDate)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

@@ -1,0 +1,32 @@
+#set ( $module = "Options" )
+#formCommon()
+
+function formInit(){
+	myForm.salesareaid.value=$!entry.SalesAreaId;
+	highlight(myForm.salesdistrictname);
+}
+
+function formValidate(){
+
+	if (isEmpty(myForm.salesdistrictname)) return false;
+
+	return true;
+}
+
+#formHeader("SalesDistrictForm.vm" "SalesDistrictSQL" "salesdistrictid" $!entry.SalesDistrictId $mode)
+
+      <tr>  
+        #formCell ("Name" "salesdistrictname" $!entry.SalesDistrictName 50 200 1)
+      </tr>
+      <tr>  
+		#formLabel("Area")
+		<td align="left">
+		<select name="salesareaid" tabIndex="4" value="$!entry.SalesAreaId" width="200" STYLE="width: 200px">
+		#foreach ($salesarea in $salesareas)
+			<option value="$salesarea.SalesAreaId">$salesarea.SalesAreaName</option>
+		#end        	
+		</select>
+		</td>
+      </tr>  
+
+#formFooter("SalesDistrictForm.vm" "SalesDistrictSQL" "salesdistrictid" $!entry.SalesDistrictId $mode)

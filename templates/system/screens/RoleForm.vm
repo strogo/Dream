@@ -1,0 +1,169 @@
+#set ( $module = "System" )
+#formCommon()
+
+var rowId=1;
+var tabInd=26;
+
+function formInit(){
+
+	#if ($!mode=="insert")
+		doAddItem();
+	#else
+		#foreach ($entryitem in $entryitems)
+			myRow= doAddItem();
+			suf= '_' + myRow;
+			myForm['permissionid' + suf].value="$!entryitem.PermissionId";
+		#end
+	#end
+
+	highlight(myForm.rolename);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.rolename)) return false;
+	
+//	var len = myForm.elements.length;
+//	for (var i = 0; i < len; i++) {
+//	    var e = myForm.elements[i];
+//	    if (e.name.substring(0, 11) == "description") {
+//			if (parent.isEmpty(e)) return false;
+//	    }
+//	}
+
+	return true;
+}
+
+function valueChanged(formField){
+}
+
+function doAddItem(){
+	rowId++;
+
+	itemstr1='<a href="javascript: void 0" ONCLICK="doDeleteItem(this)"><img src="$ui.image($ui.itemDelete)" width="16" height="16" border=0 alt="Delete Item"></a>';
+	itemstr2='<select name="permissionid_' + rowId + '" tabIndex="' + tabInd + '" value="" width="320" STYLE="width: 320px">';
+
+	itemstr2+='<option value="2010">Inbox View</option>'
+	itemstr2+='<option value="2011">Inbox Modify</option>'
+	itemstr2+='<option value="2020">Outbox View</option>'
+	itemstr2+='<option value="2021">Outbox Modify</option>'
+	itemstr2+='<option value="2030">Newsletter View</option>'
+	itemstr2+='<option value="2031">Newsletter Modify</option>'
+	itemstr2+='<option value="2040">Return View</option>'
+	itemstr2+='<option value="2041">Return Modify</option>'
+	itemstr2+='<option value="2050">Shipment View</option>'
+	itemstr2+='<option value="2051">Shipment Modify</option>'
+	itemstr2+='<option value="2060">Order View</option>'
+	itemstr2+='<option value="2061">Order Modify</option>'
+	itemstr2+='<option value="2070">Contract View</option>'
+	itemstr2+='<option value="2071">Contract Modify</option>'
+	itemstr2+='<option value="2080">Location View</option>'
+	itemstr2+='<option value="2081">Location Modify</option>'
+	itemstr2+='<option value="2090">Distributor View</option>'
+	itemstr2+='<option value="2091">Distributor Modify</option>'
+	itemstr2+='<option value="1110">Projects View</option>'
+	itemstr2+='<option value="1111">Projects Modify</option>'
+	itemstr2+='<option value="1120">Products View</option>'
+	itemstr2+='<option value="1121">Products Modify</option>'
+	itemstr2+='<option value="1150">Languages View</option>'
+	itemstr2+='<option value="1151">Languages Modify</option>'
+	itemstr2+='<option value="1160">Countries View</option>'
+	itemstr2+='<option value="1161">Countries Modify</option>'
+	itemstr2+='<option value="1170">Regions View</option>'
+	itemstr2+='<option value="1171">Regions Modify</option>'
+	itemstr2+='<option value="2170">Sales District View</option>'
+	itemstr2+='<option value="2171">Sales District Modify</option>'
+	itemstr2+='<option value="2180">Sales Area View</option>'
+	itemstr2+='<option value="2181">Sales Area Modify</option>'
+	itemstr2+='<option value="2190">Cost Type View</option>'
+	itemstr2+='<option value="2191">Cost Type Modify</option>'
+	itemstr2+='<option value="1200">UOMs View</option>'
+	itemstr2+='<option value="1201">UOMs Modify</option>'
+	itemstr2+='<option value="1210">Vendors View</option>'
+	itemstr2+='<option value="1211">Vendors Modify</option>'
+	itemstr2+='<option value="2220">Distributor Categories View</option>'
+	itemstr2+='<option value="2221">Distributor Categories Modify</option>'
+	itemstr2+='<option value="1230">Project Categories View</option>'
+	itemstr2+='<option value="1231">Project Categories Modify</option>'
+	itemstr2+='<option value="1240">Product Categories View</option>'
+	itemstr2+='<option value="1241">Product Categories Modify</option>'
+	itemstr2+='<option value="2250">Location View</option>'
+	itemstr2+='<option value="2251">Location Modify</option>'
+	itemstr2+='<option value="1260">Users View</option>'
+	itemstr2+='<option value="1261">Users Modify</option>'
+	itemstr2+='<option value="1270">Roles View</option>'
+	itemstr2+='<option value="1271">Roles Modify</option>'
+
+	itemstr2+='</select>';
+	tabInd++;
+
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+    var row = table.insertRow(table.rows.length);
+
+    var cell1 = row.insertCell(0);
+    cell1.innerHTML = itemstr1;
+    var cell2 = row.insertCell(1);
+    cell2.innerHTML = itemstr2;
+    
+    return rowId;
+}
+
+function doDeleteItem(cell){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	var rowIndex= document.all ? cell.parentElement.parentElement.rowIndex : cell.parentNode.parentNode.rowIndex;
+
+	table.deleteRow(rowIndex);
+	if (table.rows.length<2){
+		doAddItem();
+	}
+}
+
+function checkEmptyTable(){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	if (table.rows.length<2){
+		doAddItem();
+	}
+}
+
+
+#formHeader("RoleForm.vm" "RoleSQL" "roleid" $!entry.RoleId $mode)
+
+<tr>
+<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+      <tr>
+        #formCell ("Role Name" "rolename" $!entry.RoleName 32 160 1 )
+      </tr>
+	</table>
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+<tr>
+<td>
+	<table align=center cellpadding=0 cellspacing=0 border=0>
+	<tr>
+		<td>
+		<table id="itemList" name="itemList" align=center cellpadding=0 cellspacing=0 border=0>
+			<tr class=toolbar align=center>
+				<td>
+				<a href="javascript: void 0" ONCLICK="doAddItem()"><img src="$ui.image($ui.itemNew)" width="16" height="16" border=0 alt="Add Item"></a>
+				</td>
+				<td width="320">Permission</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+
+
+#formFooter("RoleForm.vm" "RoleSQL" "roleid" $!entry.RoleId $mode)

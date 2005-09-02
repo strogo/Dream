@@ -1,0 +1,46 @@
+$page.setBgColor($ui.bgcolor)
+$page.setTitle("File Upload")
+
+<form method="post" enctype="multipart/form-data" action="$link.setPage("UploadComplete.vm").setAction("Upload")">
+  <div align="left">
+    <table bgcolor="#ffffff" cellpadding="5">
+        
+      #if ($errorTemplate)
+      <tr>
+        <td colspan="4">
+          <table bgcolor="#ffffff">
+            <tr>
+              <td>
+                <img src="$ui.image($ui.alertImage,$data)">
+              </td>
+              <td>
+                #parse ($errorTemplate)
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      #end
+
+      <tr>
+        #fileUpload ("File" "file")
+      </tr>
+
+      <tr>
+        <td align="$ui.buttonAlignment" bgcolor="$ui.buttonColor">
+          #*
+            Check for a mode, the update and delete buttons
+            shouldn't appear when inserting a new user.
+          *#
+
+          <font face="$ui.sansSerifFonts">
+
+          <input type="submit" name="eventSubmit_doUpload" value="Upload"/>
+    
+          </font>
+        </td>
+      </tr>
+      
+    </table>
+  </div>
+</form>

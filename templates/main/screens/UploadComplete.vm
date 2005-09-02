@@ -1,0 +1,4 @@
+$page.setBgColor($ui.bgcolor)
+$page.setTitle("File Upload")
+
+Your file has been successfully uploaded!

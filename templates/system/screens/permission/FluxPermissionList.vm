@@ -1,0 +1,15 @@
+#set ( $module = "System" )
+#listCommon()
+
+<table  width="100%" cellpadding=2 cellspacing=0 border=0>
+    #foreach ($permission in $flux.Permissions)
+    <tr class=msgnew>
+
+		#addToggle($permission.Name)
+		#addListPic($ui.space)
+		<td width="99%"><a href="$link.setPage("permission,FluxPermissionForm.vm").addPathInfo("name",$permission.Name).addQueryData("mode","modify")">$permission.Name</a></td>
+    </tr>        
+    #end
+
+#listFooter()
+

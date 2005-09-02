@@ -1,0 +1,25 @@
+#set ( $module = "Main" )
+#listCommon()
+#listHeader(1102 "LocationList.vm" "LocationSQL" 7)
+  
+	#if ($entries)
+
+		#foreach ($entry in $entries)
+			#rowStatusClass ($!entry.Status)
+				#addToggle ($!entry.LocationId)
+
+				#if ($!entry.LocationType==10)
+					#addListPic($ui.person)
+				#else
+					#addListPic($ui.institut)
+				#end
+
+				<td width="15%"><span class="llink" onClick="doEdit('$entry.LocationId')">$!entry.LocationCode</span></td>
+				#listCellPrc (35 $!entry.LocationDisplay)
+				#listCellPrc (25 $entry.Distributor.DistributorDisplay)
+				#listCellPrc (25 $!entry.SalesDistrict.SalesDistrictName)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

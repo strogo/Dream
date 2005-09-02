@@ -1,0 +1,188 @@
+#set ( $module = "Main" )
+#formCommon()
+
+function formInit(){
+	myForm.status.value=$!entry.Status;
+	myForm.producttypetemp.value=$!entry.ProductType;
+	#if ($!entry.Created)
+		myForm.producttypetemp.disabled=true;
+	#end
+	myForm.productcatid.value=$!entry.ProductCatId;
+	myForm.uomid.value=$!entry.UomId;
+	myForm.vendorid.value=$!entry.VendorId;
+
+	highlight(myForm.productdescription);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.productcode)) return false;
+	if (parent.isEmpty(myForm.productdescription)) return false;
+	if (parent.isEmpty(myForm.productdisplay)) return false;
+	if (parent.isEmpty(myForm.baseprice)) return false;
+	if (parent.isNotFloat(myForm.baseprice)) return false;
+	if (parent.isNegative(myForm.baseprice)) return false;
+	if (parent.isEmpty(myForm.baseweight)) return false;
+	if (parent.isNotFloat(myForm.baseweight)) return false;
+	if (parent.isNegative(myForm.baseweight)) return false;
+
+	myForm.productcode.value = myForm.productcode.value.toUpperCase();
+	myForm.producttype.value=myForm.producttypetemp.value;
+
+
+	return true;
+}
+
+
+function valueChanged(formField){
+	if (formField.name=='productdescription'){
+		desc= formField.value;
+		myForm.productdisplay.value=desc.substring(0, 69);
+	}
+}
+
+#formHeader("ProductForm.vm" "ProductSQL" "productid" $!entry.ProductId $mode)
+
+<tr>
+<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+      <tr>  
+   		#formCell ("Code" "productcode" $!entry.ProductCode 20 100 1)
+			<td width=16>&nbsp;</td>
+		#formLabel("Status")
+		<td align="left">
+		<select name="status" tabIndex="2" value="$!entry.Status" width="100" STYLE="width: 100px">
+			<option value="30">Active</option>
+			<option value="50">Inactive</option>
+		</select>
+		</td>
+      </tr>
+      <tr>
+	<td>
+	&nbsp;
+	</td>
+      </tr>
+      <tr>
+        #formCellWithChange ("Description" "productdescription" $!entry.ProductDescription 254 160 3)
+			<td width=16>&nbsp;</td>
+		#formLabel("Type")
+		<td align="left">
+		<select name="producttypetemp" tabIndex="5" value="$!entry.ProductType" width="160" STYLE="width: 160px">
+			<option value="10">Stock Item</option>
+			<option value="50">Print Media</option>
+		</select>
+		</td>
+      </tr>
+      <tr>
+        #formCell ("Display" "productdisplay" $!entry.ProductDisplay 70 160 4)
+			<td width=16>&nbsp;</td>
+		#formLabel("Category")
+		<td align="left">
+		<select name="productcatid" tabIndex="6" value="$!entry.ProductCatId" width="160" STYLE="width: 160px">
+		#foreach ($productcat in $productcats)
+			<option value="$productcat.ProductCatId">$productcat.ProductCatName</option>
+		#end        	
+		</select>
+		</td>
+      </tr>
+      <tr>
+		<td>
+		&nbsp;
+		</td>
+      </tr>
+      <tr>
+		#formLabel("UOM")
+		<td align="left">
+		<select name="uomid" tabIndex="7" value="$!entry.UomId" width="160" STYLE="width: 160px">
+		#foreach ($uom in $uoms)
+			<option value="$uom.UomId">$uom.UomName</option>
+		#end        	
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+		#formLabel("Vendor")
+		<td align="left">
+		<select name="vendorid" tabIndex="11" value="$!entry.VendorId" width="160" STYLE="width: 160px">
+		#foreach ($vendor in $vendors)
+			<option value="$vendor.VendorId">$vendor.VendorName</option>
+		#end        	
+		</select>
+		</td>
+      </tr>
+      <tr>
+        #formCellAmount ("Base Price" "baseprice" $!entry.BasePrice 20 100 8)
+			<td width=16>&nbsp;</td>
+        #formCell ("Vendor's ID" "vendorscode" $!entry.VendorsCode 20 160 12)
+      </tr>
+        #formCellAmount ("Base Weight" "baseweight" $!entry.BaseWeight 20 100 8)
+			<td width=16>&nbsp;</td>
+        #formCell ("EAN/UPC" "eanupccode" $!entry.EanUpcCode 20 160 13)
+      </tr>
+      <tr>
+        #formCell ("Location" "location" $!entry.Location 55 160 9)
+			<td width=16>&nbsp;</td>
+        #formCell ("Info URL" "www" $!entry.Www 70 160 14)
+      </tr>
+      <tr>
+		<td>
+		&nbsp;
+		</td>
+      </tr>
+      <tr>
+        #formCell ("Custom 1" "custom1" $!entry.Custom1 55 160 27)
+			<td width=16>&nbsp;</td>
+        #formCell ("Custom 4" "custom4" $!entry.Custom4 55 160 30)
+      </tr>
+      <tr>
+        #formCell ("Custom 2" "custom2" $!entry.Custom2 55 160 28)
+			<td width=16>&nbsp;</td>
+        #formCell ("Custom 5" "custom5" $!entry.Custom5 55 160 31)
+      </tr>
+      <tr>
+        #formCell ("Custom 3" "custom3" $!entry.Custom3 55 160 29)
+			<td width=16>&nbsp;</td>
+        #formCell ("Custom 6" "custom6" $!entry.Custom6 55 160 32)
+      </tr>
+	</table>
+  </td>
+</tr>
+
+<input type="hidden" name="producttype" value="$!entry.ProductType">
+
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+<tr>
+	<td align=center>
+		<textarea rows="5" cols="96%" name="notes" tabIndex=43>$!entry.Notes</textarea>
+	</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+
+#if ($!entry.Created)
+	<input type="hidden" name="created" value="$!dtf.format($!entry.Created)">
+	<input type="hidden" name="createdby" value="$!entry.CreatedBy">
+
+	<tr>
+		<td align=center>
+	    <table align=center width="96%" cellpadding=0 cellspacing=0 border=0>
+	      <tr>  
+	      	  <td align=left><font class=frmlabel>Created: </font>$!dtf.format($!entry.Created) ($!entry.CreatedBy)</td>
+	      	  <td align=right><font class=frmlabel>Modified: </font>$!dtf.format($!entry.Modified) ($!entry.ModifiedBy)</td>
+	      </tr>  
+		</table>
+		</td>
+	</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+#end        	
+	
+#formFooter("ProductForm.vm" "ProductSQL" "productid" $!entry.ProductId $mode)

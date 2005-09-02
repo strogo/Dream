@@ -1,0 +1,15 @@
+#set ( $module = "Options" )
+#listCommon()
+#listHeader(3107 "CostTypeList.vm" "CostTypeSQL" 4)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.CostTypeId)
+				#addListPic($ui.space)
+				<td width="100%"><span class="llink" onClick="doEdit('$entry.CostTypeId')">$entry.CostTypeName</span></td>
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

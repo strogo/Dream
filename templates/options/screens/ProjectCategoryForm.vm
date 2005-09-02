@@ -1,0 +1,20 @@
+#set ( $module = "Options" )
+#formCommon()
+
+function formInit(){
+	highlight(myForm.projectcatname);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.projectcatname)) return false;
+	
+	return true;
+}
+
+#formHeader("ProjectCategoryForm.vm" "ProjectCategorySQL" "projectcatid" $!entry.ProjectCatId $mode)
+
+      <tr>  
+        #formCell ("Name" "projectcatname" $!entry.ProjectCatName 50 200 1)
+      </tr>
+
+#formFooter("ProjectCategoryForm.vm" "ProjectCategorySQL" "projectcatid" $!entry.ProjectCatId $mode)

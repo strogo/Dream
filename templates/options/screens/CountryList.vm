@@ -1,0 +1,16 @@
+#set ( $module = "Options" )
+#listCommon()
+#listHeader(3003 "CountryList.vm" "CountrySQL" 4)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.CountryId)
+				#addListPic($ui.space)
+				<td width="80%"><span class="llink" onClick="doEdit('$entry.CountryId')">$entry.CountryName</span></td>
+				#listCellPrc (20 $entry.CountryCode)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

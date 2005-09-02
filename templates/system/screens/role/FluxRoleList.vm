@@ -1,0 +1,17 @@
+#set ( $module = "System" )
+#listCommon()
+
+
+<table  width="100%" cellpadding=2 cellspacing=0 border=0>
+  
+    #foreach ($role in $flux.Roles)
+	    <tr class=msgnew>
+	
+		#addToggle($role.Name)
+		#addListPic($ui.space)
+		<td width="99%"><a href="$link.setPage("role,FluxRoleForm.vm").addPathInfo("name",$role.Name).addQueryData("mode","modify")">$role.Name</a></td>
+	    </tr>        
+    #end
+
+#listFooter()
+

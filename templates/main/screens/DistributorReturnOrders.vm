@@ -1,0 +1,27 @@
+#set ( $module = "Util" )
+#utilCommon()
+
+<script id="utilScript" language="JavaScript">
+
+function copyDetails(){
+	myForm=parent.document.getElementById('formData');
+
+	myForm.dorderid.length=0;
+
+	#foreach ($order in $orders)
+		if (document.all) {
+			ordo = parent.document.createElement("OPTION");
+			ordo.text = '$!order.DorderCode';
+			ordo.value = '$!order.DorderId';
+			myForm.dorderid.add(ordo);
+		}else{
+			ordo = new Option();
+			ordo.text = '$!order.DorderCode';
+			ordo.value = '$!order.DorderId';
+			myForm.dorderid.options[myForm.dorderid.length] = ordo;
+		}
+	#end
+	myForm.dorderid.focus();
+
+}
+</script>

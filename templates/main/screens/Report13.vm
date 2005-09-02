@@ -1,0 +1,24 @@
+#set ( $module = "Report" )
+
+#reportHeader($!reptitle)
+<tr><td>
+<table  width="80%" align="center" cols=3 cellpadding=2 cellspacing=0 border=0>
+	#if ($!entries)
+		<tr>
+			<td class="reptblhead" align="left" width="45%">Area&nbsp;</td>
+			<td class="reptblhead" align="left" width="15%">&nbsp;ID&nbsp;</td>
+			<td class="reptblhead" align="left" width="25%">Product&nbsp;</td>
+			<td class="reptblhead" align="right" width="15%">Amount&nbsp;</td>
+		</tr>        
+	    #foreach ($entry in $entries)
+			<tr class="repcontent">
+				<td class="repcontent" align="left" width="45%">$!entry.getValue(4)</td>
+				<td class="repcontent" align="left" width="15%">&nbsp;$!entry.getValue(5)</td>
+				<td class="repcontent" align="left" width="25%">$!entry.getValue(6)&nbsp;</td>
+				<td class="repcontent" align="right" width="15%">$!af.format( $!entry.getValue(1).asBigDecimal())&nbsp;</td>
+			</tr>        
+	    #end
+	#end
+</table>
+</td></tr>
+#reportFooter()

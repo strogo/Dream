@@ -1,0 +1,6 @@
+--------------------------------------------------------------------------
+G E T T I N G  S T A R T E D  G U I D E
+--------------------------------------------------------------------------
+
+Please see http://jakarta.apache.org/turbine/tdk/tdk-howto.html for
+information on how to set up the TDK.

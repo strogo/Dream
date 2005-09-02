@@ -1,0 +1,20 @@
+#set ( $module = "Options" )
+#formCommon()
+
+function formInit(){
+	highlight(myForm.distributorcatname);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.distributorcatname)) return false;
+	
+	return true;
+}
+
+#formHeader("DistributorCategoryForm.vm" "DistributorCategorySQL" "distributorcatid" $!entry.DistributorCatId $mode)
+
+      <tr>  
+        #formCell ("Name" "distributorcatname" $!entry.DistributorCatName 50 200 1)
+      </tr>
+
+#formFooter("DistributorCategoryForm.vm" "DistributorCategorySQL" "distributorcatid" $!entry.DistributorCatId $mode)

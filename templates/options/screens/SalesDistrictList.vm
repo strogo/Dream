@@ -1,0 +1,16 @@
+#set ( $module = "Options" )
+#listCommon()
+#listHeader(3106 "SalesDistrictList.vm" "SalesDistrictSQL" 3)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.SalesDistrictId)
+				#addListPic($ui.space)
+				<td width="50%"><span class="llink" onClick="doEdit('$entry.SalesDistrictId')">$entry.SalesDistrictName</span></td>
+				#listCellPrc (50 $!entry.SalesArea.SalesAreaName)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

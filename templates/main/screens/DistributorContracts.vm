@@ -1,0 +1,28 @@
+#set ( $module = "Util" )
+#utilCommon()
+
+<script id="utilScript" language="JavaScript">
+
+function copyDetails(){
+	myForm=parent.document.getElementById('formData');
+
+	myForm.dcontractid.length=0;
+
+	#foreach ($contract in $contracts)
+		if (document.all) {
+			ordo = parent.document.createElement("OPTION");
+			ordo.text = '$!contract.DcontractCode';
+			ordo.value = '$!contract.DcontractId';
+			myForm.dcontractid.add(ordo);
+		}else{
+			ordo = new Option();
+			ordo.text = '$!contract.DcontractCode';
+			ordo.value = '$!contract.DcontractId';
+			myForm.dcontractid.options[myForm.dcontractid.length] = ordo;
+		}
+	#end
+	
+	parent.setProductData();
+
+}
+</script>

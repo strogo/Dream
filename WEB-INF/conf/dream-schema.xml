@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
+
+<!-- ==================================================================== -->
+<!--                                                                      -->
+<!-- D R E A M  P R O J E C T  S C H E M A                            -->
+<!--                                                                      -->
+<!-- ==================================================================== -->
+<!-- This is a Turbine project schema.                           -->
+<!-- ==================================================================== -->
+
+<database name="dream">
+
+  <table name="DREAM_USER">
+    <column name="USER_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="LOGIN_NAME" required="true" size="32" type="VARCHAR"/>
+    <column name="WELCOME" required="true" size="32" type="VARCHAR"/>
+    <column name="DEFAULT_LIST" default="1000" required="true" type="INTEGER"/>
+    <column name="DINBOX_FID" default="1000" required="true" type="INTEGER"/>
+    <column name="DOUTBOX_FID" default="1000" required="true" type="INTEGER"/>
+    <column name="DNEWSLETTER_FID" default="1000" required="true" type="INTEGER"/>
+    <column name="DRETURN_FID" default="1000" required="true" type="INTEGER"/>
+    <column name="DSHIPMENT_FID" default="1000" required="true" type="INTEGER"/>
+    <column name="DORDER_FID" default="1000" required="true" type="INTEGER"/>
+    <column name="DCONTRACT_FID" default="1000" required="true" type="INTEGER"/>
+    <column name="PROJECT_FID" default="1000" required="true" type="INTEGER"/>
+    <column name="LOCATION_FID" default="1000" required="true" type="INTEGER"/>
+    <column name="DISTRIBUTOR_FID" default="1000" required="true" type="INTEGER"/>
+    <column name="PRODUCT_FID" default="1000" required="true" type="INTEGER"/>
+    
+    <unique>
+        <unique-column name="LOGIN_NAME"/>
+    </unique>        
+  
+  </table>
+
+  <table name="PROJECT_CATEGORY" idMethod="native">
+    <column name="PROJECT_CAT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="PROJECT_CAT_NAME" required="true" size="50" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="PROJECT_CAT_NAME"/>
+    </unique>        
+  </table>
+
+  <table name="PRODUCT_CATEGORY" idMethod="native">
+    <column name="PRODUCT_CAT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="PRODUCT_CAT_NAME" required="true" size="50" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="PRODUCT_CAT_NAME"/>
+    </unique>        
+  </table>
+
+  <table name="DISTRIBUTOR_CATEGORY" idMethod="native">
+    <column name="DISTRIBUTOR_CAT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DISTRIBUTOR_CAT_NAME" required="true" size="50" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="DISTRIBUTOR_CAT_NAME"/>
+    </unique>        
+  </table>
+
+  <table name="LOCATION_CATEGORY" idMethod="native">
+    <column name="LOCATION_CAT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="LOCATION_CAT_NAME" required="true" size="50" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="LOCATION_CAT_NAME"/>
+    </unique>        
+  </table>
+
+  <table name="COST_TYPE" idMethod="native">
+    <column name="COST_TYPE_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="COST_TYPE_FUNCTION" default="10" required="true" type="INTEGER"/>
+    <column name="COST_TYPE_NAME" required="true" size="50" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="COST_TYPE_NAME"/>
+    </unique>        
+  </table>
+
+
+  <table name="COUNTRY" idMethod="native">
+    <column name="COUNTRY_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="COUNTRY_NAME" required="true" size="50" type="VARCHAR"/>
+    <column name="COUNTRY_CODE" required="true" size="2" type="CHAR"/>
+
+    <unique>
+        <unique-column name="COUNTRY_NAME"/>
+    </unique>        
+    <unique>
+        <unique-column name="COUNTRY_CODE"/>
+    </unique>        
+  </table>
+
+  <table name="REGION" idMethod="native">
+    <column name="REGION_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="REGION_NAME" required="true" size="50" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="REGION_NAME"/>
+    </unique>        
+  </table>
+
+  <table name="SALES_AREA" idMethod="native">
+    <column name="SALES_AREA_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="SALES_AREA_NAME" required="true" size="50" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="SALES_AREA_NAME"/>
+    </unique>        
+  </table>
+
+  <table name="SALES_DISTRICT" idMethod="native">
+    <column name="SALES_DISTRICT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="SALES_AREA_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="SALES_DISTRICT_NAME" required="true" size="50" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="SALES_DISTRICT_NAME"/>
+    </unique>        
+    <foreign-key foreignTable="SALES_AREA">
+      <reference local="SALES_AREA_ID" foreign="SALES_AREA_ID"/>
+    </foreign-key>
+  </table>
+
+  <table name="LANGUAGE" idMethod="native">
+    <column name="LANGUAGE_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="LANGUAGE_NAME" required="true" size="50" type="VARCHAR"/>
+    <column name="LANGUAGE_CODE" required="true" size="2" type="CHAR"/>
+
+    <unique>
+        <unique-column name="LANGUAGE_NAME"/>
+    </unique>        
+    <unique>
+        <unique-column name="LANGUAGE_CODE"/>
+    </unique>        
+  </table>
+
+  <table name="VENDOR" idMethod="native">
+    <column name="VENDOR_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="VENDOR_NAME" required="true" size="50" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="VENDOR_NAME"/>
+    </unique>        
+  </table>
+
+  <table name="UOM" idMethod="native">
+    <column name="UOM_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="UOM_NAME" required="true" size="50" type="VARCHAR"/>
+    <column name="UOM_CODE" required="true" size="3" type="CHAR"/>
+
+    <unique>
+        <unique-column name="UOM_NAME"/>
+    </unique>        
+    <unique>
+        <unique-column name="UOM_CODE"/>
+    </unique>        
+  </table>
+
+  <table name="DISTRIBUTOR" idMethod="native">
+    <column name="DISTRIBUTOR_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DISTRIBUTOR_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="DISTRIBUTOR_NAME_1" required="true" size="70" type="VARCHAR"/>
+    <column name="DISTRIBUTOR_NAME_2" size="70" type="VARCHAR"/>
+    <column name="DISTRIBUTOR_DISPLAY" required="true" size="70" type="VARCHAR"/>
+    <column name="DEAR" size="70" type="VARCHAR"/>
+    <column name="DISTRIBUTOR_TYPE" default="10" required="true" type="INTEGER"/>
+    <column name="GENDER" default="10" required="true" type="INTEGER"/>
+    <column name="DISTRIBUTOR_CAT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="LANGUAGE_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="ADDRESS_1" size="55" type="VARCHAR"/>
+    <column name="ADDRESS_2" size="55" type="VARCHAR"/>
+    <column name="CITY" size="35" type="VARCHAR"/>
+    <column name="ZIP" size="12" type="VARCHAR"/>
+    <column name="STATE" size="35" type="VARCHAR"/>
+    <column name="COUNTRY_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="REGION_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PHONE_1" size="30" type="VARCHAR"/>
+    <column name="PHONE_2" size="30" type="VARCHAR"/>
+    <column name="FAX" size="30" type="VARCHAR"/>
+    <column name="EMAIL" size="70" type="VARCHAR"/>
+    <column name="EMAIL_FORMAT" default="10" required="true" type="INTEGER"/>
+    <column name="SEND_NEWS" default="20" required="true" type="INTEGER"/>
+    <column name="WEB_URL" size="70" type="VARCHAR"/>
+    <column name="CUSTOM_1" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_2" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_3" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_4" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_5" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_6" size="55" type="VARCHAR"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="DISTRIBUTOR_CODE"/>
+    </unique>        
+    <unique>
+        <unique-column name="DISTRIBUTOR_DISPLAY"/>
+    </unique>        
+
+	<index>
+		<index-column name="EMAIL"/>
+	</index>
+	<index>
+		<index-column name="CITY"/>
+	</index>
+
+    <foreign-key foreignTable="DISTRIBUTOR_CATEGORY">
+      <reference local="DISTRIBUTOR_CAT_ID" foreign="DISTRIBUTOR_CAT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="COUNTRY">
+      <reference local="COUNTRY_ID" foreign="COUNTRY_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="REGION">
+      <reference local="REGION_ID" foreign="REGION_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="LANGUAGE">
+      <reference local="LANGUAGE_ID" foreign="LANGUAGE_ID"/>
+    </foreign-key>
+
+  </table>
+
+  <table name="LOCATION" idMethod="native">
+    <column name="LOCATION_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="LOCATION_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="LOCATION_NAME_1" required="true" size="70" type="VARCHAR"/>
+    <column name="LOCATION_NAME_2" size="70" type="VARCHAR"/>
+    <column name="LOCATION_DISPLAY" required="true" size="70" type="VARCHAR"/>
+    <column name="SALES_DISTRICT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="LOCATION_TYPE" default="10" required="true" type="INTEGER"/>
+    <column name="GENDER" default="10" required="true" type="INTEGER"/>
+    <column name="LOCATION_CAT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="DISTRIBUTOR_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="ADDRESS_1" size="55" type="VARCHAR"/>
+    <column name="ADDRESS_2" size="55" type="VARCHAR"/>
+    <column name="CITY" size="35" type="VARCHAR"/>
+    <column name="ZIP" size="12" type="VARCHAR"/>
+    <column name="STATE" size="35" type="VARCHAR"/>
+    <column name="COUNTRY_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="REGION_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PHONE_1" size="30" type="VARCHAR"/>
+    <column name="PHONE_2" size="30" type="VARCHAR"/>
+    <column name="FAX" size="30" type="VARCHAR"/>
+    <column name="CUSTOM_1" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_2" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_3" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_4" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_5" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_6" size="55" type="VARCHAR"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="LOCATION_CODE"/>
+    </unique>        
+    <unique>
+        <unique-column name="LOCATION_DISPLAY"/>
+    </unique>        
+
+	<index>
+		<index-column name="CITY"/>
+	</index>
+
+    <foreign-key foreignTable="LOCATION_CATEGORY">
+      <reference local="LOCATION_CAT_ID" foreign="LOCATION_CAT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="COUNTRY">
+      <reference local="COUNTRY_ID" foreign="COUNTRY_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="REGION">
+      <reference local="REGION_ID" foreign="REGION_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="SALES_DISTRICT">
+      <reference local="SALES_DISTRICT_ID" foreign="SALES_DISTRICT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="DISTRIBUTOR">
+      <reference local="DISTRIBUTOR_ID" foreign="DISTRIBUTOR_ID"/>
+    </foreign-key>
+
+  </table>
+
+  <table name="PRODUCT" idMethod="native">
+    <column name="PRODUCT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="PRODUCT_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="PRODUCT_TYPE" default="10" required="true" type="INTEGER"/>
+    <column name="PRODUCT_CAT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PRODUCT_DESCRIPTION" required="true" size="254" type="VARCHAR"/>
+    <column name="PRODUCT_DISPLAY" required="true" size="70" type="VARCHAR"/>
+    <column name="BASE_PRICE" default="0" required="true" type="FLOAT"/>
+    <column name="BASE_WEIGHT" default="0" required="true" type="FLOAT"/>
+    <column name="UOM_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="WEB_URL" size="70" type="VARCHAR"/>
+    <column name="SHOW_ON_PRICELIST" default="20" required="true" type="INTEGER"/>
+    <column name="VENDOR_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="VENDORS_CODE" size="20" type="VARCHAR"/>
+    <column name="EAN_UPC_CODE" size="20" type="VARCHAR"/>
+    <column name="LOCATION" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_1" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_2" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_3" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_4" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_5" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_6" size="55" type="VARCHAR"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="PRODUCT_CODE"/>
+    </unique>        
+    <unique>
+        <unique-column name="PRODUCT_DISPLAY"/>
+    </unique>        
+
+	<index>
+		<index-column name="BASE_PRICE"/>
+	</index>
+
+    <foreign-key foreignTable="PRODUCT_CATEGORY">
+      <reference local="PRODUCT_CAT_ID" foreign="PRODUCT_CAT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="UOM">
+      <reference local="UOM_ID" foreign="UOM_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="VENDOR">
+      <reference local="VENDOR_ID" foreign="VENDOR_ID"/>
+    </foreign-key>
+
+  </table>
+
+  <table name="PROJECT" idMethod="native">
+    <column name="PROJECT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="PROJECT_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="PROJECT_CAT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PROJECT_NAME" required="true" size="70" type="VARCHAR"/>
+    <column name="START_DATE" required="true" type="DATE"/>
+    <column name="END_DATE" type="DATE"/>
+    <column name="EXPENSES" default="0" required="true" size="15,2" type="DECIMAL"/>
+    <column name="REVENUES" default="0" required="true" size="15,2" type="DECIMAL"/>
+    <column name="CUSTOM_1" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_2" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_3" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_4" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_5" size="55" type="VARCHAR"/>
+    <column name="CUSTOM_6" size="55" type="VARCHAR"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="PROJECT_CODE"/>
+    </unique>        
+    <unique>
+        <unique-column name="PROJECT_NAME"/>
+    </unique>        
+
+	<index>
+		<index-column name="START_DATE"/>
+	</index>
+	<index>
+		<index-column name="EXPENSES"/>
+	</index>
+	<index>
+		<index-column name="REVENUES"/>
+	</index>
+
+    <foreign-key foreignTable="PROJECT_CATEGORY">
+      <reference local="PROJECT_CAT_ID" foreign="PROJECT_CAT_ID"/>
+    </foreign-key>
+
+  </table>
+
+  <table name="DCONTRACT" idMethod="native">
+    <column name="DCONTRACT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DCONTRACT_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="ISSUED_DATE" required="true" type="DATE"/>
+    <column name="CLOSED_DATE" type="DATE"/>
+    <column name="DISTRIBUTOR_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PROJECT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="START_DATE" required="true" type="DATE"/>
+    <column name="END_DATE" required="true" type="DATE"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="DCONTRACT_CODE"/>
+    </unique>        
+
+	<index>
+		<index-column name="ISSUED_DATE"/>
+	</index>
+	<index>
+		<index-column name="STATUS"/>
+	</index>
+
+    <foreign-key foreignTable="DISTRIBUTOR">
+      <reference local="DISTRIBUTOR_ID" foreign="DISTRIBUTOR_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="PROJECT">
+      <reference local="PROJECT_ID" foreign="PROJECT_ID"/>
+    </foreign-key>
+
+  </table>
+
+  <table name="DCONTRACT_ITEM" idMethod="native">
+    <column name="DCONTRACT_ITEM_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DCONTRACT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="COST_TYPE_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="COST_FUNCTION" default="10" required="true" type="INTEGER"/>
+    <column name="COST_AMOUNT" default="0" required="true" size="15,2" type="DECIMAL"/>
+    
+
+	<index>
+		<index-column name="DCONTRACT_ID"/>
+	</index>
+	<index>
+		<index-column name="COST_TYPE_ID"/>
+	</index>
+
+    <foreign-key foreignTable="DCONTRACT" onDelete="cascade">
+      <reference local="DCONTRACT_ID" foreign="DCONTRACT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="COST_TYPE">
+      <reference local="COST_TYPE_ID" foreign="COST_TYPE_ID"/>
+    </foreign-key>
+
+  </table>
+
+  <table name="DORDER" idMethod="native">
+    <column name="DORDER_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DORDER_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="ISSUED_DATE" required="true" type="DATE"/>
+    <column name="SALES_DATE" required="true" type="DATE"/>
+    <column name="EXPECTED_TIME" required="true" type="TIMESTAMP"/>
+    <column name="CLOSED_DATE" type="DATE"/>
+    <column name="DISTRIBUTOR_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="DCONTRACT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PROJECT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PRODUCT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="DESCRIPTION" required="true" size="254" type="VARCHAR"/>
+    <column name="UNIT_PRICE" default="0" required="true" type="FLOAT"/>
+    <column name="UNIT_WEIGHT" default="0" required="true" type="FLOAT"/>
+    <column name="TOTAL_QUANTITY" default="0" required="true" type="INTEGER"/>
+    <column name="TOTAL_AMOUNT" default="0" required="true" size="15,2" type="DECIMAL"/>
+    <column name="TOTAL_WEIGHT" default="0" required="true" size="15,2" type="DECIMAL"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="DORDER_CODE"/>
+    </unique>        
+
+	<index>
+		<index-column name="ISSUED_DATE"/>
+	</index>
+	<index>
+		<index-column name="STATUS"/>
+	</index>
+
+    <foreign-key foreignTable="DISTRIBUTOR">
+      <reference local="DISTRIBUTOR_ID" foreign="DISTRIBUTOR_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="DCONTRACT">
+      <reference local="DCONTRACT_ID" foreign="DCONTRACT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="PROJECT">
+      <reference local="PROJECT_ID" foreign="PROJECT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="PRODUCT">
+      <reference local="PRODUCT_ID" foreign="PRODUCT_ID"/>
+    </foreign-key>
+
+  </table>
+
+  <table name="DORDER_ITEM" idMethod="native">
+    <column name="DORDER_ITEM_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DORDER_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="LOCATION_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="ORDERED_QTY" default="0" required="true" type="INTEGER"/>
+    <column name="SHIPPED_QTY" default="0" required="true" type="INTEGER"/>
+    <column name="UNSOLD_QTY" default="0" required="true" type="INTEGER"/>
+    <column name="LOST_QTY" default="0" required="true" type="INTEGER"/>
+    
+
+    <unique>
+        <unique-column name="DORDER_ID"/>
+        <unique-column name="LOCATION_ID"/>
+    </unique>        
+    
+    <foreign-key foreignTable="DORDER" onDelete="cascade">
+      <reference local="DORDER_ID" foreign="DORDER_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="LOCATION">
+      <reference local="LOCATION_ID" foreign="LOCATION_ID"/>
+    </foreign-key>
+
+  </table>
+
+  <table name="DSHIPMENT" idMethod="native">
+    <column name="DSHIPMENT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DSHIPMENT_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="ISSUED_DATE" required="true" type="DATE"/>
+    <column name="SHIPPING_TIME" required="true" type="TIMESTAMP"/>
+    <column name="CLOSED_DATE" type="DATE"/>
+    <column name="DISTRIBUTOR_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="DORDER_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="DSHIPMENT_CODE"/>
+    </unique>        
+    <unique>
+        <unique-column name="DORDER_ID"/>
+    </unique>        
+
+	<index>
+		<index-column name="ISSUED_DATE"/>
+	</index>
+	<index>
+		<index-column name="STATUS"/>
+	</index>
+
+    <foreign-key foreignTable="DISTRIBUTOR">
+      <reference local="DISTRIBUTOR_ID" foreign="DISTRIBUTOR_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="DORDER">
+      <reference local="DORDER_ID" foreign="DORDER_ID"/>
+    </foreign-key>
+
+  </table>
+  
+  <table name="DRETURN" idMethod="native">
+    <column name="DRETURN_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DRETURN_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="ISSUED_DATE" required="true" type="DATE"/>
+    <column name="RETURN_DATE" required="true" type="DATE"/>
+    <column name="CLOSED_DATE" type="DATE"/>
+    <column name="DISTRIBUTOR_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="DORDER_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="DRETURN_CODE"/>
+    </unique>        
+    <unique>
+        <unique-column name="DORDER_ID"/>
+    </unique>        
+
+	<index>
+		<index-column name="ISSUED_DATE"/>
+	</index>
+	<index>
+		<index-column name="STATUS"/>
+	</index>
+
+    <foreign-key foreignTable="DISTRIBUTOR">
+      <reference local="DISTRIBUTOR_ID" foreign="DISTRIBUTOR_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="DORDER">
+      <reference local="DORDER_ID" foreign="DORDER_ID"/>
+    </foreign-key>
+
+  </table>
+  
+  <table name="DINBOX_EVENT" idMethod="native">
+    <column name="DINBOX_EVENT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DINBOX_EVENT_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="PRIORITY" default="30" required="true" type="INTEGER"/>
+    <column name="ISSUED_DATE" required="true" type="DATE"/>
+    <column name="CLOSED_DATE" type="DATE"/>
+    <column name="RECEIVED_TIME" type="TIMESTAMP"/>
+    <column name="SENT_TIME" type="TIMESTAMP"/>
+    <column name="EVENT_CHANNEL" default="20" required="true" type="INTEGER"/>
+    <column name="EVENT_TYPE" default="30" required="true" type="INTEGER"/>
+    <column name="EMAIL_FORMAT" default="10" required="true" type="INTEGER"/>
+    <column name="DISTRIBUTOR_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PROJECT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PRODUCT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="SENDER" size="254" type="VARCHAR"/>
+    <column name="SUBJECT" required="true" size="254" type="VARCHAR"/>
+    <column name="BODY" type="CLOB"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="DINBOX_EVENT_CODE"/>
+    </unique>        
+
+	<index>
+		<index-column name="ISSUED_DATE"/>
+	</index>
+	<index>
+		<index-column name="STATUS"/>
+	</index>
+	<index>
+		<index-column name="SUBJECT"/>
+	</index>
+
+    <foreign-key foreignTable="DISTRIBUTOR">
+      <reference local="DISTRIBUTOR_ID" foreign="DISTRIBUTOR_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="PROJECT">
+      <reference local="PROJECT_ID" foreign="PROJECT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="PRODUCT">
+      <reference local="PRODUCT_ID" foreign="PRODUCT_ID"/>
+    </foreign-key>
+
+  </table>
+
+  <table name="DOUTBOX_EVENT" idMethod="native">
+    <column name="DOUTBOX_EVENT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DOUTBOX_EVENT_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="PRIORITY" default="30" required="true" type="INTEGER"/>
+    <column name="ISSUED_DATE" required="true" type="DATE"/>
+    <column name="CLOSED_DATE" type="DATE"/>
+    <column name="SENT_TIME" type="TIMESTAMP"/>
+    <column name="EVENT_CHANNEL" default="10" required="true" type="INTEGER"/>
+    <column name="EVENT_TYPE" default="20" required="true" type="INTEGER"/>
+    <column name="EMAIL_FORMAT" default="10" required="true" type="INTEGER"/>
+    <column name="DISTRIBUTOR_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PROJECT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PRODUCT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="RECEIVER" size="254" type="VARCHAR"/>
+    <column name="SUBJECT" required="true" size="254" type="VARCHAR"/>
+    <column name="BODY" type="CLOB"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="DOUTBOX_EVENT_CODE"/>order
+    </unique>        
+
+	<index>
+		<index-column name="ISSUED_DATE"/>
+	</index>
+	<index>
+		<index-column name="STATUS"/>
+	</index>
+	<index>
+		<index-column name="SUBJECT"/>
+	</index>
+
+    <foreign-key foreignTable="DISTRIBUTOR">
+      <reference local="DISTRIBUTOR_ID" foreign="DISTRIBUTOR_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="PROJECT">
+      <reference local="PROJECT_ID" foreign="PROJECT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="PRODUCT">
+      <reference local="PRODUCT_ID" foreign="PRODUCT_ID"/>
+    </foreign-key>
+
+  </table>
+
+  <table name="DNEWSLETTER" idMethod="native">
+    <column name="DNEWSLETTER_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DNEWSLETTER_CODE" default="AUTO" required="true" size="20" type="VARCHAR"/>
+    <column name="STATUS" default="30" required="true" type="INTEGER"/>
+    <column name="PRIORITY" default="30" required="true" type="INTEGER"/>
+    <column name="ISSUED_DATE" required="true" type="DATE"/>
+    <column name="CLOSED_DATE" type="DATE"/>
+    <column name="SENT_TIME" type="TIMESTAMP"/>
+    <column name="EMAIL_FORMAT" default="10" required="true" type="INTEGER"/>
+    <column name="LANGUAGE_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="DISTRIBUTOR_CAT_ID" default="999" required="true" type="INTEGER"/>
+    <column name="DISTRIBUTOR_TYPE" default="1" required="true" type="INTEGER"/>
+    <column name="DIST_LANGUAGE_ID" default="999" required="true" type="INTEGER"/>
+    <column name="DIST_COUNTRY_ID" default="999" required="true" type="INTEGER"/>
+    <column name="PROJECT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="PRODUCT_ID" default="1000" required="true" type="INTEGER"/>
+    <column name="SUBJECT" required="true" size="254" type="VARCHAR"/>
+    <column name="BODY" type="CLOB"/>
+    <column name="NOTES" type="CLOB"/>
+    <column name="CREATED" required="true" type="TIMESTAMP"/>
+    <column name="MODIFIED" required="true" type="TIMESTAMP"/>
+    <column name="CREATED_BY" required="true" size="32" type="VARCHAR"/>
+    <column name="MODIFIED_BY" required="true" size="32" type="VARCHAR"/>
+
+    <unique>
+        <unique-column name="DNEWSLETTER_CODE"/>
+    </unique>        
+
+	<index>
+		<index-column name="ISSUED_DATE"/>
+	</index>
+	<index>
+		<index-column name="STATUS"/>
+	</index>
+	<index>
+		<index-column name="SUBJECT"/>
+	</index>
+
+    <foreign-key foreignTable="DISTRIBUTOR_CATEGORY">
+      <reference local="DISTRIBUTOR_CAT_ID" foreign="DISTRIBUTOR_CAT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="PROJECT">
+      <reference local="PROJECT_ID" foreign="PROJECT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="PRODUCT">
+      <reference local="PRODUCT_ID" foreign="PRODUCT_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="COUNTRY">
+      <reference local="DIST_COUNTRY_ID" foreign="COUNTRY_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="LANGUAGE">
+      <reference local="DIST_LANGUAGE_ID" foreign="LANGUAGE_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="LANGUAGE">
+      <reference local="LANGUAGE_ID" foreign="LANGUAGE_ID"/>
+    </foreign-key>
+
+  </table>
+
+</database>

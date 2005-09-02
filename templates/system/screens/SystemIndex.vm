@@ -1,0 +1,27 @@
+#set ( $screenTitle = "Users" )
+#set ( $module = "System" )
+#set ( $screenType = "List" )
+#set ( $headings = ["User","First Name", "Last Name", "Email"] )
+#set ( $newCommand = "user,FluxUserForm.vm?mode=insert")
+
+<table  width="100%" cellpadding=2 cellspacing=0 border=0>
+        <tr class=listhead>
+	#addToggleAll()
+
+	#foreach ($heading in $headings)
+		#addCollHead(25 $heading)
+	#end    
+        </tr>
+  
+        #foreach ($user in $flux.Users)
+        <tr class=msgnew>
+	#addToggle($!user.UserName)
+
+	<td><a href="$link.setPage("user,FluxUserForm.vm").addPathInfo("username",$user.UserName).addQueryData("mode","modify")">$!user.UserName</a></td>
+	#entryCell ($!user.FirstName)
+	#entryCell ($!user.LastName)
+	#entryCell ("<a href=mailto:$!user.Email>$!user.Email</a>")
+        </tr>        
+        #end
+
+</table>

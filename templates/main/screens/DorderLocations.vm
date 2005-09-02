@@ -1,0 +1,67 @@
+#set ( $module = "Util" )
+#utilCommon()
+
+<script id="utilScript" language="JavaScript">
+
+function copyDetails(){
+	myForm=parent.document.getElementById('formData');
+
+		parent.doClearItems();
+
+	#foreach ($newlocation in $newlocations)
+		myRow= parent.doAddItem();
+		suf= '_' + myRow;
+		myForm['locationid' + suf].value="$!newlocation.LocationId";
+		myForm['locationname' + suf].value="$!newlocation.SalesDistrict.SalesDistrictName" + " - " + "$!newlocation.LocationDisplay";
+		myForm['oldshippedqty' + suf].value="- ";
+		myForm['oldsoldqty' + suf].value="- ";
+		myForm['oldpercentage' + suf].value="- ";
+		myForm['orderedqty' + suf].value=0;
+
+	#end
+
+
+	#foreach ($orditem in $orderlocations)
+		myRow= parent.doAddItem();
+		suf= '_' + myRow;
+
+		#set ( $soldqty = $!orditem.ShippedQty - $!orditem.UnsoldQty - $!orditem.LostQty )
+		#set ( $soldprc = $soldqty * 100 / $!orditem.ShippedQty )
+		#set ( $retprc = 100 - $soldprc )
+		
+		if ($retprc > 35){
+			myForm['orderedqty' + suf].style.backgroundColor="#FFC0C0";
+		}
+
+		if ($retprc < 20){
+			myForm['orderedqty' + suf].style.backgroundColor="#FFFFC0";
+		}
+
+		myForm['locationid' + suf].value="$!orditem.LocationId";
+		myForm['locationname' + suf].value="$!orditem.Location.SalesDistrict.SalesDistrictName" + " - " + "$!orditem.Location.LocationDisplay";
+		myForm['oldshippedqty' + suf].value="$!orditem.ShippedQty";
+		myForm['oldsoldqty' + suf].value="$soldqty";
+		myForm['oldpercentage' + suf].value="$retprc" + "%";
+		myForm['orderedqty' + suf].value=$!orditem.ShippedQty;
+
+	#end
+
+	#foreach ($newlocation in $alllocations)
+		myRow= parent.doAddItem();
+		suf= '_' + myRow;
+		myForm['locationid' + suf].value="$!newlocation.LocationId";
+		myForm['locationname' + suf].value="$!newlocation.SalesDistrict.SalesDistrictName" + " - " + "$!newlocation.LocationDisplay";
+		myForm['oldshippedqty' + suf].value="-";
+		myForm['oldsoldqty' + suf].value="-";
+		myForm['oldpercentage' + suf].value="-";
+		myForm['orderedqty' + suf].value=0;
+
+	#end
+
+	parent.checkEmptyTable();
+
+	parent.calcTotal();
+	
+
+}
+</script>

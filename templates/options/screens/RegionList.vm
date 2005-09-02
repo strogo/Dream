@@ -1,0 +1,15 @@
+#set ( $module = "Options" )
+#listCommon()
+#listHeader(3012 "RegionList.vm" "RegionSQL" 3)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.RegionId)
+				#addListPic($ui.space)
+				<td width="100%"><span class="llink" onClick="doEdit('$entry.RegionId')">$entry.RegionName</span></td>
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

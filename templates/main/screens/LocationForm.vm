@@ -1,0 +1,249 @@
+#set ( $module = "Main" )
+#formCommon()
+
+function formInit(){
+	myForm.status.value=$!entry.Status;
+	myForm.locationtype.value=$!entry.LocationType;
+	myForm.gendertemp.value=$!entry.Gender;
+	myForm.locationcatid.value=$!entry.LocationCatId;
+	myForm.countryid.value=$!entry.CountryId;
+	myForm.regionid.value=$!entry.RegionId;
+	myForm.distributorid.value=$!entry.DistributorId;
+	myForm.salesdistrictid.value=$!entry.SalesDistrictId;
+
+	if (myForm.locationtype.value==20){
+		myForm.gendertemp.disabled=true;
+	}
+	highlight(myForm.locationname1);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.locationcode)) return false;
+	if (parent.isEmpty(myForm.locationname1)) return false;
+	if (parent.isEmpty(myForm.locationdisplay)) return false;
+	
+	myForm.locationcode.value = myForm.locationcode.value.toUpperCase();
+
+	if (myForm.locationtype.value==20){
+		myForm.gender.value=10;
+	}
+	else{
+		myForm.gender.value=myForm.gendertemp.value;
+	}
+	
+	return true;
+}
+
+function valueChanged(formField){
+	if (formField.name=='locationname1'){
+		myForm.locationdisplay.value=formField.value;
+		myForm.dear.value=formField.value;
+	}
+	else if (formField.name=='locationtype'){
+		if (formField.value==20){
+			myForm.gendertemp.value=10;
+			myForm.gendertemp.disabled=true;
+		}else{
+			myForm.gendertemp.disabled=false;
+		}
+	}
+
+}
+
+#formHeader("LocationForm.vm" "LocationSQL" "locationid" $!entry.LocationId $mode)
+
+<tr>
+<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+      <tr>  
+   		#formCell ("Code" "locationcode" $!entry.LocationCode 20 100 1)
+			<td width=16>&nbsp;</td>
+		#formLabel("Status")
+		<td align="left">
+		<select name="status" tabIndex=2 value=$!entry.Status STYLE="width: 100px">
+  		#if($mode=="insert" || $!entry.Status==10)
+			<option value="10">Prospect</option>
+		#end        	
+			<option value="30">Active</option>
+			<option value="50">Inactive</option>
+		</select>
+		</td>
+      </tr>
+      <tr>
+	<td>
+	&nbsp;
+	</td>
+      </tr>
+      <tr>
+		#formLabel("Distributor")
+		<td align="left">
+		<select name="distributorid" tabIndex="3" value="$!entry.DistributorId" width="160" STYLE="width: 160px">
+		#foreach ($distributor in $distributors)
+			<option value="$distributor.DistributorId">$distributor.DistributorDisplay</option>
+		#end        	
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+		#formLabel("District")
+		<td align="left">
+		<select name="salesdistrictid" tabIndex="3" value="$!entry.SalesDistrictId" width="160" STYLE="width: 160px">
+		#foreach ($salesdistrict in $salesdistricts)
+			<option value="$salesdistrict.SalesDistrictId">$salesdistrict.SalesArea.SalesAreaName - $salesdistrict.SalesDistrictName</option>
+		#end        	
+		</select>
+		</td>
+      </tr>
+      <tr>
+		<td>
+		&nbsp;
+		</td>
+      </tr>
+      <tr>
+        #formCellWithChange ("Name" "locationname1" $!entry.LocationName1 70 160 3)
+			<td width=16>&nbsp;</td>
+		#formLabel("Type")
+		<td align="left">
+		<select name="locationtype" tabIndex="7" value="$!entry.LocationType" onchange="valueChanged(this);" width="160" STYLE="width: 160px">
+			<option value="10">Person</option>
+			<option value="20">Institution</option>
+		</select>
+		</td>
+      </tr>
+      <tr>
+        #formCell ("" "locationname2" $!entry.LocationName2 70 160 4)
+			<td width=16>&nbsp;</td>
+		#formLabel("Gender")
+		<td align="left">
+		<select name="gendertemp" tabIndex="8" value="$!entry.Gender" width="160" STYLE="width: 160px">
+			<option value="10">---</option>
+			<option value="20">Male</option>
+			<option value="30">Female</option>
+		</select>
+		</td>
+      </tr>
+      <tr>
+        #formCell ("Display" "locationdisplay" $!entry.LocationDisplay 70 160 5)
+			<td width=16>&nbsp;</td>
+			<td width=16>&nbsp;</td>
+			<td width=16>&nbsp;</td>
+      </tr>
+      <tr>
+        #formCell ("Dear" "dear" $!entry.Dear 70 160 6)
+			<td width=16>&nbsp;</td>
+		#formLabel("Category")
+		<td align="left">
+		<select name="locationcatid" tabIndex="9" value="$!entry.LocationCatId" width="160" STYLE="width: 160px">
+		#foreach ($locationcat in $locationcats)
+			<option value="$locationcat.LocationCatId">$locationcat.LocationCatName</option>
+		#end        	
+		</select>
+		</td>
+      </tr>
+      <tr>
+		<td>
+		&nbsp;
+		</td>
+      </tr>
+      <tr>
+        #formCell ("Address" "address1" $!entry.Address1 55 160 12)
+			<td width=16>&nbsp;</td>
+		#formLabel("Country")
+		<td align="left">
+		<select name="countryid" tabIndex="18" value="$!entry.CountryId" width="160" STYLE="width: 160px">
+		#foreach ($country in $countries)
+			<option value="$country.CountryId">$country.CountryName</option>
+		#end        	
+		</select>
+		</td>
+      </tr>
+      <tr>
+        #formCell ("" "address2" $!entry.Address2 55 160 13)
+			<td width=16>&nbsp;</td>
+		#formLabel("Region")
+		<td align="left">
+		<select name="regionid" tabIndex="19" value="$!entry.RegionId" width="160" STYLE="width: 160px">
+		#foreach ($region in $regions)
+			<option value="$region.RegionId">$region.RegionName</option>
+		#end        	
+		</select>
+		</td>
+      </tr>
+      <tr>
+        #formCell ("City" "city" $!entry.City 35 160 15)
+			<td width=16>&nbsp;</td>
+        #formCell ("Phone 1" "phone1" $!entry.Phone1 30 160 20)
+      </tr>
+      <tr>
+        #formCell ("Zip" "zip" $!entry.Zip 12 100 16)
+			<td width=16>&nbsp;</td>
+        #formCell ("Phone 2" "phone2" $!entry.Phone1 30 160 21)
+      </tr>
+      <tr>
+        #formCell ("State" "state" $!entry.State 35 160 17)
+			<td width=16>&nbsp;</td>
+        #formCell ("Fax" "fax" $!entry.Fax 30 160 22)
+      </tr>
+      <tr>
+		<td>
+		&nbsp;
+		</td>
+      </tr>
+      <tr>
+        #formCell ("Custom 1" "custom1" $!entry.Custom1 55 160 37)
+			<td width=16>&nbsp;</td>
+        #formCell ("Custom 4" "custom4" $!entry.Custom4 55 160 40)
+      </tr>
+      <tr>
+        #formCell ("Custom 2" "custom2" $!entry.Custom2 55 160 38)
+			<td width=16>&nbsp;</td>
+        #formCell ("Custom 5" "custom5" $!entry.Custom5 55 160 41)
+      </tr>
+      <tr>
+        #formCell ("Custom 3" "custom3" $!entry.Custom3 55 160 39)
+			<td width=16>&nbsp;</td>
+        #formCell ("Custom 6" "custom6" $!entry.Custom6 55 160 42)
+      </tr>
+	</table>
+  </td>
+</tr>
+
+<input type="hidden" name="gender" value="$!entry.Gender">
+
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+<tr>
+	<td align=center>
+		<textarea rows="5" cols="96%" name="notes" tabIndex=43>$!entry.Notes</textarea>
+	</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+#if ($!entry.Created)
+	<input type="hidden" name="created" value="$!dtf.format($!entry.Created)">
+	<input type="hidden" name="createdby" value="$!entry.CreatedBy">
+
+	<tr>
+		<td align=center>
+	    <table align=center width="96%" cellpadding=0 cellspacing=0 border=0>
+	      <tr>  
+	      	  <td align=left><font class=frmlabel>Created: </font>$!dtf.format($!entry.Created) ($!entry.CreatedBy)</td>
+	      	  <td align=right><font class=frmlabel>Modified: </font>$!dtf.format($!entry.Modified) ($!entry.ModifiedBy)</td>
+	      </tr>  
+		</table>
+		</td>
+	</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+#end        	
+
+	
+#formFooter("LocationForm.vm" "LocationSQL" "locationid" $!entry.LocationId $mode)

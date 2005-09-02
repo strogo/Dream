@@ -1,0 +1,18 @@
+#set ( $module = "System" )
+#listCommon()
+#listHeader(4001 "UserList.vm" "UserSQL" 5)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+			#rowStatusClass (30)
+				#addToggle($!entry.UserId)
+				#addListPic($ui.space)
+		
+				<td width="33%"><span class="llink" onClick="parent.doEdit('$!entry.UserId')">$!entry.LoginName</span></td>
+				#listCellPrc (33 $!entry.FirstName)
+				#listCellPrc (33 $!entry.LastName)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

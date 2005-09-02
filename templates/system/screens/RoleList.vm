@@ -1,0 +1,15 @@
+#set ( $module = "System" )
+#listCommon()
+#listHeader(4003 "RoleList.vm" "RoleSQL" 3)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+			#rowStatusClass (30)
+				#addToggle($!entry.RoleId)
+				#addListPic($ui.space)
+				<td width="100%"><span class="llink" onClick="parent.doEdit('$!entry.RoleId')">$!entry.RoleName</span></td>
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

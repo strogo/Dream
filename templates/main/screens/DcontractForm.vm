@@ -1,0 +1,228 @@
+#set ( $module = "Main" )
+#formCommon()
+
+var rowId=1;
+var tabInd=26;
+
+function CostTypeObject (desc, fun){
+	this.description=desc;
+	this.func=fun;
+}
+
+var contractCostType= new Array();
+
+#foreach ($costtype in $costtypes)
+contractCostType[$costtype.CostTypeId]=new CostTypeObject("$costtype.CostTypeName", "$costtype.CostTypeFunction");
+#end        	
+
+
+
+function formInit(){
+	myForm.status.value=$!entry.Status;
+	myForm.distributorid.value=$!entry.DistributorId;
+	myForm.projectid.value=$!entry.ProjectId;
+
+	#if ($!mode=="insert")
+		doAddItem();
+	#else
+		#foreach ($entryitem in $entryitems)
+			doAddItem();
+			suf= '_' + rowId;
+			myForm['costtypeid' + suf].value="$!entryitem.CostTypeId";
+			myForm['costfunction' + suf].value="$!entryitem.CostType.CostTypeFunction";
+			myForm['costamount' + suf].value="$!af.format($!entryitem.CostAmount)";
+	
+		#end
+	#end
+	myForm.distributorid.focus();
+
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.issueddate)) return false;
+	if (parent.isNotDate(myForm.issueddate)) return false;
+	if (parent.isEmpty(myForm.startdate)) return false;
+	if (parent.isNotDate(myForm.startdate)) return false;
+	if (parent.isEmpty(myForm.enddate)) return false;
+	if (parent.isNotDate(myForm.enddate)) return false;
+
+	if (myForm.status.value==50){
+		if (parent.isEmpty(myForm.closeddate)) return false;
+		if (parent.isNotDate(myForm.closeddate)) return false;
+	}
+	if (parent.isSelected(myForm.distributorid)) return false;
+
+	var costfunc= 0;
+	var len = myForm.elements.length;
+	for (var i = 0; i < len; i++) {
+	    var e = myForm.elements[i];
+	    if (e.name.substring(0, 10) == "costtypeid") {
+			if (parent.isSelected(e)) return false;
+	    }
+	    else if (e.name.substring(0, 12) == "costfunction") {
+	    	costfunc= parseInt(e.value);
+	    }
+	    else if (e.name.substring(0, 10) == "costamount") {
+			if (costfunc==10 || costfunc==20 ){
+				if (parent.isNotPercentage(e)) return false;
+			}
+			else{
+				if (parent.isNotAmount(e)) return false;
+			}
+	    }
+	}
+
+	return true;
+}
+
+function valueChanged(formField){
+	if (formField.name=='status'){
+		if (myForm.status.value==50){
+			myForm.closeddate.disabled=false;
+			myForm.closeddate.value="$!df.format($!today)";
+		}
+		else{
+			myForm.closeddate.disabled=true;
+			myForm.closeddate.value="";
+		}
+	}
+	else if (formField.name.substring(0, 10)=='costtypeid'){
+		sufix= formField.name.substring(10, formField.name.length);
+		setCostTypeData(sufix);
+	}
+}
+
+function doAddItem(){
+	rowId++;
+
+	itemstr1='<a href="javascript: void 0" ONCLICK="doDeleteItem(this)"><img src="$ui.image($ui.itemDelete)" width="16" height="16" border=0 alt="Delete Item"></a>';
+	itemstr2='<select name="costtypeid_' + rowId + '" tabIndex="' + tabInd + '" value="$!entry.CostTypeId" onchange="valueChanged(this);" width="400" STYLE="width: 400px">';
+	#foreach ($costtype in $costtypes)
+		itemstr2+='<option value="$costtype.CostTypeId">$costtype.CostTypeName</option>'
+	#end        	
+	itemstr2+='</select>';
+	tabInd++;
+	itemstr3='<input type="hidden" tabIndex="' + tabInd + '" name="costfunction_' + rowId + '" STYLE="width: 1px">';
+	tabInd++;
+	itemstr4='<input type="text" tabIndex="' + tabInd + '" maxLength="10" name="costamount_' + rowId + '" value="0.00" onchange="valueChanged(this);" STYLE="width: 140px; text-align: right;">';
+
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+    var row = table.insertRow(table.rows.length);
+
+    var cell1 = row.insertCell(0);
+    cell1.innerHTML = itemstr1;
+    var cell2 = row.insertCell(1);
+    cell2.innerHTML = itemstr2;
+    var cell3 = row.insertCell(2);
+    cell3.innerHTML = itemstr3;
+    var cell4 = row.insertCell(3);
+    cell4.innerHTML = itemstr4;
+}
+
+function setCostTypeData(sufix){
+	prid= myForm['costtypeid' + sufix].value;
+	
+	myForm['costfunction' + sufix].value=this.contractCostType[prid].func;
+}
+
+function doDeleteItem(cell){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	var rowIndex= document.all ? cell.parentElement.parentElement.rowIndex : cell.parentNode.parentNode.rowIndex;
+
+	table.deleteRow(rowIndex);
+	if (table.rows.length<2){
+		doAddItem();
+	}
+}
+
+function checkEmptyTable(){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	if (table.rows.length<2){
+		doAddItem();
+	}
+}
+
+
+#formHeader("DcontractForm.vm" "DcontractSQL" "dcontractid" $!entry.DcontractId $mode)
+
+<tr>
+<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+      <tr>  
+   		#formCellDisabled ("ID" "dcontractcode" $!entry.DcontractCode 20 100 1)
+			<td width=16>&nbsp;</td>
+        #formCellDateDefault ("Issued" "issueddate" $!entry.IssuedDate $!today 10 100 2)
+			<td width=16>&nbsp;</td>
+   		#formSelectStatus ("Status" "status" $!entry.Status 100 3)
+      </tr>
+    <tr>
+	<td>
+	&nbsp;
+	</td>
+    </tr>
+
+      <tr>
+   		#formSelectDistributor ("Distributor" "distributorid" $!entry.DistributorId 160 5)
+			<td width=16>&nbsp;</td>
+			<td width=16>&nbsp;</td>
+			<td width=16>&nbsp;</td>
+			<td width=16>&nbsp;</td>
+		#if ($!entry.Status==50)
+        	#formCellDate ("Closed" "closeddate" $!entry.ClosedDate 10 100 7)
+        #else
+        	#formCellDisabled ("Closed" "closeddate" $!entry.ClosedDate 10 100 7)
+        #end
+      </tr>
+
+    <tr>
+	<td>
+	&nbsp;
+	</td>
+    </tr>
+
+      <tr>
+   		#formSelectProject ("Campaign" "projectid" $!entry.ProjectId 160 8)
+			<td width=16>&nbsp;</td>
+        	#formCellDateDefault ("Start" "startdate" $!entry.StartDate $!today 10 100 9)
+			<td width=16>&nbsp;</td>
+        	#formCellDateDefault ("End" "enddate" $!entry.EndDate $!today 10 100 11)
+      </tr>
+	</table>
+  </td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+<tr>
+<td>
+	<table align=center cellpadding=0 cellspacing=0 border=0>
+	<tr>
+		<td>
+		<table id="itemList" name="itemList" align=center cellpadding=0 cellspacing=0 border=0>
+			<tr class="toolbar" align="center">
+				<td>
+				<a href="javascript: void 0" ONCLICK="doAddItem()"><img src="$ui.image($ui.itemNew)" width="16" height="16" border="0" alt="Add Item"></a>
+				</td>
+				<td width="400">Cost Type</td>
+				<td width="1"></td>
+				<td width="140">Amount / Percentage</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+
+<input type="hidden" name="dcontractcode" value="$!entry.DcontractCode">
+
+#documentFooter()
+	
+#formFooter("DcontractForm.vm" "DcontractSQL" "dcontractid" $!entry.DcontractId $mode)

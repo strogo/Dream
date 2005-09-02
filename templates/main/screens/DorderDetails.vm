@@ -1,0 +1,25 @@
+#set ( $module = "Util" )
+#utilCommon()
+
+<script id="utilScript" language="JavaScript">
+
+function copyDetails(){
+	myForm=parent.document.getElementById('formData');
+
+	myForm['productname'].value="$!entry.Product.ProductDisplay";
+	myForm['totalquantity'].value="$!entry.TotalQuantity";
+	myForm['totalweight'].value="$!af.format($entry.TotalWeight)";
+	myForm['expectedtime'].value="$!dstf.format($!entry.ExpectedTime)";
+
+
+	parent.doClearItems();
+	#foreach ($entryitem in $entryitems)
+			myRow= parent.doAddItem();
+			suf= '_' + myRow;
+			myForm['locationid' + suf].value="$!entryitem.LocationId";
+			myForm['locationname' + suf].value="$!entryitem.Location.SalesDistrict.SalesDistrictName" + " - " + "$!entryitem.Location.LocationDisplay";
+			myForm['shippedqty' + suf].value="$!entryitem.ShippedQty";
+	#end
+	parent.checkEmptyTable();
+}
+</script>

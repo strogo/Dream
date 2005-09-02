@@ -1,0 +1,114 @@
+#set ( $module = "System" )
+$page.setHttpEquiv("Pragma", "no-cache")
+$page.setBgColor("$ui.formBg")
+$page.addAttribute("onLoad", "window.parent.copyFormContent();")	
+
+<script id="formScript" language=JavaScript>
+
+var myForm=document.getElementById('formData');
+
+function formInit(){
+	myForm.subject1.focus();
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.subject1)) return false;
+	if (parent.isEmpty(myForm.notification1)) return false;
+	if (parent.isEmpty(myForm.subject2)) return false;
+	if (parent.isEmpty(myForm.notification2)) return false;
+	if (parent.isEmpty(myForm.subject3)) return false;
+	if (parent.isEmpty(myForm.notification3)) return false;
+
+	return true;
+}
+
+function saveForm(retUrl){
+	myAction='NotificationSQL';
+	myUrl= retUrl + '/action/' + myAction;
+	myForm.action= myUrl;
+	myForm.submit();
+}
+</script>
+
+<form id="formData" name="formData" target="buffer" method="post" action="" onSubmit="return formValidate();">
+  <div id="Master" align="center">
+    <table cellpadding=1 cellspacing=0 border=0>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+ 		<tr>
+			<td>
+			&nbsp;
+			</td>
+    		#formLabel("New subscription notification")
+ 		</tr>
+ 		<tr>
+    		#formCell ("Subject" "subject1" $!entry1.Subject 254 420 1)
+ 		</tr>
+		<tr>
+			<td>
+			&nbsp;
+			</td>
+			<td align=center>
+				<textarea rows="5" name="notification1" tabIndex=2 style="width: 420px;">$!entry1.Body</textarea>
+			</td>
+		</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+ 		<tr>
+			<td>
+			&nbsp;
+			</td>
+    		#formLabel("Subscription expires notification")
+ 		</tr>
+ 		<tr>
+    		#formCell ("Subject" "subject2" $!entry2.Subject 254 420 3)
+ 		</tr>
+		<tr>
+			<td>
+			&nbsp;
+			</td>
+			<td align=center>
+				<textarea rows="5" name="notification2" tabIndex=4 style="width: 420px;">$!entry2.Body</textarea>
+			</td>
+		</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+ 		<tr>
+			<td>
+			&nbsp;
+			</td>
+    		#formLabel("Subscription expired notification")
+ 		</tr>
+ 		<tr>
+    		#formCell ("Subject" "subject3" $!entry3.Subject 254 420 5)
+ 		</tr>
+		<tr>
+			<td>
+			&nbsp;
+			</td>
+			<td align=center>
+				<textarea rows="5" name="notification3" tabIndex=6 style="width: 420px;">$!entry3.Body</textarea>
+			</td>
+		</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+</table>
+
+
+    <input type="hidden" name="eventSubmit_doUpdate" value="Update"/>
+  </div>
+</form>
+
+	

@@ -1,0 +1,188 @@
+#set ( $module = "Main" )
+#formCommon()
+
+function formInit(){
+	myForm.status.value=$entry.Status;
+	myForm.priority.value=$entry.Priority;
+	myForm.eventtype.value=$entry.EventType;
+	myForm.eventchannel.value=$entry.EventChannel;
+	myForm.distributorid.value=$entry.DistributorId;
+	myForm.productid.value=$entry.ProductId;
+	myForm.projectid.value=$entry.ProjectId;
+
+	if (myForm.eventchannel.value==10){
+		myForm.eventchannel.disabled=true;
+	}
+
+	myForm.eventtype.focus();
+
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.issueddate)) return false;
+	if (parent.isSelected(myForm.distributorid)) return false;
+	if (parent.isEmpty(myForm.subject)) return false;
+
+	return true;
+}
+
+#formHeader("DinboxEventForm.vm" "DinboxEventSQL" "dinboxeventid" $!entry.DinboxEventId $mode)
+
+ <tr>
+	<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+</td>
+<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+      <tr>  
+   		#formCellDisabled ("ID" "dinboxeventcodetemp" $!entry.DinboxEventCode 20 130 1)
+			<td width=16>&nbsp;</td>
+		#formLabel("Priority")
+		<td align="left">
+		<select name="priority" tabIndex="2" value="$!entry.Priority" width="100" STYLE="width: 100px">
+			<option value="10">Low</option>
+			<option #if($mode=="insert")selected #end value="30">Normal</option>
+			<option value="50">High</option>
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+		#formLabel("Status")
+		<td align="left">
+		<select name="status" tabIndex="3" value="$!entry.Status" width="100" STYLE="width: 100px">
+  		#if($mode=="insert" || $!entry.Status==10)
+			<option value="10">Draft</option>
+		#end        	
+			<option #if($mode=="insert")selected #end value="30">Open</option>
+			<option value="50">Closed</option>
+		</select>
+		</td>
+      </tr>
+ <tr>
+	<td>
+	&nbsp;
+	</td>
+ </tr>
+      <tr>  
+		#formLabel("Type")
+		<td align="left">
+		<select name="eventtype" tabIndex="4" value="$!entry.EventType" width="130" STYLE="width: 130px">
+			<option value="10">Message</option>
+			<option value="30">Info Request</option>
+			<option value="50">Support Request</option>
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+		#formLabel("Channel")
+		<td align="left">
+		<select name="eventchannel" tabIndex="5" value="$!entry.EventChannel" width="100" STYLE="width: 100px">
+  		#if($mode!="insert" && $!entry.EventChannel==10)
+			<option value="10">Email</option>
+		#end        	
+			<option value="20">Phone Call</option>
+			<option value="30">Letter</option>
+			<option value="40">Fax</option>
+			<option value="50">Visit</option>
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+   		#formCellDateDefault ("Date" "issueddate" $!entry.IssuedDate $!today 20 100 6)
+      </tr>
+	</table>
+	</td>
+ </tr>
+ <tr>
+	<td>
+	&nbsp;
+	</td>
+ </tr>
+ 		<tr>
+			#formLabel("Distributor")
+			<td align="left">
+			<select name="distributorid" tabIndex="7" value="$!entry.DistributorId" width="520" STYLE="width: 520px">
+			#foreach ($distributor in $distributors)
+				<option value="$distributor.DistributorId">$!distributor.DistributorDisplay</option>
+			#end        	
+			</select>
+			</td>
+ 		</tr>
+ 		<tr>
+			#formLabel("Campaign")
+			<td align="left">
+			<select name="projectid" tabIndex="8" value="$!entry.ProjectId" width="520" STYLE="width: 520px">
+			#foreach ($project in $projects)
+				<option value="$project.ProjectId">$!project.ProjectName</option>
+			#end        	
+			</select>
+			</td>
+ 		</tr>
+ 		<tr>
+			#formLabel("Product")
+			<td align="left">
+			<select name="productid" tabIndex="9" value="$!entry.ProductId" width="520" STYLE="width: 520px">
+			#foreach ($product in $products)
+				<option value="$product.ProductId">$!product.ProductDisplay</option>
+			#end        	
+			</select>
+			</td>
+ 		</tr>
+  		#if($mode!="insert" && $!entry.EventChannel==10)
+		<tr>
+			<td>
+			&nbsp;
+			</td>
+			<td align=left>
+					<input type="button" name="replyButton" class=fbutton style="width: 520px" onclick="parent.doReply($!entry.DinboxEventId)" value="Reply"/>
+			</td>
+		</tr>
+		#end
+ 		<tr>
+    		#formCell ("Subject" "subject" $!entry.Subject 254 520 10)
+ 		</tr>
+
+		<tr>
+			<td>
+			&nbsp;
+			</td>
+			<td align=left>
+				<textarea rows=14 name="body" tabIndex=33 style="width: 520px">$!entry.Body</textarea>
+			</td>
+		</tr>
+
+<input type="hidden" name="dinboxeventcode" value="$!entry.DinboxEventCode">
+
+		 <tr>
+			<td>
+			&nbsp;
+			</td>
+		 </tr>
+#if ($!entry.Created)
+	<input type="hidden" name="created" value="$!dtf.format($!entry.Created)">
+	<input type="hidden" name="createdby" value="$!entry.CreatedBy">
+
+			<tr>
+			<td>
+			&nbsp;
+			</td>
+				<td align=center>
+			    <table align=center width="520" cellpadding=0 cellspacing=0 border=0>
+			      <tr>  
+			      	  <td align=left><font class=frmlabel>Created: </font>$!dtf.format($!entry.Created) ($!entry.CreatedBy)</td>
+			      	  <td align=right><font class=frmlabel>Modified: </font>$!dtf.format($!entry.Modified) ($!entry.ModifiedBy)</td>
+			      </tr>  
+				</table>
+				</td>
+			</tr>
+		<tr>
+		<td>
+		&nbsp;
+		</td>
+		</tr>
+		#end        	
+ 		</table>
+</td>
+</tr>
+
+	
+#formFooter("DinboxEventForm.vm" "DinboxEventSQL" "dinboxeventid" $!entry.DinboxEventId $mode)

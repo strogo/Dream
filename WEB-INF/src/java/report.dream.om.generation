@@ -1,0 +1,457 @@
+
+  
+    
+  
+  org.campware.dream.om
+  org.campware.dream.om
+  org.campware.dream.om.map
+
+    Failed to create dir or dir already exists: /home/nenad/Projects/dream/WEB-INF/src/java/org/campware/dream/om/
+
+    Failed to create dir or dir already exists: /home/nenad/Projects/dream/WEB-INF/src/java/org/campware/dream/om/map/
+
+    Failed to create dir or dir already exists: /home/nenad/Projects/dream/WEB-INF/src/java/org/campware/dream/om/
+
+         TURBINE_PERMISSION
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                TURBINE_ROLE
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                TURBINE_GROUP
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                TURBINE_ROLE_PERMISSION
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                TURBINE_USER
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                TURBINE_USER_GROUP_ROLE
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                TURBINE_SCHEDULED_JOB
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+           
+    
+  
+  org.campware.dream.om
+  org.campware.dream.om
+  org.campware.dream.om.map
+
+    Failed to create dir or dir already exists: /home/nenad/Projects/dream/WEB-INF/src/java/org/campware/dream/om/
+
+    Failed to create dir or dir already exists: /home/nenad/Projects/dream/WEB-INF/src/java/org/campware/dream/om/map/
+
+    Failed to create dir or dir already exists: /home/nenad/Projects/dream/WEB-INF/src/java/org/campware/dream/om/
+
+         DREAM_USER
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                PROJECT_CATEGORY
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                PRODUCT_CATEGORY
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DISTRIBUTOR_CATEGORY
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                LOCATION_CATEGORY
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                COST_TYPE
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                COUNTRY
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                REGION
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                SALES_AREA
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                SALES_DISTRICT
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                LANGUAGE
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                VENDOR
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                UOM
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DISTRIBUTOR
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                LOCATION
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                PRODUCT
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                PROJECT
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DCONTRACT
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DCONTRACT_ITEM
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DORDER
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DORDER_ITEM
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DSHIPMENT
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DRETURN
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DINBOX_EVENT
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DOUTBOX_EVENT
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+                DNEWSLETTER
+    
+        
+
+          
+    
+
+        
+
+
+        
+        
+    
+         

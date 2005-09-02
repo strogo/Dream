@@ -1,0 +1,114 @@
+
+$page.setTitle("Please Login")
+$page.addAttribute("onload", "loginInit()")
+
+<script language="JavaScript">
+
+function loginInit(){
+	if (parent.window.frames['buffer'])
+	{
+		parent.doLogin();		
+	}
+	else
+	{
+		myForm=document.getElementById('formLogin');
+		myForm.username.focus();
+		myForm.username.select();
+	}
+}
+
+</script>
+
+<script language=JavaScript>
+	if (window.innerHeight)
+	{
+		myHeight = window.innerHeight;
+	}
+	else if (document.documentElement && document.documentElement.clientHeight)
+	{
+		myHeight = document.documentElement.clientHeight;
+	}
+	else if (document.body)
+	{
+		myHeight = document.body.clientHeight;
+	}
+
+	myHeight=myHeight - 60;
+	myHeight= parseInt(myHeight * 0.8);
+	myScreen='<table width="100%" height="' + myHeight + '" cellpadding="0" cellspacing="0" border="0">';
+	document.write(myScreen);
+</script>
+
+
+<tr>
+<td align="center" valign="middle">
+	<table cellspace=50 width=460 align="center" style="border-bottom: solid 1px #E7F6DA;">
+		<tr>
+			<td align="center" valign="middle" style="border-top: solid 1px #E7F6DA; border-bottom: solid 1px #E7F6DA;">
+				<table align="center" width="100%" cellpadding=10>
+				<tr>
+				<td align="center" valign="top">
+				<img src="$ui.image($ui.logo)">
+				</td>
+				<td align="center" valign="center">
+				<font color="#333333" size="+3"><b>DReaM 1.0.0</b></font>
+				</td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+		<td align="center">
+		&nbsp;
+		</td>
+		</tr>
+		<tr>
+		<td align="center" valign="middle">
+			<form name="formLogin" id="formLogin" method="post" action="$link.setAction("LoginUser")">
+			  <table align="center">
+			    <tr>
+			    <td>
+				<table align="center" cellpadding=3>
+				    <tr>
+			    		#formCell ("User" "username" "" 30 160 1)
+			    	</tr>
+			    	<tr>
+			       		#formPasswordCell ("Password" "password" "" 30 160 2)
+			    	</tr>
+				</table>
+			    </td>
+			    </tr>
+			    	
+			    <tr align="center">
+			      <td>
+			      &nbsp;
+			      </td>
+			    </tr>
+			    <tr align="center">
+			      <td>
+			          <input type="submit" class=fbutton value="Login">
+			      </td>
+			    </tr>
+			  </table>
+			</form>
+		</td>
+		</tr>
+		<tr>
+		<td align="center">
+		&nbsp;
+		</td>
+		</tr>
+		<tr>
+		<td align="center" style="border-top: solid 1px #E7F6DA;">
+			#if ( $data.getMessage() )
+			  <font color="#FF0000" size="-1"><b>$data.getMessage()</b></font>
+			#end
+		</td>
+		</tr>
+	</table>
+</td>
+</tr>
+</table>
+
+
+

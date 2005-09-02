@@ -1,0 +1,49 @@
+A, A visited { font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold; color:black;}
+body, td {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; }
+input, textarea, select {font-family: Arial, Helvetica, sans-serif; font-size: 12px; }
+small, .ftitle TD, .verd {font-family:Arial,Arial,helvetica,sans-serif;font-size:xx-small;}
+big {font-size:small;}
+font {line-height: 1.35em;}
+tt, pre {font-family:'courier new',monospace; font-size:x-small;}
+
+.ltitle, .mtitle, .errtitle {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 20px; font-weight: bold;color: #4C4C4C;background-color: #E7F6DA;}
+.lfilter {background-color: #E7F6DA;border-top: solid 2px #9CB886;}
+.fbutton {cursor: hand; background-color: #E7F6DA; text-align: center;}
+.tabhi, .tabhi A, .tabhi A visited {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; background-color: #9CB886; border-left: solid 1px #77995C; border-top: solid 1px #77995C; border-right: solid 1px #77995C; font-weight: bold;color:#333333;}
+.tablo {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; background-color: #E7F6DA; border-left: solid 1px #9CB886; border-right:solid 1px #9CB886; border-top: solid 1px #9CB886; border-bottom:solid 1px #77995C;font-weight: bold;color:#4C4C4C;}
+.tablo A {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; background-color: #E7F6DA; font-weight: bold;color:#4C4C4C;}
+.tablo A visited  {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; background-color: #E7F6DA; font-weight: bold;color:#4C4C4C;}
+.tabrest {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom:solid 1px #77995C;color:blue;}
+.ftitle TD {border-bottom: solid 1px #77995C; padding-top: 8px; padding-bottom: 4px;}
+.mlink {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold; color: #333333; cursor: pointer; }
+.lhlink {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold; color: #4C4C4C; cursor: pointer; }
+.llink {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold; color: black; cursor: pointer; }
+.tlink {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold; color: #4C4C4C; cursor: pointer; }
+.trlink {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold; color: black; cursor: pointer; }
+.mitemlo TD {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom: solid 1px #E7F6DA; font-weight: bold; color: #333333;}
+.mitemlo A {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold; color: #333333; }
+.mitemlo A visited {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold; color: #333333; }
+.mitemhi TD {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom: solid 1px #E7F6DA; border-top: solid 1px #E7F6DA; font-weight: bold; color: #333333; }
+.mitemhi A {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold; color: #333333; }
+.mitemhi A visited {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold; color: #333333; }
+.mitemsp TD {border-bottom: solid 1px #E7F6DA;}
+.bgd {background-color: #9CB886;}
+.tabfoot {background-color: #9CB886; border-bottom:solid 1px #77995C; border-left: solid 1px #77995C;}
+.menubar {background-color:#9CB886;}
+.menubgd {background-color:#9CB886; border-left: solid 1px #77995C;}
+.toolbar {background-color:#9CB886;font-weight: bold;color:#333333;}
+.toolbar select {font-family: Arial, Helvetica, sans-serif; font-size: 12px;font-weight: normal; }
+.listhead TD {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom: solid 2px #9CB886;background-color: #E7F6DA;font-weight: bold;color: #4C4C4C;}
+.listhead A {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; background-color: #E7F6DA;font-weight: bold;color: #4C4C4C;}
+.listhead A visited {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; background-color: #E7F6DA;font-weight: bold;color: #4C4C4C;}
+.headlabel {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; background-color: #E7F6DA;font-weight: bold;color: #4C4C4C;}
+.frmlabel {font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #333333;}
+.msgnew TD {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom: solid 2px #EEEEEE;}
+.msgold TD {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom: solid 2px #FFFFFF;}
+.rowopen TD {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom: solid 2px #EEEEEE;}
+.rowclosed TD {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom: solid 2px #EEEEEE;color: #666666; }
+.rowdraft TD {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom: solid 2px #EEEEEE;color: #4C4C4C;}
+.repcontent {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px;}
+.rephead {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom: solid 2px #EEEEEE;color: #EEEEEE;}
+.reptitle {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 16px; font-weight: bold;color: #4C4C4C;}
+.reptblhead {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold;color: #4C4C4C;border-bottom: solid 2px #4C4C4C;border-top: solid 2px #4C4C4C;}

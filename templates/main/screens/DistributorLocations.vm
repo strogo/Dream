@@ -1,0 +1,20 @@
+#set ( $module = "Util" )
+#utilCommon()
+
+<script id="utilScript" language="JavaScript">
+
+function copyDetails(){
+	myForm=parent.document.getElementById('formData');
+
+	parent.doClearItems();
+	#foreach ($entryitem in $entryitems)
+			doAddItem();
+			suf= '_' + rowId;
+			myForm['locationid' + suf].value="$!entryitem.LocationId";
+			myForm['locationname' + suf].value="$!entryitem.LocationDisplay";
+			myForm['orderedqty' + suf].value=0;
+	#end
+	parent.checkEmptyTable();
+	myForm.projectid.focus();
+}
+</script>

@@ -1,0 +1,22 @@
+#set ( $module = "Options" )
+#formCommon()
+
+<script language="JavaScript">
+function formInit(){
+	this.document.formData.carriername.focus();
+}
+
+function formValidate(){
+	if (parent.isEmpty(this.document.formData.carriername)) return false;
+	
+	return true;
+}
+</script>
+
+#formHeader("CarrierForm.vm" "CarrierSQL" "carrierid" $!entry.CarrierId $mode)
+
+      <tr>  
+        #formCell ("Name" "carriername" $!entry.CarrierName 50 50 1)
+      </tr>
+
+#formFooter("CarrierForm.vm" "CarrierSQL" "carrierid" $!entry.CarrierId $mode)

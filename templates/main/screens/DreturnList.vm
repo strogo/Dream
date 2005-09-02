@@ -1,0 +1,19 @@
+#set ( $module = "Main" )
+#listCommon()
+#listHeader(2104 "DreturnList.vm" "DreturnSQL" 7)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+			#rowStatusClass ($!entry.Status)
+				#addToggle($!entry.DreturnId)
+				#addListPic($ui.dreturn)
+				<td width="15%"><span class="llink" onClick="doEdit('$!entry.DreturnId')">$!entry.DreturnCode</span></td>
+				#listCellPrc (25 $!entry.Distributor.DistributorDisplay)
+				#listCellPrc (25 $!entry.Dorder.Product.ProductDisplay)
+				#listCellPrc (20 $!entry.Dorder.DorderCode)
+				#listCellPrcDate (15 $!entry.IssuedDate)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

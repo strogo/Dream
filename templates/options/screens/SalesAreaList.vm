@@ -1,0 +1,15 @@
+#set ( $module = "Options" )
+#listCommon()
+#listHeader(3105 "SalesAreaList.vm" "SalesAreaSQL" 3)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.SalesAreaId)
+				#addListPic($ui.space)
+				<td width="100%"><span class="llink" onClick="doEdit('$entry.SalesAreaId')">$entry.SalesAreaName</span></td>
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

@@ -1,0 +1,15 @@
+#set ( $module = "System" )
+#listCommon()
+
+<table  width="100%" cellpadding=2 cellspacing=0 border=0>
+    #foreach ($group in $flux.Groups)
+    <tr class=msgnew>
+		#addToggle($group.Name)
+		#addListPic($ui.space)
+		<td width="99%"><a href="javascript:parent.doEdit('$group.Name')">$group.Name</a></td>
+    </tr>        
+    #end
+
+#listFooter()
+
+

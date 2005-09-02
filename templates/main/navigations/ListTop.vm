@@ -1,0 +1,31 @@
+
+<table cellpadding=0 cellspacing=0 border=0 width="100%">
+<tr>
+<td>
+				    
+<table cellpadding=5 cellspacing=0 border=0 width="100%">
+<tr>
+<td class=ltitle colspan=2><span id="ListTitle">No Title</span>&nbsp;&nbsp;<span></span></td>
+<td class=lfilter align=right nowrap></td>
+</tr>
+				    
+<tr  class=toolbar>
+<td nowrap>
+<a href="javascript:doNew()"><img src="$ui.image($ui.navNew)" width="24" height="24" border=0 alt="Add New"></a>
+<a href="javascript:doDelete()"><img src="$ui.image($ui.navDelete)" width="24" height="24" border=0 alt="Delete Selected"></a>
+<a href="javascript:doFind()"><img src="$ui.image($ui.navFind)" width="24" height="24" border=0 alt="Find"></a>
+</td>
+<td align=right nowrap></td>
+<td align=right >
+<select ID="ListFilter" onchange="filterList(1)">
+	<option>---</option>
+	#foreach ($filter in $filters)
+		<option value="$filter">$filter</option>
+	#end    
+</select>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>

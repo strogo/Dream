@@ -1,0 +1,15 @@
+#set ( $module = "Options" )
+#listCommon()
+#listHeader(3110 "DistributorCategoryList.vm" "DistributorCategorySQL" 3)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.DistributorCatId)
+				#addListPic($ui.space)
+				<td width="100%"><span class="llink" onClick="doEdit('$entry.DistributorCatId')">$entry.DistributorCatName</span></td>
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

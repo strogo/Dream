@@ -1,0 +1,490 @@
+
+var lastTop;
+var lastScreen;
+var lastScreenType;
+var lastList;
+var screenHeight;
+var screenWidth;
+var listScreenHeight;
+var listTopHeight=94;
+var formTopHeight=69;
+var marginHeight=10;
+var retrieveInfo=false;
+
+if (document.layers)
+    document.captureEvents(Event.KEYPRESS);
+  document.onkeypress = function (evt) {
+    var key = document.all ? event.keyCode : evt.which ? evt.which : evt.keyCode;
+    if (key == 13){
+//      if (document.getElementById("formData")) doSave();
+    }
+  };
+
+
+
+	function initApp()
+	{
+		showTab(TAB_MAIN);
+		showList(defaultList);
+		document.body.style.visibility='visible';
+	}
+
+
+	function postResize()
+	{
+		if (window.innerHeight)
+		{
+			myHeight = window.innerHeight;
+			myWidth = window.innerWidth;
+		}
+		else if (document.documentElement && document.documentElement.clientHeight)
+		{
+			myHeight = document.documentElement.clientHeight;
+			myWidth = document.documentElement.clientWidth;
+		}
+		else if (document.body)
+		{
+			myHeight = document.body.clientHeight;
+			myWidth = document.body.clientWidth;
+		}
+	
+		myHeight=myHeight - 60;
+		screenHeight= myHeight;
+		screenWidth= myWidth;
+		dataScreenWidth= myWidth - 185;
+		document.getElementById("mainTable").style.height=myHeight;
+		if (lastTop==TOP_LIST)
+		{
+			document.getElementById('DataFrame').style.height = screenHeight - listTopHeight - marginHeight;
+		}
+		else
+		{
+			document.getElementById('DataFrame').style.height = screenHeight - formTopHeight - marginHeight;
+		}
+	}
+
+	function showTab(tabId)
+	{
+		document.getElementById("AppTab").innerHTML=getTab(tabId);
+		document.getElementById("AppMenu").innerHTML=getMenu(tabId);
+	}
+
+
+	function getTab(tabId)
+	{
+		tabHeader='<table width="100%" cellpadding=5 cellspacing=0 border=0>';
+		tabHeader+='<tr>';
+
+		tabFooter='<td class=tabrest align=right valign=bottom>';
+		tabFooter+='<span><b>'+TI_WELCOME+'</b></span> - ';
+		tabFooter+='<span class="trlink" onClick="showDialog(REPORT)">'+getMenuLabel(REPORT)+'</span> - ';
+		tabFooter+='<span class="trlink" onClick="Help()">'+TI_HELP+'</span> - ';
+		tabFooter+='<span class="trlink" onClick="showAbout()">'+TI_ABOUT+'</span> - ';
+		tabFooter+='<a href="$link.setAction("LogoutUser")">'+TI_LOGOUT+'</a></td>';
+		tabFooter+='</tr>';
+		tabFooter+='</table>';
+
+		tabContent='';
+
+		if (tabId==TAB_OPTIONS)
+		{
+			tabContent+='<td class=tablo align=center valign=bottom><span class="tlink" onClick="showTab(TAB_MAIN)">'+TI_MAIN+'</span></td>';
+			tabContent+='<td class=tabhi align=center valign=bottom>'+TI_OPTIONS+'</td>';
+			tabContent+='<td class=tablo align=center valign=bottom><span class="tlink" onClick="showTab(TAB_SYSTEM)">'+TI_SYSTEM+'</span></td>';
+		}
+		else if (tabId==TAB_SYSTEM)
+		{
+			tabContent+='<td class=tablo align=center valign=bottom><span class="tlink" onClick="showTab(TAB_MAIN)">'+TI_MAIN+'</span></td>';
+			tabContent+='<td  class=tablo align=center valign=bottom><span class="tlink" onClick="showTab(TAB_OPTIONS)">'+TI_OPTIONS+'</span></td>';
+			tabContent+='<td  class=tabhi align=center valign=bottom>'+TI_SYSTEM+'</td>';
+		}
+		else
+		{
+			tabContent+='<td class=tabhi align=center valign=bottom>'+TI_MAIN+'</td>';
+			tabContent+='<td class=tablo align=center valign=bottom><span class="tlink" onClick="showTab(TAB_OPTIONS)">'+TI_OPTIONS+'</span></td>';
+			tabContent+='<td class=tablo align=center valign=bottom><span class="tlink" onClick="showTab(TAB_SYSTEM)">'+TI_SYSTEM+'</span></td>';
+		}
+		
+		tabContent= tabHeader + tabContent + tabFooter;
+		return tabContent;
+	}
+
+	function getMenu(tabId)
+	{
+		menuHeader='<table  class=menubgd cellpadding=10 cellspacing=0 border=0 height="100%" width="100%">';
+		menuHeader+='<tr valign="top">';
+		menuHeader+='<td>';
+		menuHeader+='<table class=menubar valign=top width="100%"  cellpadding="2" cellspacing="0" border="0">';
+		menuHeader+='<tr height="12">';
+		menuHeader+='<td></td>';
+		menuHeader+='<td></td>';
+		menuHeader+='</tr>';
+		
+		menuFooter='<tr>';
+		menuFooter+='<td colSpan=2 height=5><IMG height=5 alt="" src="$ui.image($ui.space)" width=5></td>';
+		menuFooter+='</tr>';
+		menuFooter+='</table>';
+		menuFooter+='</td>';
+		menuFooter+='</tr>';
+		menuFooter+='</table>';
+
+
+		menuContent='';
+		beforeMenuItem='<tr class="mitemlo">';
+		beforeMenuItem+='<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>';
+		beforeFirstMenuItem='<tr class="mitemhi">';
+		beforeFirstMenuItem+='<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>';
+		postMenuItem='</tr>';
+
+		menuSpace='<tr class="mitemsp">';
+		menuSpace+='<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>';
+		menuSpace+='<td>&nbsp;</td>';
+		menuSpace+='</tr>';
+				
+		if (tabId==TAB_OPTIONS)
+		{
+			menuContent+=beforeFirstMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(SALES_DISTRICT)">'+getMenuLabel(SALES_DISTRICT)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(SALES_AREA)">'+getMenuLabel(SALES_AREA)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(LANGUAGE)">'+getMenuLabel(LANGUAGE)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(COUNTRY)">'+getMenuLabel(COUNTRY)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(REGION)">'+getMenuLabel(REGION)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(COST_TYPE)">'+getMenuLabel(COST_TYPE)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(UOM)">'+getMenuLabel(UOM)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(VENDOR)">'+getMenuLabel(VENDOR)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=menuSpace;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(LOCATION_CATEGORY)">'+getMenuLabel(LOCATION_CATEGORY)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(DISTRIBUTOR_CATEGORY)">'+getMenuLabel(DISTRIBUTOR_CATEGORY)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(PROJECT_CATEGORY)">'+getMenuLabel(PROJECT_CATEGORY)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(PRODUCT_CATEGORY)">'+getMenuLabel(PRODUCT_CATEGORY)+'</span></td>';
+			menuContent+=postMenuItem;
+		}
+		else if (tabId==TAB_SYSTEM)
+		{
+			menuContent+=beforeFirstMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showDialog(PREFERENCES)">'+getMenuLabel(PREFERENCES)+'</span></td>';
+			menuContent+=postMenuItem;
+
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showDialog(PASSWORD)">'+getMenuLabel(PASSWORD)+'</span></td>';
+			menuContent+=postMenuItem;
+
+			menuContent+=menuSpace;
+
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(USER)">'+getMenuLabel(USER)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(ROLE)">'+getMenuLabel(ROLE)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+//			menuContent+=beforeMenuItem;
+//			menuContent+='<td><span class="mlink" onClick="showNotReady(SCHEDULER)">'+getMenuLabel(SCHEDULER)+'</span></td>';
+//			menuContent+=postMenuItem;
+		}
+		else
+		{
+			menuContent+=beforeFirstMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(DINBOX)">'+getMenuLabel(DINBOX)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(DOUTBOX)">'+getMenuLabel(DOUTBOX)+'</span></td>';
+			menuContent+=postMenuItem;
+
+			menuContent+=menuSpace;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(DNEWSLETTER)">'+getMenuLabel(DNEWSLETTER)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(DRETURN)">'+getMenuLabel(DRETURN)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(DSHIPMENT)">'+getMenuLabel(DSHIPMENT)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(DORDER)">'+getMenuLabel(DORDER)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(DCONTRACT)">'+getMenuLabel(DCONTRACT)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=menuSpace;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(LOCATION)">'+getMenuLabel(LOCATION)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(DISTRIBUTOR)">'+getMenuLabel(DISTRIBUTOR)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(PROJECT)">'+getMenuLabel(PROJECT)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+			menuContent+=beforeMenuItem;
+			menuContent+='<td><span class="mlink" onClick="showList(PRODUCT)">'+getMenuLabel(PRODUCT)+'</span></td>';
+			menuContent+=postMenuItem;
+			
+//			menuContent+=menuSpace;
+			
+//			menuContent+=beforeMenuItem;
+//			menuContent+='<td><span class="mlink" onClick="showDialog(REPORT)">'+getMenuLabel(REPORT)+'</span></td>';
+//			menuContent+=postMenuItem;
+		}
+		
+		menuContent= menuHeader + menuContent + menuFooter;
+		return menuContent;
+	}
+
+	function getMenuLabel(objName)
+	{
+		return this.creamObject[objName].menuLabel;
+	}
+
+	function showNotReady(dlgName)
+	{
+		showInfo("Sorry, not for public use yet!");
+	}
+
+	function showDialog(dlgName)
+	{
+		dlgLocation= this.creamObject[dlgName].formTemplate;
+		formId= getFormId(dlgName);
+		dlgLocation+="/" + formId + "/1";
+		
+		dlgTitle= this.creamObject[dlgName].titleEdit;
+
+
+		showRetrieveInfo();
+		window.frames.buffer.document.location.replace(dlgLocation);
+
+		lastTop=TOP_DIALOG;
+		lastScreenType=SCREEN_DIALOG;
+		lastScreen=dlgName;
+
+		dlgTop='<table cellpadding=0 cellspacing=0 border=0 width="100%">';
+		dlgTop+='<tr>';
+		dlgTop+='<td>';
+		dlgTop+='<table cellpadding=5 cellspacing=0 border=0 width="100%">';
+		dlgTop+='<tr>';
+		dlgTop+='<td class=ltitle  align=left colspan=2><span>'+ dlgTitle+'</span>&nbsp;&nbsp;<span></span></td>';
+		dlgTop+='<td class=lfilter align=right nowrap></td>';
+		dlgTop+='</tr>';
+		dlgTop+='<tr class=toolbar>';
+		dlgTop+='<td align=left nowrap>';
+		dlgTop+='<a href="javascript:doHelp()"><img src="$ui.image($ui.navHelp)" width="24" height="24" border=0 alt="Help"></a>';
+		dlgTop+='</td>';
+		dlgTop+='<td align=right nowrap></td>';
+		dlgTop+='<td align=right >';
+
+		if (dlgName==REPORT){		
+	    	dlgTop+='<input type="button" name="okButton" class=fbutton onclick="doReport()" value="Show"/>';
+	    }else{
+	    	dlgTop+='<input type="button" name="okButton" class=fbutton onclick="doSave()" value="Save"/>';
+	    }
+	    dlgTop+='<input type="button" name="cancelButton"  class=fbutton onclick="doCancel()" value="Cancel"/>';
+		dlgTop+='</td>';
+		dlgTop+='</tr>';
+		dlgTop+='</table>';
+		dlgTop+='</td>';
+		dlgTop+='</tr>';
+		dlgTop+='</table>';
+
+
+		document.getElementById('DataFrame').style.height = screenHeight - formTopHeight - marginHeight;
+		document.getElementById('ScreenTop').innerHTML = dlgTop;
+	}	
+
+	function doReport()
+	{
+		if (formValidate()){
+			showReport();
+		}
+	}
+
+	function showRetrieveInfo()
+	{
+		document.getElementById('DataFrame').style.backgroundColor = "#ffffff";
+		document.getElementById('DataFrame').innerHTML='<table width="100%" height="100%"><tr><td valign="center"><p align="center">Retrieving data ...</p></td></tr></table>';
+		retrieveInfo=true;
+	}	
+
+    function doHelp()
+    {
+		window.open("","help","");
+    }
+
+    function doLogin()
+    {
+		self.document.location.replace('$link.setPage("Login.vm")');
+    }
+
+
+    function Help()
+    {
+		window.open("http://www.campware.org/dream/help/","help","");
+    }
+
+	function getScreenSize()
+	{
+		if(IE)
+		{
+			winWidth = document.body.clientWidth;
+			winHeight = document.body.clientHeight;	
+		}
+	
+		if(NS)
+		{
+			winWidth = innerWidth -17;
+			winHeight = innerHeight;	
+		}
+	}
+
+	function getYMargin()
+	{
+		if(IE) return document.body.scrollTop;
+		if(NS) return window.pageYOffset;
+	}
+		
+	function getXMargin()
+	{
+		if(IE) return document.body.scrollLeft;
+		if(NS) return window.pageXOffset;
+	}
+
+    function showAbout()
+    {
+		msgTitle = 'About';
+//		msgString = 'DReaM 1.0 (Beta 1)<br><br>Written by Nenad Pandzic<br><br>Copyright MDLF, 2004';
+//		msgString = '                        DReaM 1.0 (Beta 1)\n\n         Written by Nenad Pandzic (pandzic@volny.cz)\n\nMaintained and distributed under GNU GPL by CAMPWARE\n\n                    Copyright @ 2004 MDLF';
+		msgString = 'DReaM 1.0.0 \n\nWritten by Nenad Pandzic\n\nMaintained and distributed under GNU GPL by CAMPWARE\n\n                    Copyright @ 2004 MDLF';
+//		showMsgBox(msgTitle, msgString);        
+		alert(msgString);  
+    }
+
+    function showInfo(msgString)
+    {
+		msgTitle = 'Info';
+//		showMsgBox(msgTitle, msgString);        
+		alert(msgString);  
+		if (retrieveInfo){
+			document.getElementById('DataFrame').innerHTML='<table width="100%" height="100%"><tr><td valign="center"><p align="center"></p></td></tr></table>';
+			retrieveInfo=false;
+		}
+    }
+
+    function showError(msgString)
+    {
+		msgTitle = 'Error';
+//		showMsgBox(msgTitle, msgString);        
+		alert(msgString);  
+		if (retrieveInfo){
+			document.getElementById('DataFrame').innerHTML='<table width="100%" height="100%"><tr><td valign="center"><p align="center"></p></td></tr></table>';
+			retrieveInfo=false;
+		}
+    }
+
+    function showMsgBox(msgtitle, msgstring)
+    {
+		getScreenSize();        
+	    
+		// Create body
+		bg = document.createElement('div');
+		bg.style.position = "absolute";
+		bg.style.top = getYMargin() + "px";  
+		bg.style.left = getXMargin() + "px";
+		bg.style.width = (winWidth)+  "px"
+		bg.style.height = (winHeight)+  "px";
+	
+		bg.style.zIndex = "99";
+		document.body.appendChild(bg);
+
+		// Create title
+		tl = document.createElement('div');
+		tl.style.position = "absolute";
+		tl.style.top = ((winHeight)/2 - 100) + getYMargin() + "px"; 
+		tl.style.left = ((winWidth)/2 - 200) + getXMargin() + "px";
+		tl.style.width = "400px";
+		tl.style.zIndex = "101";
+		tl.style.backgroundColor = "#1F386A";
+		tl.style.fontWeight = "bold";
+		tl.style.color = "#EEF3FB";
+		tl.style.border = "solid 1px black"
+		tl.style.textAlign = "left";
+		tl.innerHTML = '&nbsp;&nbsp;' + msgtitle;
+		document.body.appendChild(tl);
+
+
+		// Create message
+		hl = document.createElement('div');
+		hl.style.position = "absolute";
+		hl.style.top = ((winHeight)/2 - 100) + getYMargin() + "px"; 
+		hl.style.left = ((winWidth)/2 - 200) + getXMargin() + "px";
+		hl.style.width = "400px";
+		hl.style.zIndex = "100";
+		hl.style.backgroundColor = "#B6C7E5";
+		hl.style.fontWeight = "bold";
+		hl.style.color = "#1F386A";
+		hl.style.border = "solid 1px black"
+		hl.style.textAlign = "center";
+		hl.innerHTML = '<br><br>' + msgstring + '<br><br><input value="  OK  " type=button class=fbutton onClick="Javascript: bg.parentNode.removeChild(bg); tl.parentNode.removeChild(tl); hl.parentNode.removeChild(hl);msgBoxClosed();"><br><br>';
+		document.body.appendChild(hl);
+		
+		msgBoxCreated();
+		
+    }
+
+	function msgBoxCreated()
+	{
+		if (document.all.formData) document.all.formData.style.visibility = 'hidden';
+	}
+
+	function msgBoxClosed()
+	{
+		if (document.all.formData){
+			document.all.formData.style.visibility = 'visible';
+			document.all.formData.focus();
+		}
+	}

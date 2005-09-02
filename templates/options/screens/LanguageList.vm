@@ -1,0 +1,16 @@
+#set ( $module = "Options" )
+#listCommon()
+#listHeader(3004 "LanguageList.vm" "LanguageSQL" 4)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.LanguageId)
+				#addListPic($ui.space)
+				<td width="80%"><span class="llink" onClick="doEdit('$entry.LanguageId')">$entry.LanguageName</span></td>
+				#listCellPrc (20 $entry.LanguageCode)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

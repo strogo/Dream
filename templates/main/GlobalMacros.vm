@@ -1,0 +1,672 @@
+#* ------------------------------------------------------------------
+#
+# Macros that are used for displaying input forms.
+#
+*# ------------------------------------------------------------------
+
+#macro (addToggle $value)
+<td width=16>
+<input type="checkbox" name="rowid" value="$value" onclick="parent.Toggle(this)">
+</td>
+#end
+
+#macro (addListPic $value)
+<td><img src="$ui.image($value)" width=16 height=16></td>
+#end
+
+
+#macro (addCollHeadPrc $prcnt $body)
+<td width="$prcnt%" align="left"><a href="/Sort.vm">$body</a></td>
+#end
+
+#macro (addCollHead $body)
+<td align="left"><a href="/Sort.vm">$body</a></td>
+#end
+
+#macro (text $text)
+    $text
+#end
+
+#macro (formLabel $label)
+  <td class=frmlabel align="left">
+        $label&nbsp;
+  </td>
+#end
+
+#macro (formTextField $name $value $size)
+  <td align="left">
+      <input type="text" size="$size" maxLength="$size" name="$name" value="$value">
+  </td>
+#end
+
+#macro (textField $name $value $size)
+    <input type="text"  name="$name" value="$value">
+#end
+
+#macro (listBox $list)
+    $list
+#end
+
+#macro (formPasswordCell $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+      <input type="password" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$value" STYLE="width: $size$px">
+  </td>
+#end
+
+#macro (formSelectStatus $label $name $value $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	<select name="$name" tabIndex="$taborder" value="$value" onchange="valueChanged(this);" width="$size" STYLE="width: $size$px">
+		#if ($value==10 || $mode=="insert") <option value="10">Draft</option> #end
+		<option value="30">Open</option>
+		<option value="50">Closed</option>
+	</select>
+  </td>
+#end
+
+#macro (formSelectCustomer $label $name $value $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	<select name="$name" tabIndex="$taborder" value="$value" onchange="valueChanged(this);" width="$size" STYLE="width: $size$px">
+	#foreach ($customer in $customers)
+		<option value="$customer.CustomerId">$customer.CustomerDisplay</option>
+	#end        	
+	</select>
+  </td>
+#end
+
+#macro (formSelectDistributor $label $name $value $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	<select name="$name" tabIndex="$taborder" value="$value" onchange="valueChanged(this);" width="$size" STYLE="width: $size$px">
+	#foreach ($distributor in $distributors)
+		<option value="$distributor.DistributorId">$distributor.DistributorDisplay</option>
+	#end        	
+	</select>
+  </td>
+#end
+
+#macro (formSelectProduct $label $name $value $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	<select name="$name" tabIndex="$taborder" value="$value" onchange="valueChanged(this);" width="$size" STYLE="width: $size$px">
+	#foreach ($product in $products)
+		<option value="$product.ProductId">$product.ProductDisplay</option>
+	#end        	
+	</select>
+  </td>
+#end
+
+
+#macro (formSelectProject $label $name $value $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	<select name="$name" tabIndex="$taborder" value="$value" width="$size" STYLE="width: $size$px">
+	#foreach ($project in $projects)
+		<option value="$project.ProjectId">$project.ProjectName</option>
+	#end        	
+	</select>
+  </td>
+#end
+
+#macro (formSelectCurrency $label $name $value $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	<select name="$name" tabIndex="$taborder" value="$value" onchange="valueChanged(this);" width="$size" STYLE="width: $size$px">
+		<option value="1000">(Local)</option>
+	#foreach ($currency in $currencies)
+		<option value="$currency.CurrencyId">$currency.CurrencyCode</option>
+	#end        	
+	</select>
+  </td>
+#end
+
+#macro (formSelectPayterm $label $name $value $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	<select name="$name" tabIndex="$taborder" value="$value" width="$size" STYLE="width: $size$px">
+		<option value="10">Prepaid</option>
+		<option value="20">On Delivery</option>
+		<option value="50">Other</option>
+	</select>
+  </td>
+#end
+
+#macro (formSelectPaymethod $label $name $value $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	<select name="$name" tabIndex="$taborder" value="$value" width="$size" STYLE="width: $size$px">
+		<option value="10">Credit Card</option>
+		<option value="20">Cheque</option>
+		<option value="30">Bank Transfer</option>
+		<option value="40">Cash</option>
+		<option value="50">Other</option>
+	</select>
+  </td>
+#end
+
+#macro (formSelectCarrier $label $name $value $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	<select name="$name" tabIndex="$taborder" value="$value" width="$size" STYLE="width: $size$px">
+		#foreach ($carrier in $carriers)
+			<option value="$carrier.CarrierId">$carrier.CarrierName</option>
+		#end        	
+	</select>
+  </td>
+#end
+
+#macro (formSelectOrder $label $name $value $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	<select name="$name" tabIndex="$taborder" value="$value" onchange="valueChanged(this);" width="$size" STYLE="width: $size$px">
+		#foreach ($order in $orders)
+			<option value="$order.SorderId">$order.SorderCode</option>
+		#end        	
+	</select>
+  </td>
+#end
+
+#macro (formCell $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$value" STYLE="width: $size$px">
+	#else
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="" STYLE="width: $size$px">
+	#end
+  </td>
+#end
+
+#macro (formCellDisabled $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" DISABLED maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$value" STYLE="width: $size$px">
+	#else
+      <input type="text" DISABLED maxLength="$maxlength" tabIndex="$taborder" name="$name" value="" STYLE="width: $size$px">
+	#end
+  </td>
+#end
+
+#macro (formCellNum $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$value" STYLE="width: $size$px; text-align: right;">
+	#else
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="" STYLE="width: $size$px; text-align: right;">
+	#end
+  </td>
+#end
+
+#macro (formCellNumDisabled $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" DISABLED maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$value" STYLE="width: $size$px; text-align: right;">
+	#else
+      <input type="text" DISABLED maxLength="$maxlength" tabIndex="$taborder" name="$name" value="" STYLE="width: $size$px; text-align: right;">
+	#end
+  </td>
+#end
+
+#macro (formCellAmount $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$!af.format($value)" STYLE="width: $size$px; text-align: right;">
+	#else
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="" STYLE="width: $size$px; text-align: right;">
+	#end
+  </td>
+#end
+
+#macro (formCellAmountDisabled $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" DISABLED tabIndex="$taborder" name="$name" value="$!af.format($value)" STYLE="width: $size$px; text-align: right;">
+	#else
+      <input type="text" maxLength="$maxlength" DISABLED tabIndex="$taborder" name="$name" value="" STYLE="width: $size$px; text-align: right;">
+	#end
+  </td>
+#end
+
+#macro (formCellRate $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$!rf.format($value)" STYLE="width: $size$px; text-align: right;">
+	#else
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="" STYLE="width: $size$px; text-align: right;">
+	#end
+  </td>
+#end
+
+#macro (formCellDate $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$!df.format($value)" STYLE="width: $size$px;">
+	#else
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="" STYLE="width: $size$px;">
+	#end
+  </td>
+#end
+
+#macro (formCellDateDefault $label $name $value $defvalue $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$!df.format($value)" STYLE="width: $size$px;">
+	#else
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$!df.format($defvalue)" STYLE="width: $size$px;">
+	#end
+  </td>
+#end
+
+#macro (formCellDateTimeDefault $label $name $value $defvalue $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$!dstf.format($value)" STYLE="width: $size$px;">
+	#else
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$!dstf.format($defvalue)" STYLE="width: $size$px;">
+	#end
+  </td>
+#end
+
+#macro (formCellDateTimeDisabled $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" DISABLED tabIndex="$taborder" name="$name" value="$!dstf.format($value)" STYLE="width: $size$px;">
+	#else
+      <input type="text" maxLength="$maxlength" DISABLED tabIndex="$taborder" name="$name" STYLE="width: $size$px;">
+	#end
+  </td>
+#end
+
+
+#macro (formCellWithChange $label $name $value $maxlength $size $taborder)
+  #set ( $px = "px" )
+  #formLabel($label)
+  <td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="$value" onchange="valueChanged(this);" STYLE="width: $size$px">
+	#else
+      <input type="text" maxLength="$maxlength" tabIndex="$taborder" name="$name" value="" onchange="valueChanged(this);" STYLE="width: $size$px">
+	#end
+  </td>
+#end
+
+#macro (formListCell $name $value $maxlength $size)
+  #set ( $px = "px" )
+	<td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" name="$name" value="$value" STYLE="width: $size$px">
+	#else
+      <input type="text" maxLength="$maxlength" name="$name" value="" STYLE="width: $size$px">
+	#end
+	</td>
+#end
+
+#macro (formListCellNum $name $value $maxlength $size)
+  #set ( $px = "px" )
+	<td align="left">
+	#if ($value)
+      <input type="text" maxLength="$maxlength" name="$name" value="$value" STYLE="width: $size$px; text-align: right;">
+	#else
+      <input type="text" maxLength="$maxlength" name="$name" value="" STYLE="width: $size$px; text-align: right;">
+	#end
+	</td>
+#end
+
+#macro (formEmptyCell)
+  <td>
+  </td>
+  <td>
+  </td>
+#end
+
+
+#macro (fileUploadField $name)
+  <td align="left">
+      <input type="file" size="30" name="$name">
+  </td>
+#end
+
+#macro (fileUpload $label $name)
+  #formLabel($label)
+  #fileUploadField($name)
+#end
+
+#macro (formCheckBox $label $name $checked $taborder)
+  <td>
+  </td>
+  <td class=frmlabel align="left">
+    <input type="checkbox" name="$name" tabIndex="$taborder" #if($checked)checked=1#end/>$label
+  </td>
+#end
+
+#macro (formListBox $label $list)
+  #formLabel($label)
+  <td align="left">
+    $list
+  </td>
+#end
+
+#* ------------------------------------------------------------------
+#
+# Macros that are used for displaying information in tables.
+#
+*# ------------------------------------------------------------------
+
+#macro (headerCell $body)
+  <td align="left">
+        $body
+  </td>
+#end
+
+#macro (entryCell $body)
+  <td align="left">
+      $body &nbsp;
+  </td>
+#end
+
+#macro (listCell $body)
+	<td align="left">
+		$body &nbsp;
+	</td>
+#end
+
+#macro (listCellDate $body)
+	#if ($body)
+		<td align="left">
+			$!df.format($body) &nbsp;
+		</td>
+	#else
+		<td align="left">
+			&nbsp;
+		</td>
+	#end
+#end
+
+#macro (listCellAmount $body)
+	#if ($body)
+		<td align="right">
+			$!af.format($body) &nbsp;
+		</td>
+	#else
+		<td align="right">
+			&nbsp;
+		</td>
+	#end
+#end
+
+#macro (listCellRate $body)
+	#if ($body)
+		<td align="right">
+			$!rf.format($body) &nbsp;
+		</td>
+	#else
+		<td align="right">
+			&nbsp;
+		</td>
+	#end
+#end
+
+#macro (listCellRight $body)
+	<td align="right">
+		$body &nbsp;
+	</td>
+#end
+
+#macro (listCellPrc $prcnt $body)
+	<td width="$prcnt%" align="left">
+	  $body &nbsp;
+	</td>
+#end
+
+#macro (listCellPrcDate $prcnt $body)
+	#if ($body)
+		<td width="$prcnt%" align="left">
+			$!df.format($body) &nbsp;
+		</td>
+	#else
+		<td width="$prcnt%" align="left">
+			&nbsp;
+		</td>
+	#end
+#end
+
+#macro (listCellPrcAmount $prcnt $body)
+	#if ($body)
+		<td width="$prcnt%" align="right">
+			$!af.format($body) &nbsp;
+		</td>
+	#else
+		<td width="$prcnt%" align="right">
+			&nbsp;
+		</td>
+	#end
+#end
+
+#macro (listCellPrcRate $prcnt $body)
+	#if ($body)
+		<td width="$prcnt%" align="right">
+			$!rf.format($body) &nbsp;
+		</td>
+	#else
+		<td width="$prcnt%" align="right">
+			&nbsp;
+		</td>
+	#end
+#end
+
+#macro (listCellPrcRight $prcnt $body)
+	<td width="$prcnt%" align="right">
+	  $body &nbsp;
+	</td>
+#end
+
+#macro (listCellPrcPayTerm $prcnt $value)
+	<td width="$prcnt%" align="left">
+	  #if ($value==10)
+	  	Prepaid &nbsp;
+	  #elseif ($value==20)
+	  	On Delivery &nbsp;
+	  #else
+	  	Other &nbsp;
+	  #end
+	</td>
+#end
+
+#macro (listCommon)
+	$page.setHttpEquiv("Pragma", "no-cache")
+#end
+
+#macro (utilCommon)
+	$page.setHttpEquiv("Pragma", "no-cache")
+	$page.addAttribute("onLoad", "copyDetails();")	
+#end
+
+#macro (formCommon)
+	$page.setHttpEquiv("Pragma", "no-cache")
+	$page.setBgColor("$ui.formBg")
+	$page.addAttribute("onLoad", "window.parent.copyFormContent();")	
+
+<script id="formScript" language="JavaScript">
+	var myForm=document.getElementById('formData');
+	
+	function highlight(theField){
+		theField.focus();
+		theField.select();
+	}
+
+#end
+
+#macro (formHeader $tplName $actName $idName $idValue $sqlmode)
+
+	function saveForm(retUrl){
+		myAction='$actName';
+		myUrl= retUrl + '/action/' + myAction;
+		myForm.action= myUrl;
+		myForm.submit();
+	}
+
+	function saveFormAndNew(){
+		myForm.action="$link.setPage("$tplName").setAction("$actName")";
+		myForm.submit();
+	}
+
+	function deleteForm(retUrl){
+		delForm=document.getElementById('formDelete');
+		myAction='$actName';
+		myUrl= retUrl + '/action/' + myAction;
+		delForm.action= myUrl;
+		delForm.submit();
+	}
+
+</script>
+
+	<form id="formData" name="formData" target="buffer" method="post" action="" onSubmit="return formValidate();">
+	  <div id="Master" align="center">
+	    <table cellpadding=1 cellspacing=0 border=0>
+	    <tr>&nbsp;</tr>
+#end
+
+#macro (formFooter $tplName $actName $idName $idValue $sqlmode)
+
+	    </table>
+	
+		#if($sqlmode=="insert")
+		    <input type="hidden" name="$idName" value=""/>
+		    <input type="hidden" name="eventSubmit_doInsert" value="Insert"/>
+		#else
+		    <input type="hidden" name="$idName" value="$idValue"/>
+		    <input type="hidden" name="eventSubmit_doUpdate" value="Update"/>
+		#end        	
+	  </div>
+	</form>
+	
+	#if($sqlmode!="insert")
+		<form  id="formDelete" name="formDelete" target="buffer" method="post" action="$link.setPage("LastList.vm").setAction("$actName")">
+	    <input type="hidden" name="$idName" value="$idValue"/>
+	    <input type="hidden" name="eventSubmit_doDelete" value="Delete"/>
+		</form>
+	#end        	
+#end
+
+
+#macro (documentFooter)
+<tr>
+<td>
+<table align=center cellpadding=0 cellspacing=0 border=0>
+	<tr>
+		<td align=center>
+			<textarea rows="5" name="notes" tabIndex="503" style="width: 556px">$!entry.Notes</textarea>
+		</td>
+	</tr>
+	<tr>
+	<td>
+	&nbsp;
+	</td>
+	</tr>
+	#if ($!entry.Created)
+		<input type="hidden" name="created" value="$!dtf.format($!entry.Created)">
+		<input type="hidden" name="createdby" value="$!entry.CreatedBy">
+	
+		<tr>
+			<td align=center>
+		    <table align=center width="96%" cellpadding=0 cellspacing=0 border=0>
+		      <tr>  
+		      	  <td align=left><font class=frmlabel>Created: </font>$!dtf.format($!entry.Created) ($!entry.CreatedBy)</td>
+		      	  <td align=right><font class=frmlabel>Modified: </font>$!dtf.format($!entry.Modified) ($!entry.ModifiedBy)</td>
+		      </tr>  
+			</table>
+			</td>
+		</tr>
+		<tr>
+		<td>
+		&nbsp;
+		</td>
+		</tr>
+	#end        	
+</table>
+</td>
+</tr>
+#end        	
+
+
+
+#macro (listHeader $retList $tplName $actName $colNo)
+	$page.addAttribute("onLoad", "window.parent.copyListContent($retList);")	
+
+	<form id="listData" name="listData" target="buffer" method="post" action="$link.setPage("$tplName").setAction("$actName")">
+	    <input type="hidden" name="actname" value="$actName"/>
+		<table  width="100%" cols=$colNo cellpadding=2 cellspacing=0 border=0>
+#end
+
+#macro (rowStatusClass $status)
+	#if($status==10)
+        <tr class="rowdraft">
+	#elseif ($status==50)
+        <tr class="rowclosed">
+	#else
+        <tr class="rowopen">
+	#end        	
+#end
+
+#macro (listFooter)
+	    </table>
+	    <input type="hidden" name="eventSubmit_doDeleteselected" value="DeleteSelected"/>
+	</form>
+#end
+
+#macro (reportHeader $title)
+	$page.setHttpEquiv("Pragma", "no-cache")
+	<style>
+		.repcontent {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px;}
+		.rephead {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; border-bottom: solid 2px #EEEEEE;color: #EEEEEE;}
+		.reptitle {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 16px; font-weight: bold;color: #5671A0;}
+		.reptblhead {font-family: Arial, Helvetica, sans-serif; text-decoration: none; font-size: 12px; font-weight: bold;color: #5671A0;border-bottom: solid 2px #5671A0;border-top: solid 2px #5671A0;}
+	</style>
+
+	<table width="100%" cellpadding=2 cellspacing=0 border=0>
+	<tr><td class="reptitle" align="center">$title</td></tr>
+	<tr><td class="reptitle" align="center">&nbsp;</td></tr>
+	<tr><td>
+		<table width="100%" cellpadding=2 cellspacing=0 border=0>
+#end
+
+#macro (reportFooter)
+		</table>
+	</td></tr>
+    </table>
+#end
+

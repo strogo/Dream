@@ -1,0 +1,20 @@
+#set ( $module = "Main" )
+#listCommon()
+#listHeader(2108 "DnewsletterList.vm" "DnewsletterSQL" 6)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+			#rowStatusClass ($!entry.Status)
+
+				#addToggle($!entry.DnewsletterId)
+				#addListPic($ui.newsletter)
+
+				<td width="15%"><span class="llink" onClick="doEdit('$!entry.DnewsletterId')">$!entry.DnewsletterCode</span></td>
+				#listCellPrc (30 $!entry.DistributorCategory.DistributorCatName)
+				#listCellPrc (40 $!entry.Subject)
+				#listCellPrcDate (15 $!entry.IssuedDate)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

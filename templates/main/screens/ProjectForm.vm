@@ -1,0 +1,160 @@
+#set ( $module = "Main" )
+#formCommon()
+
+function formInit(){
+	myForm.status.value=$!entry.Status;
+	myForm.projectcatid.value=$!entry.ProjectCatId;
+
+	highlight(myForm.projectname);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.projectcode)) return false;
+	if (parent.isEmpty(myForm.projectname)) return false;
+	if (parent.isEmpty(myForm.startdate)) return false;
+	if (parent.isNotDate(myForm.startdate)) return false;
+	if (myForm.status.value==50){
+		if (parent.isEmpty(myForm.enddate)) return false;
+		if (parent.isNotDate(myForm.enddate)) return false;
+	}
+
+	if (parent.isEmpty(myForm.expenses)) return false;
+	if (parent.isNotFloat(myForm.expenses)) return false;
+	if (parent.isNegative(myForm.expenses)) return false;
+	if (parent.isEmpty(myForm.revenues)) return false;
+	if (parent.isNotFloat(myForm.revenues)) return false;
+	if (parent.isNegative(myForm.revenues)) return false;
+
+	myForm.projectcode.value = myForm.projectcode.value.toUpperCase();
+	
+	return true;
+}
+
+function valueChanged(formField){
+	if (formField.name=='status'){
+		if (myForm.status.value==50){
+			myForm.enddate.disabled=false;
+			myForm.enddate.value="$!df.format($!today)";
+		}
+		else{
+			myForm.enddate.disabled=true;
+			myForm.enddate.value="";
+		}
+	}
+}
+
+#formHeader("ProjectForm.vm" "ProjectSQL" "projectid" $!entry.ProjectId $mode)
+
+<tr>
+<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+      <tr>  
+   		#formCell ("Code" "projectcode" $!entry.ProjectCode 20 100 1)
+			<td width=16>&nbsp;</td>
+		#formLabel("Status")
+		<td align="left">
+		<select name="status" tabIndex="2" value="$!entry.Status" onchange="valueChanged(this);" width="100" STYLE="width: 100px">
+			<option value="30">Open</option>
+			<option value="50">Closed</option>
+		</select>
+		</td>
+      </tr>
+      <tr>
+	<td>
+	&nbsp;
+	</td>
+      </tr>
+      <tr>
+        #formCell ("Name" "projectname" $!entry.ProjectName 70 160 3)
+			<td width=16>&nbsp;</td>
+        #formCellDateDefault ("Start" "startdate" $!entry.StartDate $!today 10 100 5)
+      </tr>
+      <tr>
+		#formLabel("Category")
+		<td align="left">
+		<select name="projectcatid" tabIndex="4" value="$!entry.ProjectCatId" width="160" STYLE="width: 160px">
+		#foreach ($projectcat in $projectcats)
+			<option value="$projectcat.ProjectCatId">$projectcat.ProjectCatName</option>
+		#end        	
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+		#if ($!entry.Status==50)
+        	#formCellDate ("End" "enddate" $!entry.EndDate 10 100 6)
+        #else
+        	#formCellDisabled ("End" "enddate" $!entry.EndDate 10 100 6)
+        #end
+      </tr>
+      <tr>
+		<td>
+		&nbsp;
+		</td>
+      </tr>
+      <tr>
+        #formCellAmount ("Expenses" "expenses" $!entry.Expenses 10 100 7)
+			<td width=16>&nbsp;</td>
+        #formCellAmount ("Revenues" "revenues" $!entry.Revenues 10 100 8)
+      </tr>
+      <tr>
+		<td>
+		&nbsp;
+		</td>
+      </tr>
+      <tr>
+        #formCell ("Custom 1" "custom1" $!entry.Custom1 55 160 27)
+			<td width=16>&nbsp;</td>
+        #formCell ("Custom 4" "custom4" $!entry.Custom4 55 160 30)
+      </tr>
+      <tr>
+        #formCell ("Custom 2" "custom2" $!entry.Custom2 55 160 28)
+			<td width=16>&nbsp;</td>
+        #formCell ("Custom 5" "custom5" $!entry.Custom5 55 160 31)
+      </tr>
+      <tr>
+        #formCell ("Custom 3" "custom3" $!entry.Custom3 55 160 29)
+			<td width=16>&nbsp;</td>
+        #formCell ("Custom 6" "custom6" $!entry.Custom6 55 160 32)
+      </tr>
+	</table>
+  </td>
+</tr>
+
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+<tr>
+	<td align=center>
+		<textarea rows="5" cols="96%" name="notes" tabIndex=43>$!entry.Notes</textarea>
+	</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+
+#if ($!entry.Created)
+	<input type="hidden" name="created" value="$!dtf.format($!entry.Created)">
+	<input type="hidden" name="createdby" value="$!entry.CreatedBy">
+
+	<tr>
+		<td align=center>
+	    <table align=center width="96%" cellpadding=0 cellspacing=0 border=0>
+	      <tr>  
+	      	  <td align=left><font class=frmlabel>Created: </font>$!dtf.format($!entry.Created) ($!entry.CreatedBy)</td>
+	      	  <td align=right><font class=frmlabel>Modified: </font>$!dtf.format($!entry.Modified) ($!entry.ModifiedBy)</td>
+	      </tr>  
+		</table>
+		</td>
+	</tr>
+	<tr>
+	<td>
+	&nbsp;
+	</td>
+	</tr>
+#end        	
+	
+	
+#formFooter("ProjectForm.vm" "ProjectSQL" "projectid" $!entry.ProjectId $mode)

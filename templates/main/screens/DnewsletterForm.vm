@@ -1,0 +1,243 @@
+#set ( $module = "Main" )
+#formCommon()
+
+function formInit(){
+	myForm.status.value=$entry.Status;
+	myForm.priority.value=$entry.Priority;
+	myForm.languageid.value=$entry.LanguageId;
+	myForm.emailformat.value=$entry.EmailFormat;
+	myForm.distributorcatid.value=$entry.DistributorCatId;
+	myForm.distributortype.value=$entry.DistributorType;
+	myForm.custlanguageid.value=$entry.DistLanguageId;
+	myForm.custcountryid.value=$entry.DistCountryId;
+	myForm.relprojectid.value=$entry.RelProjectId;
+	myForm.relproductid.value=$entry.RelProductId;
+	myForm.productid.value=$entry.ProductId;
+	myForm.projectid.value=$entry.ProjectId;
+
+	#if ($!entry.Status==50)
+		parent.disableSave();
+	#end
+
+	myForm.languageid.focus();
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.subject)) return false;
+
+	return true;
+}
+
+#formHeader("DnewsletterForm.vm" "DnewsletterSQL" "dnewsletterid" $!entry.DnewsletterId $mode)
+
+
+ <tr>
+	<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+	<tr>
+	<td>
+	</td>
+	<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+      <tr>  
+   		#formCellDisabled ("ID" "dnewslettercode" $!entry.DnewsletterCode 20 100 1)
+			<td width=16>&nbsp;</td>
+		#formLabel("Priority")
+		<td align="left">
+		<select name="priority" tabIndex="2" value="$!entry.Priority" width="100" STYLE="width: 100px">
+			<option value="10">Low</option>
+			<option #if($mode=="insert")selected #end value="30">Normal</option>
+			<option value="50">High</option>
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+		#formLabel("Status")
+		<td align="left">
+		<select name="status" tabIndex="3" value="$!entry.Status" width="100" STYLE="width: 100px">
+  		#if($mode=="insert" || $!entry.Status==10)
+			<option value="10">Draft</option>
+		#end        	
+			<option #if($mode=="insert")selected #end value="30">To Send</option>
+  		#if($!entry.Status==50)
+			<option value="50">Sent</option>
+		#end        	
+		</select>
+		</td>
+      </tr>
+ <tr>
+	<td>
+	&nbsp;
+	</td>
+ </tr>
+      <tr>  
+		#formLabel("Language")
+		<td align="left">
+		<select name="languageid" tabIndex="6" value="$!entry.LanguageId" width="100" STYLE="width: 100px">
+		#foreach ($language in $languages)
+			<option value="$language.LanguageId">$language.LanguageCode</option>
+		#end        	
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+		#formLabel("Format")
+		<td align="left">
+			<select name="emailformat" tabIndex="7" value="$!entry.EmailFormat" width="100" STYLE="width: 100px">
+			<option value="10">Text</option>
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+   		#formCellDateDefault ("Date" "issueddate" $!entry.IssuedDate $!today 20 100 8)
+ 		</tr>
+
+
+	</table>
+	</td>
+ </tr>
+ <tr>
+	<td>
+	&nbsp;
+	</td>
+ </tr>
+
+
+ 		<tr>
+    		#formLabel ("Distributors")
+    		<td align="left">
+			<table align="left" cellpadding=10 cellspacing=0 border=0 style="border: solid 2px #9CB886; width: 520px">
+			<tr>
+			<td align="left">
+			    <table align=center cellpadding=0 cellspacing=0 border=0>
+					<tr>
+						#formLabel("Category")
+						<td align="left">
+						<select name="distributorcatid" tabIndex="15" value="$!entry.DistributorCatId" width="130" STYLE="width: 130px">
+							<option value="999">(*)</option>
+						#foreach ($distributorcat in $distributorcats)
+							<option value="$distributorcat.DistributorCatId">$distributorcat.DistributorCatName</option>
+						#end        	
+						</select>
+						</td>
+							<td width=16>&nbsp;</td>
+						#formLabel("Language")
+						<td align="left">
+						<select name="distlanguageid" tabIndex="17" value="$!entryDistLanguageId" width="50" STYLE="width: 50px">
+							<option value="999">(*)</option>
+						#foreach ($language in $languages)
+							<option value="$language.LanguageId">$language.LanguageCode</option>
+						#end        	
+						</select>
+						</td>
+							<td width=16>&nbsp;</td>
+						#formLabel("Product")
+						<td align="left">
+						<select name="relproductid" tabIndex="19" DISABLED value="$!entry.RelProductId" width="130" STYLE="width: 130px">
+							<option value="999">(*)</option>
+						#foreach ($product in $products)
+							<option value="$product.ProductId">$product.ProductDisplay</option>
+						#end        	
+						</select>
+						</td>
+					</tr>
+					<tr>
+						#formLabel("Type")
+						<td align="left">
+						<select name="distributortype" tabIndex="16" value="$!entry.DistributorType" width="130" STYLE="width: 130px">
+							<option value="1">(*)</option>
+							<option value="10">Person</option>
+							<option value="20">Institution</option>
+						</select>
+						</td>
+							<td width=16>&nbsp;</td>
+						#formLabel("Country")
+						<td align="left">
+						<select name="distcountryid" tabIndex="18" value="$!entry.DistCountryId" width="50" STYLE="width: 50px">
+							<option value="999">(*)</option>
+						#foreach ($country in $countries)
+							<option value="$country.CountryId">$country.CountryCode</option>
+						#end        	
+						</select>
+						</td>
+							<td width=16>&nbsp;</td>
+						#formLabel("Campaign")
+						<td align="left">
+						<select name="relprojectid" tabIndex="20" DISABLED value="$!entry.RelProjectId" width="130" STYLE="width: 130px">
+							<option value="999">(*)</option>
+						#foreach ($project in $projects)
+							<option value="$project.ProjectId">$project.ProjectName</option>
+						#end        	
+						</select>
+						</td>
+					</tr>
+    			</table>
+			</td>
+			</tr>
+			</table>
+    		</td>
+ 		</tr>
+ 		<tr>
+			#formLabel("Campaign")
+			<td align="left">
+			<select name="projectid" tabIndex="25" value="$!entry.ProjectId" width="520" STYLE="width: 520px">
+			#foreach ($project in $projects)
+				<option value="$project.ProjectId">$project.ProjectName</option>
+			#end        	
+			</select>
+			</td>
+ 		</tr>
+ 		<tr>
+			#formLabel("Product")
+			<td align="left">
+			<select name="productid" tabIndex="26" value="$!entry.ProductId" width="520" STYLE="width: 520px">
+			#foreach ($product in $products)
+				<option value="$product.ProductId">$product.ProductDisplay</option>
+			#end        	
+			</select>
+			</td>
+ 		</tr>
+ 		<tr>
+    		#formCell ("Subject" "subject" $!entry.Subject 254 520 27)
+ 		</tr>
+		<tr>
+			<td>
+			&nbsp;
+			</td>
+			<td align=left>
+				<textarea rows=12 name="body" tabIndex=33 style="width: 520px">$!entry.Body</textarea>
+			</td>
+		</tr>
+		 <tr>
+			<td>
+			&nbsp;
+			</td>
+		 </tr>
+<input type="hidden" name="dnewslettercode" value="$!entry.DnewsletterCode">
+
+#if ($!entry.Created)
+	<input type="hidden" name="created" value="$!dtf.format($!entry.Created)">
+	<input type="hidden" name="createdby" value="$!entry.CreatedBy">
+
+			<tr>
+			<td>
+			&nbsp;
+			</td>
+				<td align=center>
+			    <table align=center width="520" cellpadding=0 cellspacing=0 border=0>
+			      <tr>  
+			      	  <td align=left><font class=frmlabel>Created: </font>$!dtf.format($!entry.Created) ($!entry.CreatedBy)</td>
+			      	  <td align=right><font class=frmlabel>Modified: </font>$!dtf.format($!entry.Modified) ($!entry.ModifiedBy)</td>
+			      </tr>  
+				</table>
+				</td>
+			</tr>
+		<tr>
+		<td>
+		&nbsp;
+		</td>
+		</tr>
+		#end        	
+ </table>
+</td>
+</tr>
+
+	
+#formFooter("DnewsletterForm.vm" "DnewsletterSQL" "dnewsletterid" $!entry.DnewsletterId $mode)

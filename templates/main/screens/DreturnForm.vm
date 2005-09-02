@@ -1,0 +1,254 @@
+#set ( $module = "Main" )
+#formCommon()
+
+var rowId=1;
+var tabInd=26;
+
+
+function formInit(){
+	myForm.status.value=$!entry.Status;
+	myForm.distributorid.value=$!entry.DistributorId;
+	myForm.dorderid.value=$!entry.DorderId;
+
+	#if ($!mode=="insert")
+		clearFields();
+		doAddItem();
+	#else
+		#foreach ($entryitem in $entryitems)
+			doAddItem();
+			suf= '_' + rowId;
+			myForm['locationid' + suf].value="$!entryitem.LocationId";
+			myForm['locationname' + suf].value="$!entryitem.Location.SalesDistrict.SalesDistrictName" + " - " + "$!entryitem.Location.LocationDisplay";
+			myForm['shippedqty' + suf].value="$!entryitem.ShippedQty";
+			myForm['unsoldqty' + suf].value="$!entryitem.UnsoldQty";
+			myForm['lostqty' + suf].value="$!entryitem.LostQty";
+	
+		#end
+	#end
+	myForm.distributorid.focus();
+
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.issueddate)) return false;
+	if (parent.isNotDate(myForm.issueddate)) return false;
+	if (parent.isEmpty(myForm.returndate)) return false;
+	if (parent.isNotDate(myForm.returndate)) return false;
+
+	if (myForm.status.value==50){
+		if (parent.isEmpty(myForm.closeddate)) return false;
+		if (parent.isNotDate(myForm.closeddate)) return false;
+	}
+	if (parent.isSelected(myForm.distributorid)) return false;
+	if (parent.isSelected(myForm.dorderid)) return false;
+
+	    var shipped = 0;
+	    var unsold = 0;
+	    var lost = 0;
+	    var returned = 0;
+	var len = myForm.elements.length;
+	for (var i = 0; i < len; i++) {
+	    var e = myForm.elements[i];
+	    
+		if (e.name.substring(0, 10) == "shippedqty") {
+			shipped= parseInt(e.value);
+	    }
+		else if (e.name.substring(0, 9) == "unsoldqty") {
+			if (parent.isNotQuantity(e))	return false;
+			returned= parseInt(e.value);
+	    }
+		else if (e.name.substring(0, 7) == "lostqty") {
+			if (parent.isNotQuantity(e)) return false;
+			lost= parseInt(e.value);
+			unsold= returned + lost;
+			if (shipped < unsold){
+				showInfo("Wrong value!");
+				e.focus();
+				return false;
+			}
+	    }
+	}
+
+	return true;
+}
+
+function valueChanged(formField){
+	if (formField.name=='distributorid'){
+		clearFields();
+		doClearItems();
+		checkEmptyTable();
+		loadUtil('$link.setPage("DistributorReturnOrders.vm")', formField.value);
+	}
+	else if (formField.name=='dorderid'){
+		clearFields();
+		doClearItems();
+		checkEmptyTable();
+		loadUtil('$link.setPage("DorderReturns.vm")', formField.value);
+	}
+	else if (formField.name=='status'){
+		if (myForm.status.value==50){
+			myForm.closeddate.disabled=false;
+			myForm.closeddate.value="$!df.format($!today)";
+		}
+		else{
+			myForm.closeddate.disabled=true;
+			myForm.closeddate.value="";
+		}
+	}
+}
+
+function clearFields(){
+	myForm['productname'].value="";
+	myForm['totalquantity'].value="";
+}
+
+function doAddItem(){
+	rowId++;
+
+	itemstr1='<input type="hidden"  maxLength="10" name="locationid_' + rowId + '"  STYLE="width: 1px; text-align: right;">';
+	itemstr2='<input type="text" READONLY name="locationname_' + rowId + '"  STYLE="width: 359px; text-align: left;color: blue;">';
+	itemstr3='<input type="text" READONLY maxLength="10" name="shippedqty_' + rowId + '" value="0" STYLE="width: 60px; text-align: right;color: blue;">';
+	tabInd++;
+	itemstr4='<input type="text" tabIndex="' + tabInd + '" maxLength="10" name="unsoldqty_' + rowId + '" value="0" onchange="valueChanged(this);" STYLE="width: 60px; text-align: right;">';
+	tabInd++;
+	itemstr5='<input type="text" tabIndex="' + tabInd + '" maxLength="10" name="lostqty_' + rowId + '" value="0" onchange="valueChanged(this);" STYLE="width: 60px; text-align: right;">';
+
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+    var row = table.insertRow(table.rows.length);
+
+    var cell1 = row.insertCell(0);
+    cell1.innerHTML = itemstr1;
+    var cell2 = row.insertCell(1);
+    cell2.innerHTML = itemstr2;
+    var cell3 = row.insertCell(2);
+    cell3.innerHTML = itemstr3;
+    var cell4 = row.insertCell(3);
+    cell4.innerHTML = itemstr4;
+    var cell5 = row.insertCell(4);
+    cell5.innerHTML = itemstr5;
+    
+    return rowId;
+}
+
+function doDeleteItem(cell){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	var rowIndex= document.all ? cell.parentElement.parentElement.rowIndex : cell.parentNode.parentNode.rowIndex;
+
+	table.deleteRow(rowIndex);
+	if (table.rows.length<2){
+		doAddItem();
+	}
+
+	calcTotal();
+}
+
+function doClearItems(){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	var rowIndex= table.rows.length - 1;
+
+	while (rowIndex > 0){
+		table.deleteRow(rowIndex);
+		rowIndex--;
+	}
+	
+	rowId=1;
+	tabInd=26;
+}
+
+
+function checkEmptyTable(){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	if (table.rows.length<2){
+		doAddItem();
+	}
+}
+
+
+#formHeader("DreturnForm.vm" "DreturnSQL" "dreturnid" $!entry.DreturnId $mode)
+
+<tr>
+<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+      <tr>  
+   		#formCellDisabled ("ID" "dreturncode" $!entry.DreturnCode 20 100 1)
+			<td width=16>&nbsp;</td>
+        #formCellDateDefault ("Issued" "issueddate" $!entry.IssuedDate $!today 10 100 2)
+			<td width=16>&nbsp;</td>
+   		#formSelectStatus ("Status" "status" $!entry.Status 100 3)
+      </tr>
+    <tr>
+	<td>
+	&nbsp;
+	</td>
+    </tr>
+
+      <tr>
+   		#formSelectDistributor ("Distributor" "distributorid" $!entry.DistributorId 160 5)
+			<td width=16>&nbsp;</td>
+        #formEmptyCell ()
+			<td width=16>&nbsp;</td>
+		#if ($!entry.Status==50)
+        	#formCellDate ("Closed" "closeddate" $!entry.ClosedDate 10 100 13)
+        #else
+        	#formCellDisabled ("Closed" "closeddate" $!entry.ClosedDate 10 100 13)
+        #end
+      </tr>
+      <tr>
+		#formLabel("Order")
+		<td align="left">
+		<select name="dorderid" tabIndex="6" value="$!entry.DorderId" onchange="valueChanged(this);" width="160" STYLE="width: 160px">
+		#foreach ($order in $orders)
+			<option value="$order.DorderId">$order.DorderCode</option>
+		#end        	
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+        #formEmptyCell ()
+			<td width=16>&nbsp;</td>
+       	#formCellDateDefault ("Returned" "returndate" $!entry.ReturnDate $!today 10 100 9)
+      </tr>
+      <tr>
+   		#formCellDisabled ("Product" "productname" $!entry.Dorder.Product.ProductDisplay 70 160 7)
+			<td width=16>&nbsp;</td>
+        #formEmptyCell ()
+			<td width=16>&nbsp;</td>
+        #formCellNumDisabled ("Total Qty" "totalquantity" $!entry.Dorder.TotalQuantity 10 100 14)
+      </tr>
+	</table>
+  </td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+<tr>
+<td>
+	<table align=center cellpadding=0 cellspacing=0 border=0>
+	<tr>
+		<td>
+		<table id="itemList" name="itemList" align=center cellpadding=0 cellspacing=0 border=0>
+			<tr class="toolbar" align="center">
+				<td width="1"></td>
+				<td width="359">Location</td>
+				<td width="60">Shipped</td>
+				<td width="60">Returned</td>
+				<td width="60">Lost</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+
+<input type="hidden" name="dreturncode" value="$!entry.DreturnCode">
+
+#documentFooter()
+	
+#formFooter("DreturnForm.vm" "DreturnSQL" "dreturnid" $!entry.DreturnId $mode)

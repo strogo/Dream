@@ -1,0 +1,15 @@
+#set ( $module = "Options" )
+#listCommon()
+#listHeader(3008 "VendorList.vm" "VendorSQL" 3)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.VendorId)
+				#addListPic($ui.space)
+				<td width="100%"><span class="llink" onClick="doEdit('$entry.VendorId')">$entry.VendorName</span></td>
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

@@ -1,0 +1,108 @@
+#set ( $module = "Application" )
+$page.setTitle("DReaM")
+
+var defaultList=$!preferences.DefaultList;
+
+TAB_MAIN=101;
+TAB_OPTIONS=102;
+TAB_SYSTEM=103;
+
+TOP_LIST=101;
+TOP_FORM_NEW=102;
+TOP_FORM_EDIT=103;
+TOP_DIALOG=104;
+
+SCREEN_LIST=101;
+SCREEN_FORM=102;
+SCREEN_DIALOG=103;
+
+DISTRIBUTOR=1101;
+LOCATION=1102;
+PROJECT=1002;
+PRODUCT=1003;
+DORDER=2101;
+DCONTRACT=2102;
+DSHIPMENT=2103;
+DRETURN=2104;
+DNEWSLETTER=2108;
+DOUTBOX=2109;
+DINBOX=2110;
+COUNTRY=3003;
+REGION=3012;
+LANGUAGE=3004;
+SALES_AREA=3105;
+SALES_DISTRICT=3106;
+COST_TYPE=3107;
+UOM=3007;
+VENDOR=3008;
+PROJECT_CATEGORY=3009;
+DISTRIBUTOR_CATEGORY=3110;
+LOCATION_CATEGORY=3111;
+PRODUCT_CATEGORY=3011;
+USER=4001;
+GROUP=4002;
+ROLE=4003;
+PERMISSION=4004;
+REPORT=5001;
+PREFERENCES=5002;
+PASSWORD=5003;
+NOTIFICATION=5004;
+SCHEDULER=5005;
+
+TI_MAIN='Main';
+TI_OPTIONS='Options';
+TI_SYSTEM='System';
+TI_WELCOME='$!preferences.Welcome';
+TI_HELP='Help';
+TI_ABOUT='About';
+TI_LOGOUT='Logout';
+
+function ScreenObject (mlb, ltpl, ftpl, idn, tl, tn, te, filterno, findstr, sortcol, sortord){
+	this.menuLabel=mlb;
+	this.listTemplate=ltpl;
+	this.formTemplate=ftpl;
+	this.idName=idn;
+	this.titleList=tl;
+	this.titleNew=tn;
+	this.titleEdit=te;
+	this.filterNumber=filterno;
+	this.findString=findstr;
+	this.sortColumn=sortcol;
+	this.sortOrder=sortord;
+}
+
+var creamObject= new Array();
+
+creamObject[DISTRIBUTOR]=new ScreenObject("Distributors", "$link.setPage("DistributorList.vm")", "$link.setPage("DistributorForm.vm")", "distributorid", "Distributors", "New Distributor", "Distributor", $!preferences.DistributorFid, "", 2, "ASC");
+creamObject[LOCATION]=new ScreenObject("Locations", "$link.setPage("LocationList.vm")", "$link.setPage("LocationForm.vm")", "locationid", "Locations", "New Location", "Location", $!preferences.LocationFid, "", 2, "ASC");
+creamObject[PROJECT]=new ScreenObject("Campaigns", "$link.setPage("ProjectList.vm")", "$link.setPage("ProjectForm.vm")", "projectid", "Campaigns", "New Campaign", "Campaign", $!preferences.ProjectFid, "", 2, "ASC");
+creamObject[PRODUCT]=new ScreenObject("Products", "$link.setPage("ProductList.vm")", "$link.setPage("ProductForm.vm")", "productid", "Products", "New Product", "Product", $!preferences.ProductFid, "", 2, "ASC");
+creamObject[DCONTRACT]=new ScreenObject("Contracts", "$link.setPage("DcontractList.vm")", "$link.setPage("DcontractForm.vm")", "dcontractid", "Contracts", "New Contract", "Contract", $!preferences.DcontractFid, "", 6, "DESC");
+creamObject[DORDER]=new ScreenObject("Orders", "$link.setPage("DorderList.vm")", "$link.setPage("DorderForm.vm")", "dorderid", "Orders", "New Order", "Order", $!preferences.DorderFid, "", 6, "DESC");
+creamObject[DSHIPMENT]=new ScreenObject("Shipments", "$link.setPage("DshipmentList.vm")", "$link.setPage("DshipmentForm.vm")", "dshipmentid", "Shipments", "New Shipment Memo", "Shipment Memo", $!preferences.DshipmentFid, "", 5, "DESC");
+creamObject[DRETURN]=new ScreenObject("Returns", "$link.setPage("DreturnList.vm")", "$link.setPage("DreturnForm.vm")", "dreturnid", "Returns", "New Return Memo", "Return Memo", $!preferences.DreturnFid, "", 1, "ASC");
+creamObject[DNEWSLETTER]=new ScreenObject("Newsletters", "$link.setPage("DnewsletterList.vm")", "$link.setPage("DnewsletterForm.vm")", "dnewsletterid", "Newsletters", "New Newsletter", "Newsletter", $!preferences.DnewsletterFid, "", 4, "DESC");
+creamObject[DOUTBOX]=new ScreenObject("Outbox", "$link.setPage("DoutboxEventList.vm")", "$link.setPage("DoutboxEventForm.vm")", "doutboxeventid", "Outbox", "New Outbox Event", "Outbox Event", $!preferences.DoutboxFid, "", 4, "DESC");
+creamObject[DINBOX]=new ScreenObject("Inbox", "$link.setPage("DinboxEventList.vm")", "$link.setPage("DinboxEventForm.vm")", "dinboxeventid", "Inbox", "New Inbox Event", "Inbox Event", $!preferences.DinboxFid, "", 4, "DESC");
+creamObject[SALES_AREA]=new ScreenObject("Sales Areas", "$link.setPage("SalesAreaList.vm")", "$link.setPage("SalesAreaForm.vm")", "salesareaid", "Sales Areas", "New Sales Area", "Sales Area", 1000, "", 1, "ASC");
+creamObject[SALES_DISTRICT]=new ScreenObject("Sales Districts", "$link.setPage("SalesDistrictList.vm")", "$link.setPage("SalesDistrictForm.vm")", "salesdistrictid", "Sales Districts", "New Sales District", "Sales District", 1000, "", 1, "ASC");
+creamObject[COUNTRY]=new ScreenObject("Countries", "$link.setPage("CountryList.vm")", "$link.setPage("CountryForm.vm")", "countryid", "Countries", "New Country", "Country", 1000, "", 1, "ASC");
+creamObject[REGION]=new ScreenObject("Regions", "$link.setPage("RegionList.vm")", "$link.setPage("RegionForm.vm")", "regionid", "Regions", "New Region", "Region", 1000, "", 1, "ASC");
+creamObject[LANGUAGE]=new ScreenObject("Languages", "$link.setPage("LanguageList.vm")", "$link.setPage("LanguageForm.vm")", "languageid", "Languages", "New Language", "Language", 1000, "", 1, "ASC");
+creamObject[COST_TYPE]=new ScreenObject("Cost Types", "$link.setPage("CostTypeList.vm")", "$link.setPage("CostTypeForm.vm")", "costtypeid", "Cost Types", "New Cost Type", "Cost Type", 1000, "", 1, "ASC");
+creamObject[LOCATION_CATEGORY]=new ScreenObject("Location Categories", "$link.setPage("LocationCategoryList.vm")", "$link.setPage("LocationCategoryForm.vm")", "locationcatid", "Location Categories", "New Location Category", "Location Category", 1000, "", 1, "ASC");
+creamObject[UOM]=new ScreenObject("UOMs", "$link.setPage("UomList.vm")", "$link.setPage("UomForm.vm")", "uomid", "Units of Measure", "New Unit of Measure", "Unit of Measure", 1000, "", 1, "ASC");
+creamObject[VENDOR]=new ScreenObject("Vendors", "$link.setPage("VendorList.vm")", "$link.setPage("VendorForm.vm")", "vendorid", "Vendors", "New Vendor", "Vendor", 1000, "", 1, "ASC");
+creamObject[PROJECT_CATEGORY]=new ScreenObject("Campaign Categories", "$link.setPage("ProjectCategoryList.vm")", "$link.setPage("ProjectCategoryForm.vm")", "projectcatid", "Campaign Categories", "New Campaign Category", "Campaign Category", 1000, "", 1, "ASC");
+creamObject[DISTRIBUTOR_CATEGORY]=new ScreenObject("Distributor Categories", "$link.setPage("DistributorCategoryList.vm")", "$link.setPage("DistributorCategoryForm.vm")", "distributorcatid", "Distributor Categories", "New Distributor Category", "Distributor Category", 1000, "", 1, "ASC");
+creamObject[PRODUCT_CATEGORY]=new ScreenObject("Product Categories", "$link.setPage("ProductCategoryList.vm")", "$link.setPage("ProductCategoryForm.vm")", "productcatid", "Product Categories", "New Product Category", "Product Category", 1000, "", 1, "ASC");
+creamObject[USER]=new ScreenObject("Users", "$link.setPage("UserList.vm")", "$link.setPage("UserForm.vm")", "userid", "Users", "New User", "User", 1000, "", 1, "ASC");
+creamObject[GROUP]=new ScreenObject("Groups", "$link.setPage("group,FluxGroupList.vm")", "$link.setPage("group,FluxGroupForm.vm")", "name", "Groups", "New Group", "Group", 1000, "", 1, "ASC");
+creamObject[ROLE]=new ScreenObject("Roles", "$link.setPage("RoleList.vm")", "$link.setPage("RoleForm.vm")", "roleid", "Roles", "New Role", "Role", 1000, "", 1, "ASC");
+creamObject[PERMISSION]=new ScreenObject("Permissions", "$link.setPage("PermissionList.vm")", "$link.setPage("PermissionForm.vm")", "permissionid", "Permissions", "New Permission", "Permission", 1000, "", 1, "ASC");
+creamObject[REPORT]=new ScreenObject("Reports", "", "$link.setPage("ReportForm.vm")", "", "", "", "Reports", 0, "", 0);
+creamObject[PREFERENCES]=new ScreenObject("Preferences", "", "$link.setPage("PreferencesForm.vm")", "userid", "", "", "Preferences", 1000, "", 0, "ASC");
+creamObject[PASSWORD]=new ScreenObject("Password", "", "$link.setPage("PasswordForm.vm")", "userid", "", "", "Password", 1000, "", 0, "ASC");
+creamObject[NOTIFICATION]=new ScreenObject("Notifications", "$link.setPage("NotificationList.vm")", "$link.setPage("NotificationForm.vm")", "notificationid", "Notifications", "New Notification", "Notification", 1000, "", 0, "ASC");
+creamObject[SCHEDULER]=new ScreenObject("Scheduler Service", "", "$link.setPage("SchedulerDialog.vm")", "userid", "", "", "Scheduler", 1000, "", 0, "ASC");
+

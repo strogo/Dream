@@ -1,0 +1,10 @@
+#Sqlfile -> Database map
+#Thu Jul 29 08:38:43 CEST 2004
+turbine-schema-idtable-init.sql=dream
+cream-schema-idtable-init.sql=cream
+turbine-schema.sql=dream
+cream-schema.sql=cream
+turbine-security.sql=dream
+dream-schema-idtable-init.sql=dream
+id-table-schema.sql=default
+dream-schema.sql=dream

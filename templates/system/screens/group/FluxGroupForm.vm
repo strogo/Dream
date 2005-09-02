@@ -1,0 +1,35 @@
+#set ( $module = "System" )
+#formCommon()
+
+<script language="JavaScript">
+function formInit(){
+	this.document.formData.name.focus();
+}
+
+function formValidate(){
+	if (parent.isEmpty(this.document.formData.name)) return false;
+	
+	return true;
+}
+</script>
+
+<form name=formData method="post" action="$link.setPage("group,FluxGroupList.vm").setAction("group.FluxGroupAction")">
+  <div align="left">
+    <table bgcolor="#ffffff" cellpadding="$ui.tableCellPadding">
+
+      <tr>  
+        #formCell ("Group Name" "name" $!flux.Group.Name 50 50 1)
+      </tr>
+
+      #if ($flux.Mode == "modify")
+        <input type="submit" name="eventSubmit_doUpdate" value="Update Group"/>
+      #elseif ($flux.Mode == "delete")
+        <input type="submit" name="eventSubmit_doDelete" value="Confirm Deletion"/>
+      #else
+        <input type="submit" name="eventSubmit_doInsert" value="Add Group"/>
+      #end
+          
+  </table>
+  </div>
+</form>
+

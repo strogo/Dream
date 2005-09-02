@@ -1,0 +1,26 @@
+#set ( $module = "Main" )
+#listCommon()
+#listHeader(1101 "DistributorList.vm" "DistributorSQL" 7)
+  
+	#if ($entries)
+
+		#foreach ($entry in $entries)
+			#rowStatusClass ($!entry.Status)
+				#addToggle ($!entry.DistributorId)
+
+				#if ($!entry.DistributorType==10)
+					#addListPic($ui.person)
+				#else
+					#addListPic($ui.institut)
+				#end
+
+				<td width="15%"><span class="llink" onClick="doEdit('$entry.DistributorId')">$!entry.DistributorCode</span></td>
+				#listCellPrc (35 $!entry.DistributorDisplay)
+				#listCellPrc (25 $!entry.DistributorCategory.DistributorCatName)
+				#listCellPrc (15 $entry.City)
+				#listCellPrc (10 $!entry.Country.CountryCode)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

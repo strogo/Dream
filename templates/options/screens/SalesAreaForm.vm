@@ -1,0 +1,20 @@
+#set ( $module = "Options" )
+#formCommon()
+
+function formInit(){
+	highlight(myForm.salesareaname);
+}
+
+function formValidate(){
+	if (isEmpty(myForm.salesareaname)) return false;
+
+	return true;
+}
+
+#formHeader("SalesAreaForm.vm" "SalesAreaSQL" "salesareaid" $!entry.SalesAreaId $mode)
+
+      <tr>  
+        #formCell ("Name" "salesareaname" $!entry.SalesAreaName 50 200 1)
+      </tr>
+
+#formFooter("SalesAreaForm.vm" "SalesAreaSQL" "salesareaid" $!entry.SalesAreaId $mode)

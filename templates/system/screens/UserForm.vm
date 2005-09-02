@@ -1,0 +1,332 @@
+#set ( $module = "System" )
+#formCommon()
+
+var rowId=1;
+var tabInd=26;
+
+function formInit(){
+	
+	#if ($!mode=="insert")
+		myForm.defaultlist.value= 2010;
+	#else
+		myForm.defaultlist.value= $!prefs.DefaultList;
+	#end
+	myForm.dinboxfid.value= $!prefs.DinboxFid;
+	myForm.doutboxfid.value= $!prefs.DoutboxFid;
+	myForm.dnewsletterfid.value= $!prefs.DnewsletterFid;
+	myForm.dreturnfid.value= $!prefs.DreturnFid;
+	myForm.dshipmentfid.value= $!prefs.DshipmentFid;
+	myForm.dorderfid.value= $!prefs.DorderFid;
+	myForm.dcontractfid.value= $!prefs.DcontractFid;
+	myForm.locationfid.value= $!prefs.LocationFid;
+	myForm.distributorfid.value= $!prefs.distributorFid;
+	myForm.projectfid.value= $!prefs.ProjectFid;
+	myForm.productfid.value= $!prefs.ProductFid;
+
+	myForm.passwordvalue.value= "$!entry.PasswordValue";
+
+	#if ($!mode=="insert")
+		doAddItem();
+	#else
+		#foreach ($entryitem in $entryitems)
+			myRow= doAddItem();
+			suf= '_' + myRow;
+			myForm['roleid' + suf].value="$!entryitem.RoleId";
+		#end
+	#end
+
+	highlight(myForm.loginname);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.loginname)) return false;
+	if (parent.isEmpty(myForm.passwordvalue)) return false;
+	if (parent.isEmpty(myForm.firstname)) return false;
+	if (parent.isEmpty(myForm.lastname)) return false;
+	if (parent.isEmpty(myForm.welcome)) return false;
+	
+	return true;
+}
+
+function valueChanged(formField){
+	if (formField.name=='firstname'){
+		myForm.welcome.value= "Welcome " + formField.value;
+	}
+}
+
+function doAddItem(){
+	rowId++;
+
+	itemstr1='<a href="javascript: void 0" ONCLICK="doDeleteItem(this)"><img src="$ui.image($ui.itemDelete)" width="16" height="16" border=0 alt="Delete Item"></a>';
+	itemstr2='<select name="roleid_' + rowId + '" tabIndex="' + tabInd + '" value="" width="420" STYLE="width: 420px">';
+
+	#foreach ($role in $roles)
+		itemstr2+='<option value="$role.RoleId">$role.RoleName</option>'
+	#end        	
+
+	itemstr2+='</select>';
+	tabInd++;
+
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+    var row = table.insertRow(table.rows.length);
+
+    var cell1 = row.insertCell(0);
+    cell1.innerHTML = itemstr1;
+    var cell2 = row.insertCell(1);
+    cell2.innerHTML = itemstr2;
+    
+    return rowId;
+}
+
+function doDeleteItem(cell){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	var rowIndex= document.all ? cell.parentElement.parentElement.rowIndex : cell.parentNode.parentNode.rowIndex;
+
+	table.deleteRow(rowIndex);
+	if (table.rows.length<2){
+		doAddItem();
+	}
+}
+
+function checkEmptyTable(){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	if (table.rows.length<2){
+		doAddItem();
+	}
+}
+
+
+#formHeader("UserForm.vm" "UserSQL" "userid" $!entry.UserId $mode)
+
+<tr>
+<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+      <tr>
+        #formCell ("User Name" "loginname" $!entry.LoginName 32 140 1 )
+				<td width=16>&nbsp;</td>
+        #formCellWithChange ("First Name" "firstname" $!entry.FirstName 99 140 3)
+      </tr>
+      <tr>
+        #formPasswordCell ("Password" "passwordvalue" $!entry.PasswordValue 32 140 2)
+				<td width=16>&nbsp;</td>
+        #formCell ("Last Name" "lastname" $!entry.LastName 99 140 4)
+      </tr>
+
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+ 		<tr>
+    		#formCell ("Welcome String" "welcome" $!prefs.Welcome 32 140 5)
+				<td width=16>&nbsp;</td>
+			#formLabel("Default List")
+			<td align="left">
+			<select name="defaultlist" tabIndex=6 value=$!prefs.DefaultList STYLE="width: 140px">
+				<option value="2110">Inbox</option>
+				<option value="2109">Outbox</option>
+				<option value="2108">Newsletters</option>
+				<option value="2104">Returns</option>
+				<option value="2103">Shipments</option>
+				<option value="2101">Orders</option>
+				<option value="2102">Contracts</option>
+				<option value="1102">Locations</option>
+				<option value="1101">Distributors</option>
+				<option value="1002">Campaigns</option>
+				<option value="1003">Products</option>
+			</select>
+			</td>
+ 		</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+ 		<tr>
+			#formLabel("Inbox Filter")
+			<td align="left">
+			<select name="dinboxfid" tabIndex=10 value=$!prefs.DinboxFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">Today</option>
+				<option value="1002">This Month</option>
+				<option value="1004">This Year</option>
+				<option value="1006">Drafts</option>
+				<option value="1007">Open</option>
+				<option value="1008">Closed</option>
+				<option value="1009">My Entries</option>
+			</select>
+			</td>
+				<td width=16>&nbsp;</td>
+			#formLabel("Contract Filter")
+			<td align="left">
+			<select name="dcontractfid" tabIndex=20 value=$!prefs.DcontractFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">Today</option>
+				<option value="1002">This Month</option>
+				<option value="1004">This Year</option>
+				<option value="1006">Drafts</option>
+				<option value="1007">Open</option>
+				<option value="1008">Closed</option>
+				<option value="1009">My Entries</option>
+			</select>
+			</td>
+ 		</tr>
+ 		<tr>
+			#formLabel("Outbox Filter")
+			<td align="left">
+			<select name="doutboxfid" tabIndex=11 value=$!prefs.DoutboxFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">Today</option>
+				<option value="1002">This Month</option>
+				<option value="1004">This Year</option>
+				<option value="1006">Drafts</option>
+				<option value="1007">Open</option>
+				<option value="1008">Closed</option>
+				<option value="1009">My Entries</option>
+			</select>
+			</td>
+				<td width=16>&nbsp;</td>
+			#formLabel("Location Filter")
+			<td align="left">
+			<select name="locationfid" tabIndex=22 value=$!prefs.LocationFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">People</option>
+				<option value="1002">Institutions</option>
+				<option value="1003">Prospects</option>
+				<option value="1004">Active</option>
+				<option value="1005">Inactive</option>
+				<option value="1006">My Entries</option>
+			</select>
+			</td>
+ 		</tr>
+ 		<tr>
+			#formLabel("Newsletter Filter")
+			<td align="left">
+			<select name="dnewsletterfid" tabIndex=12 value=$!prefs.DnewsletterFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">Today</option>
+				<option value="1002">This Month</option>
+				<option value="1004">This Year</option>
+				<option value="1006">Drafts</option>
+				<option value="1007">Open</option>
+				<option value="1008">Closed</option>
+				<option value="1009">My Entries</option>
+			</select>
+			</td>
+				<td width=16>&nbsp;</td>
+			#formLabel("Distributor Filter")
+			<td align="left">
+			<select name="distributorfid" tabIndex=23 value=$!prefs.DistributorFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">People</option>
+				<option value="1002">Institutions</option>
+				<option value="1003">Prospects</option>
+				<option value="1004">Active</option>
+				<option value="1005">Inactive</option>
+				<option value="1006">My Entries</option>
+			</select>
+			</td>
+ 		</tr>
+ 		<tr>
+			#formLabel("Return Filter")
+			<td align="left">
+			<select name="dreturnfid" tabIndex=13 value=$!prefs.DreturnFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">Today</option>
+				<option value="1002">This Month</option>
+				<option value="1004">This Year</option>
+				<option value="1006">Drafts</option>
+				<option value="1007">Open</option>
+				<option value="1008">Closed</option>
+				<option value="1009">My Entries</option>
+			</select>
+			</td>
+				<td width=16>&nbsp;</td>
+			#formLabel("Campaign Filter")
+			<td align="left">
+			<select name="projectfid" tabIndex=25 value=$!prefs.ProjectFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">Open</option>
+				<option value="1002">Closed</option>
+				<option value="1003">My Entries</option>
+			</select>
+			</td>
+ 		</tr>
+ 		<tr>
+			#formLabel("Shipment Filter")
+			<td align="left">
+			<select name="dshipmentfid" tabIndex=14 value=$!prefs.DshipmentFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">Today</option>
+				<option value="1002">This Month</option>
+				<option value="1004">This Year</option>
+				<option value="1006">Drafts</option>
+				<option value="1007">Open</option>
+				<option value="1008">Closed</option>
+				<option value="1009">My Entries</option>
+			</select>
+			</td>
+				<td width=16>&nbsp;</td>
+			#formLabel("Product Filter")
+			<td align="left">
+			<select name="productfid" tabIndex=26 value=$!prefs.ProductFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">Stock Items</option>
+				<option value="1002">Print Media</option>
+				<option value="1003">Active</option>
+				<option value="1004">Inactive</option>
+				<option value="1005">My Entries</option>
+			</select>
+			</td>
+ 		</tr>
+ 		<tr>
+			#formLabel("Order Filter")
+			<td align="left">
+			<select name="dorderfid" tabIndex=15 value=$!prefs.DorderFid STYLE="width: 140px">
+				<option value="1000"> ---</option>
+				<option value="1001">Today</option>
+				<option value="1002">This Month</option>
+				<option value="1004">This Year</option>
+				<option value="1006">Drafts</option>
+				<option value="1007">Open</option>
+				<option value="1008">Closed</option>
+				<option value="1009">My Entries</option>
+			</select>
+			</td>
+				<td width=16>&nbsp;</td>
+				<td width=16>&nbsp;</td>
+				<td width=16>&nbsp;</td>
+ 		</tr>
+	</table>
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+<tr>
+<td>
+	<table align=center cellpadding=0 cellspacing=0 border=0>
+	<tr>
+		<td>
+		<table id="itemList" name="itemList" align=center cellpadding=0 cellspacing=0 border=0>
+			<tr class=toolbar align=center>
+				<td>
+				<a href="javascript: void 0" ONCLICK="doAddItem()"><img src="$ui.image($ui.itemNew)" width="16" height="16" border=0 alt="Add Item"></a>
+				</td>
+				<td width="420">Role</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+
+#formFooter("UserForm.vm" "UserSQL" "userid" $!entry.UserId $mode)

@@ -1,0 +1,33 @@
+<table cellpadding=0 cellspacing=0 border=0 width="100%">
+<tr>
+<td width="5">
+</td>
+<td>
+
+<table cellpadding=4 cellspacing=0 border=0 width="100%">
+<tr>
+<td colspan=2 height=5>
+</td>
+</tr>
+				    
+<tr valign="bottom" class=toolbar>
+<td nowrap>
+<a href=""><img src="$ui.image($ui.navNew)" width="24" height="24" border=0 alt="Add New"></a>
+<a href=""><img src="$ui.image($ui.navDelete)" width="24" height="24" border=0 alt="Delete Selected"></a>
+<a href=""><img src="$ui.image($ui.navFind)" width="24" height="24" border=0 alt="Find"></a>
+</td>
+<td align=right nowrap>
+</td>
+<td align=right >
+<a href=""><img src="$ui.image($ui.navFirst)" width="24" height="24" border=0 alt="First"></a>
+<a href=""><img src="$ui.image($ui.navPrevious)" width="24" height="24" border=0 alt="Previous"></a>
+<a href=""><img src="$ui.image($ui.navNext)" width="24" height="24" border=0 alt="Next"></a>
+<a href=""><img src="$ui.image($ui.navLast)" width="24" height="24" border=0 alt="Last"></a>
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+

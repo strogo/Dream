@@ -1,0 +1,26 @@
+#set ( $module = "Options" )
+#formCommon()
+
+function formInit(){
+	highlight(myForm.countryname);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.countryname)) return false;
+	if (parent.isEmpty(myForm.countrycode)) return false;
+	
+	myForm.countrycode.value = myForm.countrycode.value.toUpperCase();
+	
+	return true;
+}
+
+#formHeader("CountryForm.vm" "CountrySQL" "countryid" $!entry.CountryId $mode)
+
+      <tr>  
+        #formCell ("Name" "countryname" $!entry.CountryName 50 200 1)
+      </tr>
+      <tr>  
+        #formCell ("Code" "countrycode" $!entry.CountryCode 2 30 2)
+      </tr>
+
+#formFooter("CountryForm.vm" "CountrySQL" "countryid" $!entry.CountryId $mode)

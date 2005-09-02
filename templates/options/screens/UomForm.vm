@@ -1,0 +1,26 @@
+#set ( $module = "Options" )
+#formCommon()
+
+function formInit(){
+	highlight(myForm.uomname);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.uomname)) return false;
+	if (parent.isEmpty(myForm.uomcode)) return false;
+
+	myForm.uomcode.value = myForm.uomcode.value.toUpperCase();
+	
+	return true;
+}
+
+#formHeader("UomForm.vm" "UomSQL" "uomid" $!entry.UomId $mode)
+
+      <tr>  
+        #formCell ("Name" "uomname" $!entry.UomName 50 200 1)
+      </tr>
+      <tr>  
+        #formCell ("Code" "uomcode" $!entry.UomCode 3 40 2)
+      </tr>
+
+#formFooter("UomForm.vm" "UomSQL" "uomid" $!entry.UomId $mode)

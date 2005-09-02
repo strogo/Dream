@@ -1,0 +1,17 @@
+#set ( $module = "System" )
+#listCommon()
+
+<table  width="100%" cellpadding=2 cellspacing=0 border=0>
+  
+    #foreach ($user in $flux.Users)
+    <tr class=msgnew>
+		#addToggle($user.UserId)
+		#addListPic($ui.space)
+
+		<td width="33%"><a href="javascript:parent.doEdit('$user.UserName')">$!user.UserName</a></td>
+		#listCellPrc (33 $!user.FirstName)
+		#listCellPrc (33 $!user.LastName)
+    </tr>        
+    #end
+
+#listFooter()

@@ -1,0 +1,16 @@
+#set ( $module = "Options" )
+#listCommon()
+#listHeader(3007 "UomList.vm" "UomSQL" 4)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.UomId)
+				#addListPic($ui.space)
+				<td width="80%"><span class="llink" onClick="doEdit('$entry.UomId')">$entry.UomName</span></td>
+				#listCellPrc (20 $entry.UomCode)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

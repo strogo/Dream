@@ -1,0 +1,19 @@
+#set ( $module = "Main" )
+#listCommon()
+#listHeader(2101 "DorderList.vm" "DorderSQL" 8)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+			#rowStatusClass ($!entry.Status)
+				#addToggle($!entry.DorderId)
+				#addListPic($ui.dorder)
+				<td width="15%"><span class="llink" onClick="doEdit('$!entry.DorderId')">$!entry.DorderCode</span></td>
+				#listCellPrc (30 $!entry.Distributor.DistributorDisplay)
+				#listCellPrc (25 $!entry.Product.ProductDisplay)
+				#listCellPrc (15 $!entry.TotalQuantity)
+				#listCellPrcDate (15 $!entry.IssuedDate)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

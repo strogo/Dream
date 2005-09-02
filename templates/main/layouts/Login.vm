@@ -1,0 +1,15 @@
+$page.setStyleSheet("$ui.image($ui.css1)")
+$page.setBgColor("#9CB886")
+
+<table width="100%" height="100%">
+  <tr>
+    <td valign=bottom colspan="2">
+      $navigation.setTemplate("/LoginTop.vm")
+    </td>
+  </tr>
+  <tr>
+    <td valign=top align="left">
+      $screen_placeholder
+    </td>
+  </tr>
+</table>

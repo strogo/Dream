@@ -1,0 +1,18 @@
+$page.setTitle("Error")
+
+$page.setBgColor("#ffffff")
+
+<font face="verdana,geneva,helvetica">
+
+<h2>Error</h2>
+
+$processingException
+
+<hr>
+
+$stackTrace
+
+</font>
+
+<br>
+

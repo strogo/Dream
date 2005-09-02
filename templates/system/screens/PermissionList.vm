@@ -1,0 +1,16 @@
+#set ( $module = "System" )
+#listCommon()
+
+<table  width="100%" cellpadding=2 cellspacing=0 border=0>
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.PermissionId)
+				#addListPic($ui.space)
+		
+				<td width="99%"><a href="javascript:parent.doEdit('$entry.PermissionName')">$!entry.PermissionName</a></td>
+	        </tr>        
+		#end
+	#end
+</table>

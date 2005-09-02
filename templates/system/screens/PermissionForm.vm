@@ -1,0 +1,22 @@
+#set ( $module = "System" )
+#formCommon()
+
+<script language="JavaScript">
+function formInit(){
+	this.document.formData.permissionname.focus();
+}
+
+function formValidate(){
+	if (parent.isEmpty(this.document.formData.permissionname)) return false;
+	
+	return true;
+}
+</script>
+
+#formHeader("PermissionForm.vm" "PermissionSQL" "permissionid" $!entry.PermissionId $mode)
+
+      <tr>  
+        #formCell ("Name" "permissionname" $!entry.PermissionName 99 50 1)
+      </tr>
+
+#formFooter("PermissionForm.vm" "PermissionSQL" "permissionid" $!entry.PermissionId $mode)

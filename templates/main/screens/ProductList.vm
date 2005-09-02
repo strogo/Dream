@@ -1,0 +1,25 @@
+#set ( $module = "Main" )
+#listCommon()
+#listHeader(1003 "ProductList.vm" "ProductSQL" 8)
+
+#if ($entries)
+	
+		#foreach ($entry in $entries)
+			#rowStatusClass($!entry.Status)
+				#addToggle($!entry.ProductId)
+				#if ($entry.ProductType==10)
+					#addListPic($ui.stockitem)
+				#else
+					#addListPic($ui.pmediaitem)
+				#end
+				<td width="15%"><span class="llink" onClick="doEdit('$entry.ProductId')">$!entry.ProductCode</span></td>
+				#listCellPrc (30 $!entry.ProductDisplay)
+				#listCellPrc (25 $!entry.ProductCategory.ProductCatName)
+				#listCellPrc (10 $!entry.Uom.UomCode)
+				#listCellPrcAmount (15 $!entry.BasePrice)
+				#addListPic($ui.space)
+	        </tr>        
+	    #end
+#end
+
+#listFooter()

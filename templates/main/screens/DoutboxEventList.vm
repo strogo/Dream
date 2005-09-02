@@ -1,0 +1,26 @@
+#set ( $module = "Main" )
+#listCommon()
+#listHeader(2109 "DoutboxEventList.vm" "DoutboxEventSQL" 6)
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+			#rowStatusClass ($!entry.Status)
+
+				#addToggle($!entry.DoutboxEventId)
+				#if ($!entry.EventType==20)
+					#addListPic($ui.message)
+				#elseif ($!entry.EventType==40)
+					#addListPic($ui.info)
+				#else
+					#addListPic($ui.support)
+				#end
+
+				<td width="15%"><span class="llink" onClick="doEdit('$!entry.DoutboxEventId')">$!entry.DoutboxEventCode</span></td>
+				#listCellPrc (30 $!entry.Distributor.DistributorDisplay)
+				#listCellPrc (40 $!entry.Subject)
+				#listCellPrcDate (15 $!entry.IssuedDate)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

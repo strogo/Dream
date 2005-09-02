@@ -1,0 +1,56 @@
+# These are the default properties
+
+
+# Images
+alertImage = alert1.gif
+logo = dream.gif
+poweredByImage = powered_by_tambora.gif
+line = line.gif
+navNew=Add24.gif
+navDelete=Delete24.gif
+navStatus=Edit24.gif
+navFind=Zoom24.gif
+navPrint=Print24.gif
+navHelp=Information24.gif
+navFirst=Rewind24.gif
+navNext=StepForward24.gif
+navPrevious=StepBack24.gif
+navLast=FastForward24.gif
+itemNew=Add16.gif
+itemDelete=Delete16.gif
+space=space.gif
+cornUp=rdul1.gif
+cornDown=rddl1.gif
+person=person.jpg
+institut=institut.jpg
+stockitem=stockitem.jpg
+serviceitem=serviceitem.jpg
+osubsitem=osubsitem.jpg
+psubsitem=psubsitem.jpg
+pmediaitem=psubsitem.jpg
+project=project.jpg
+sorder=sorder.jpg
+dorder=sorder.jpg
+payment=payment.jpg
+dcontract=payment.jpg
+dreturn=osubsitem.jpg
+shipment=shipment.jpg
+service=service.jpg
+osubs=osubs.jpg
+psubs=psubs.jpg
+usage=person.jpg
+newsletter=news.jpg
+message=message.jpg
+inforeq=inforeq.jpg
+suppreq=suppreq.jpg
+info=info.jpg
+support=support.jpg
+
+darkColor = #000088
+lightColor = #DDDDDD
+tableColor = #000000  
+formBg = #E7F6DA
+
+# Scripts
+css1=style_green.css
+css2=style_green.css

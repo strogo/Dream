@@ -1,0 +1,29 @@
+#set ( $module = "Util" )
+#utilCommon()
+
+<script id="utilScript" language="JavaScript">
+
+function copyDetails(){
+	myForm=parent.document.getElementById('formData');
+
+	myForm.projectid.value=$!entry.ProjectId;
+	myForm.recipientid.value=$!entry.RecipientId;
+	myForm.carrierid.value=$!entry.CarrierId;
+
+	parent.doClearItems();
+	#foreach ($entryitem in $entryitems)
+		#if ($entryitem.Product.ProductType == 10)
+			myRow= parent.doAddItem();
+			suf= '_' + myRow;
+			myForm['productid' + suf].value="$!entryitem.ProductId";
+			myForm['description' + suf].value="$!entryitem.Description";
+			myForm['uomcode' + suf].value="$!entryitem.Product.Uom.UomCode";
+			myForm['quantity' + suf].value="$!entryitem.Quantity";
+		#end
+	#end
+
+	parent.checkEmptyTable();
+	myForm.projectid.focus();
+
+}
+</script>

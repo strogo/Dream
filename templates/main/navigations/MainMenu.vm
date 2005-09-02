@@ -1,0 +1,90 @@
+<table  class=menubgd cellpadding=10 cellspacing=0 border=0 height="100%" width="100%">
+
+<tr valign="top">
+<td>
+
+<table class=menubar width="100%"  cellpadding="2" cellspacing="0" border="0">
+<tr class="mitemsp">
+<td height="6"></td>
+</tr>
+
+
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showList(INBOX)"><b>Inbox</b></a></td>
+</tr>
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showList(OUTBOX)">Outbox</a></td>
+</tr>
+
+<tr class="mitemsp">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td>&nbsp;</td>
+</tr>
+
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showList(USAGE)">Usage</a></td>
+</tr>
+
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showList(SUBSCRIPTION)">Subscriptions</a></td>
+</tr>
+
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showList(SHIPMENT)">Shipments</a></td>
+</tr>
+
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showList(PAYMENT)">Payments</a></td>
+</tr>
+
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showList(ORDER)">Orders</a></td>
+</tr>
+
+<tr class="mitemsp">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td>&nbsp;</td>
+</tr>
+
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showList(PROJECT)">Projects</a></td>
+</tr>
+
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showList(CUSTOMER)">Customers</a></td>
+</tr>
+
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showList(PRODUCT)">Products</a></td>
+</tr>
+
+<tr class="mitemsp">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td>&nbsp;</td>
+</tr>
+
+<tr class="mitemlo">
+<td width="1%" nowrap><img src="$ui.image($ui.space)" width="7" height="16"></td>
+<td><a href="javascript:showFilter(REPORT)">Reports</a></td>
+</tr>
+
+<tr>
+<td colSpan=2 height=5><IMG height=5 alt="" src="$ui.image($ui.space)" width=5></td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+

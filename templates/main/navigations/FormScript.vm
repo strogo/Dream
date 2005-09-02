@@ -1,0 +1,487 @@
+	function loadUtil(utilTemplate, idNo)
+	{
+		formLocation= utilTemplate;
+		formLocation+="/id/" + idNo;
+
+		loadForm(formLocation);
+	}
+
+	function loadUtil3(utilTemplate, idN1, idN2, idN3)
+	{
+		formLocation= utilTemplate;
+		formLocation+="/id1/" + idN1;
+		formLocation+="/id2/" + idN2;
+		formLocation+="/id3/" + idN3;
+
+		loadForm(formLocation);
+	}
+
+	function loadForm (url) {
+	  window.frames['buffer'].document.location.replace(url);
+//	  document.getElementById('buffer').src=url;
+	}
+
+	function copyFormContent () {
+		document.getElementById('DataFrame').style.backgroundColor = "$ui.formBg";
+		document.getElementById('DataFrame').innerHTML = window.frames['buffer'].document.body.innerHTML;
+
+		oldSc=document.getElementById('docFormScript');
+		sc = document.createElement('script');
+		sc.id="docFormScript";
+		sc.text= window.frames.buffer.document.getElementById('formScript').text;
+		document.body.replaceChild(sc, oldSc);
+		retrieveInfo=false;
+
+		formInit();
+	}
+
+	function showNew(formName)
+	{
+		formLocation= getFormTemplate(formName);
+		formId= getFormId(formName);
+
+		formLocation+="/" + formId + "/0";
+
+		loadForm(formLocation);
+		showForm(formName, true);
+		showRetrieveInfo();
+
+		lastTop=TOP_FORM_NEW;
+	}
+
+	function showDetail(formName, idNo)
+	{
+		formLocation= getFormTemplate(formName);
+		formId= getFormId(formName);
+
+		formLocation+="/" + formId + "/" + idNo;
+
+		loadForm(formLocation);
+		showForm(formName, false);
+		showRetrieveInfo();
+
+		lastTop=TOP_FORM_EDIT;
+	}
+
+	function doReply( idNo)
+	{
+		formLocation= getFormTemplate(DOUTBOX);
+		formId= getFormId(DOUTBOX);
+		relNo= idNo * (-1);
+
+		formLocation+="/" + formId + "/" + relNo;
+
+		loadForm(formLocation);
+		showForm(DOUTBOX, true);
+		showRetrieveInfo();
+
+		lastTop=TOP_FORM_NEW;
+	}
+
+	function showForm(formName, isNew)
+	{
+
+		document.getElementById('ScreenTop').innerHTML = getFormTop(formName, isNew);
+		document.getElementById('DataFrame').style.height = screenHeight - formTopHeight - marginHeight;
+		lastScreenType=SCREEN_FORM;
+		lastScreen=formName;
+	}
+
+
+	function getFormTop(formName, isNew)
+	{
+		formTopHeader='<table cellpadding=0 cellspacing=0 border=0 width="100%">';
+		formTopHeader+='<tr>';
+		formTopHeader+='<td>';
+		formTopHeader+='<table cellpadding=5 cellspacing=0 border=0 width="100%">';
+		formTopHeader+='<tr>';
+		formTopHeader+='<td class=ltitle  align=left colspan=3><span>'+ getFormTitle(formName, isNew)+'</span>&nbsp;&nbsp;<span></span></td>';
+		formTopHeader+='</tr>';
+
+		formToolbar='<tr class=toolbar>';
+		formToolbar+='<td align=left nowrap>';
+		formToolbar+='<span onClick="doNew()" style="cursor: pointer;"><img src="$ui.image($ui.navNew)" width="24" height="24" border=0 alt="Add New"></span>';
+		if (isNew==false)
+		{
+			formToolbar+='<span onClick="doDelete()" style="cursor: pointer;"><img src="$ui.image($ui.navDelete)" width="24" height="24" border=0 alt="Delete Selected"></span>';
+		}
+//		if (formName<3000 & isNew==false)
+//		{
+//			formToolbar+='<span onClick="doPrint()" style="cursor: pointer;"><img src="$ui.image($ui.navPrint)" width="24" height="24" border=0 alt="Print"></span>';
+//		}
+		formToolbar+='<span onClick="doHelp()" style="cursor: pointer;"><img src="$ui.image($ui.navHelp)" width="24" height="24" border=0 alt="Help"></span>';
+		formToolbar+='</td>';
+		formToolbar+='<td align=right nowrap></td>';
+		formToolbar+='<td align=right >';
+		if (isNew)
+		{
+	    	formToolbar+='<input type="button" name="okNewButton" class=fbutton onclick="doSaveAndNew()" value="Save & New"/>';
+	    }
+	    formToolbar+='<input type="button" name="okButton" class=fbutton onclick="doSave()" value="Save"/>';
+	    formToolbar+='<input type="button" name="cancelButton"  class=fbutton onclick="doCancel()" value="Cancel"/>';
+		formToolbar+='</td>';
+		formToolbar+='</tr>';
+		
+		formTopFooter='</table>';
+		formTopFooter='</td>';
+		formTopFooter='</tr>';
+		formTopFooter='</table>';
+
+		return formTopHeader + formToolbar + formTopFooter;
+	}
+
+
+
+	function getFormId(formName)
+	{
+
+		formId= this.creamObject[formName].idName;
+		
+		return formId;
+	}
+
+	function getFormTitle(formName, isNew)
+	{
+		if (isNew)
+		{
+			formTitle=this.creamObject[formName].titleNew;
+		}
+		else
+		{
+			formTitle=this.creamObject[formName].titleEdit;
+		}
+
+		return formTitle;
+	}
+
+
+	function doEdit(idNo)
+	{
+		showDetail(lastScreen, idNo);
+	}
+
+	function doNew()
+	{
+		return showNew(lastScreen);
+	}
+
+	function doCancel()
+	{
+		return showList(lastList);
+	}
+
+	function doSave()
+	{
+		if (document.getElementById('formData')){
+			if (formValidate()){
+				saveForm( getListUrl(lastList));
+			}
+		}
+	}
+
+	function doSaveAndNew()
+	{
+		if (document.getElementById('formData')){
+			if (formValidate()){
+				saveFormAndNew();
+			}
+		}
+	}
+
+	function doDelete()
+	{
+		 if (confirm("Do you really want to delete this entry?")){
+			deleteForm( getListUrl(lastScreen));
+		  }
+	}
+
+	function isEmpty(theField){
+		   if( theField.value=="" ) {
+		      showInfo("This field is required!");
+		      theField.focus();
+		      return true;
+		   } else {
+		      return false;
+		   }
+	}
+		
+	function isNotInteger(theField){
+//		alert("Wrong value!");
+		return false;
+	}
+	
+	function isNotFloat(theField){
+		if (isNaN(theField.value)){
+			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		} else {
+		  return false;
+		}
+	}
+
+	function isNotPositive(theField){
+		if (theField.value<0 || theField.value==0){
+			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		} else {
+		  return false;
+		}
+	}
+
+	function isNegative(theField){
+		if (theField.value < 0){
+			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		} else {
+		  return false;
+		}
+	}
+
+	function isNotAmount(theField){
+		if (isNaN(theField.value) || theField.value<0){
+			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		} else {
+		  return false;
+		}
+	}
+
+	function isNotPercentage(theField){
+		if (isNaN(theField.value) || theField.value<0 || theField.value>100){
+			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		} else {
+		  return false;
+		}
+	}
+
+	function isNotRate(theField){
+		if (isNaN(theField.value) || theField.value<0){
+			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		} else {
+		  return false;
+		}
+	}
+
+	function isNotQuantity(theField){
+		if (isNaN(theField.value) || theField.value<0){
+			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		} else {
+		  return false;
+		}
+	}
+
+	function isNotDate(theField){
+		if (isDate(theField.value)== false){
+//			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		} else {
+		  return false;
+		}
+	}
+
+	function isNotDateTime(theField){
+		var myStr= theField.value;
+		var pos1=myStr.indexOf(" ");
+		var myDate=myStr.substring(0,pos1);
+		var myTime=myStr.substring(pos1+1);
+
+		if (pos1==-1){
+			alert("The datetime format should be : dd.mm.yyyy hh:mm")
+			return true
+		}
+		if (myStr.indexOf(" ",pos1+1)!=-1){
+			alert("Please enter a valid datetime")
+			return true
+		}
+
+		if (isDate(myDate)== false){
+//			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		}
+		if (isTime(myTime)== false){
+//			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		}
+		
+		  return false;
+	}
+
+	var dtCh= ".";
+	var tCh= ":";
+	var minYear=1900;
+	var maxYear=2100;
+	
+	function isInteger(s){
+		var i;
+	    for (i = 0; i < s.length; i++){   
+	        // Check that current character is number.
+	        var c = s.charAt(i);
+	        if (((c < "0") || (c > "9"))) return false;
+	    }
+	    // All characters are numbers.
+	    return true;
+	}
+	
+	function stripCharsInBag(s, bag){
+		var i;
+	    var returnString = "";
+	    // Search through string's characters one by one.
+	    // If character is not in bag, append to returnString.
+	    for (i = 0; i < s.length; i++){   
+	        var c = s.charAt(i);
+	        if (bag.indexOf(c) == -1) returnString += c;
+	    }
+	    return returnString;
+	}
+	
+	function daysInFebruary (year){
+		// February has 29 days in any year evenly divisible by four,
+	    // EXCEPT for centurial years which are not also divisible by 400.
+	    return (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+	}
+
+	function DaysArray(n) {
+		for (var i = 1; i <= n; i++) {
+			this[i] = 31
+			if (i==4 || i==6 || i==9 || i==11) {this[i] = 30}
+			if (i==2) {this[i] = 29}
+	   } 
+	   return this
+	}
+	
+	function isDate(dtStr){
+		var daysInMonth = DaysArray(12)
+		var pos1=dtStr.indexOf(dtCh)
+		var pos2=dtStr.indexOf(dtCh,pos1+1)
+		var strDay=dtStr.substring(0,pos1)
+		var strMonth=dtStr.substring(pos1+1,pos2)
+		var strYear=dtStr.substring(pos2+1)
+		strYr=strYear
+		if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1)
+		if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1)
+		for (var i = 1; i <= 3; i++) {
+			if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1)
+		}
+		month=parseInt(strMonth)
+		day=parseInt(strDay)
+		year=parseInt(strYr)
+		if (pos1==-1 || pos2==-1){
+			alert("The date format should be : dd.mm.yyyy")
+			return false
+		}
+		if (strMonth.length<1 || month<1 || month>12){
+			alert("Please enter a valid month")
+			return false
+		}
+		if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+			alert("Please enter a valid day")
+			return false
+		}
+		if (strYear.length != 4 || year==0 || year<minYear || year>maxYear){
+			alert("Please enter a valid 4 digit year between "+minYear+" and "+maxYear)
+			return false
+		}
+		if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false){
+			alert("Please enter a valid date")
+			return false
+		}
+	return true
+	}
+	
+	function isTime(dtStr){
+		var pos1=dtStr.indexOf(tCh)
+		var strHour=dtStr.substring(0,pos1)
+		var strMinute=dtStr.substring(pos1+1)
+
+		hour=parseInt(strHour)
+		minute=parseInt(strMinute)
+
+		if (pos1==-1){
+			alert("The time format should be : hh:mm")
+			return false
+		}
+		if (strHour.length<1 || hour<0 || hour>23){
+			alert("Please enter a valid hour")
+			return false
+		}
+		if (strMinute.length<1 || minute<0 || minute>59){
+			alert("Please enter a valid minutes")
+			return false
+		}
+		if (dtStr.indexOf(tCh,pos1+1)!=-1 || isInteger(stripCharsInBag(dtStr, tCh))==false){
+			alert("Please enter a valid time")
+			return false
+		}
+	return true
+	}
+
+
+
+	function isSelected(theField){
+		if (theField.value < 1001){
+			showInfo("Wrong value!");
+			theField.focus();
+			return true;
+		} else {
+		  return false;
+		}
+	}
+
+	function formatDate(theValue){
+		strFormated= theValue;
+		return strFormated;
+	}
+
+	function formatAmount(theValue){
+		strFormated= theValue.toFixed(2);
+//		strFormated.toFixed(2);
+//		strFormated= Math.round(theValue * 100) / 100;
+		return strFormated;
+	}
+
+	function formatRate(theValue){
+		strFormated= theValue;
+		return strFormated;
+	}
+
+	function formatQuantity(theValue){
+		strFormated= theValue;
+		return strFormated;
+	}
+
+	function disableSave(){
+		okButton.disabled= true;
+	}
+
+	function trimString (str) {
+		while (str.charAt(0) == ' ')
+			str = str.substring(1);
+		while (str.charAt(str.length - 1) == ' ')
+			str = str.substring(0, str.length - 1);
+		return str;
+	}
+
+	function showWrongValue(theField){
+		showInfo("Wrong value!");
+		theField.focus();
+	}
+
+	function getFormTemplate(formName)
+	{
+		formLocation= this.creamObject[formName].formTemplate;
+		return formLocation;
+	}
+

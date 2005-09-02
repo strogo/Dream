@@ -1,0 +1,22 @@
+#set ( $module = "System" )
+#formCommon()
+
+<script language="JavaScript">
+function formInit(){
+	this.document.formData.name.focus();
+}
+
+function formValidate(){
+	if (parent.isEmpty(this.document.formData.name)) return false;
+	
+	return true;
+}
+</script>
+
+#formHeader("GroupForm.vm" "group.FluxGroupAction" "name" $!entry.GroupName $mode)
+
+      <tr>  
+        #formCell ("Name" "name" $!entry.GroupName 99 50 1)
+      </tr>
+
+#formFooter("GroupForm.vm" "group.FluxGroupAction" "name" $!entry.GroupName $mode)

@@ -1,0 +1,529 @@
+	
+	function showLastList()
+	{
+		showList(lastList);
+	}
+
+	function loadList (url) {
+	  window.frames['buffer'].document.location.replace(url);
+	}
+
+	function copyListContent (listName) {
+		if (listName!=lastScreen || lastTop!=TOP_LIST)
+		{
+			showListTop(listName);
+			if (listName<3000)
+			{
+				if (this.creamObject[listName].filterNumber==999)
+				{
+					setFindFilter(listName);
+				}
+				document.getElementById("ListFilter").value=this.creamObject[listName].filterNumber;
+			}
+		}
+		else if (listName<3000 && this.creamObject[listName].filterNumber==999)
+		{
+			setFindFilter(listName);
+			document.getElementById("ListFilter").value=this.creamObject[listName].filterNumber;
+		}
+
+		lastScreenType=SCREEN_LIST;
+		lastScreen=listName;
+		lastList=listName;
+		retrieveInfo=false;
+
+		document.getElementById('DataFrame').style.backgroundColor = "#ffffff";
+		document.getElementById('DataFrame').innerHTML = window.frames['buffer'].document.body.innerHTML;
+	}
+
+	function showList(listName)
+	{
+		listLocation= getListUrl(listName);
+
+		if (listName!=lastScreen || lastTop!=TOP_LIST)
+		{
+			showListTop(listName);
+			if (listName<3000)
+			{
+				if (this.creamObject[listName].filterNumber==999)
+				{
+					setFindFilter(listName);
+				}
+				document.getElementById("ListFilter").value=this.creamObject[listName].filterNumber;
+			}
+		}
+		else if (listName<3000 && this.creamObject[listName].filterNumber==999)
+		{
+			setFindFilter(listName);
+			document.getElementById("ListFilter").value=this.creamObject[listName].filterNumber;
+		}
+
+		showRetrieveInfo();
+		lastScreenType=SCREEN_LIST;
+		lastScreen=listName;
+		lastList=listName;
+		loadList(listLocation);
+
+	}	
+
+	function getListUrl(listName)
+	{
+		listLocation= getListTemplate(listName);
+		if (listName<3000)
+		{
+			if (this.creamObject[listName].filterNumber==999)
+			{		
+				listLocation+="/find/" + this.creamObject[listName].findString;		
+			}
+			else
+			{
+				listLocation+="/filter/" + this.creamObject[listName].filterNumber;
+			}
+		}
+		listLocation+="/sortcol/" + this.creamObject[listName].sortColumn;		
+		listLocation+="/sortord/" + this.creamObject[listName].sortOrder;		
+		
+		return listLocation;
+	}
+
+	function showListTop(listName)
+	{
+
+		document.getElementById('DataFrame').style.height = screenHeight - listTopHeight - marginHeight;
+		document.getElementById('ScreenTop').innerHTML = getListTop(listName);
+//		document.getElementById('DataFrame').style.height = screenHeight - document.getElementById('ScreenTop').offsetHeight - 10;
+		lastTop=TOP_LIST;
+	}
+	
+	function getListTop(listName)
+	{
+		listTopHeader='<table cellpadding=0 cellspacing=0 border=0 width="100%">';
+		listTopHeader+='<tr>';
+		listTopHeader+='<td>';
+		listTopHeader+='<table cellpadding=5 cellspacing=0 border=0 width="100%">';
+		listTopHeader+='<tr>';
+		listTopHeader+='<td class=ltitle align=left colspan=3><span>'+ getListTitle(listName)+'</span>&nbsp;&nbsp;<span></span></td>';
+		listTopHeader+='</tr>';
+
+		listToolbar='<tr class=toolbar>';
+		listToolbar+='<td align=left nowrap>';
+		listToolbar+='<span onClick="doNew()" style="cursor: pointer;"><img src="$ui.image($ui.navNew)" width="24" height="24" border=0 alt="Add New"></span>';
+		listToolbar+='<span onClick="doDeleteSelected()" style="cursor: pointer;"><img src="$ui.image($ui.navDelete)" width="24" height="24" border=0 alt="Delete Selected"></span>';
+		if (listName<3000)
+		{
+			listToolbar+='<span onClick="doFind()" style="cursor: pointer;"><img src="$ui.image($ui.navFind)" width="24" height="24" border=0 alt="Find"></span>';
+		}
+		listToolbar+='<span onClick="doHelp()" style="cursor: pointer;"><img src="$ui.image($ui.navHelp)" width="24" height="24" border=0 alt="Help"></span>';
+		listToolbar+='</td>';
+		listToolbar+='<td align=right nowrap></td>';
+		listToolbar+='<td align=right>';
+		if (listName<3000)
+		{
+			listToolbar+='<span>Filter:&nbsp;&nbsp;</span>';
+			listToolbar+='<select ID="ListFilter" onChange="javascript:doFilter(this[this.selectedIndex].value)" STYLE="width: 140px">';
+			listToolbar+= getListFilter(listName);
+			listToolbar+='</select>';
+		}
+		listToolbar+='</td>';
+		listToolbar+='</tr>';
+		
+		listTopFooter='</table>';
+		listTopFooter='</td>';
+		listTopFooter='</tr>';
+		listTopFooter='</table>';
+
+		listHeader=getListHeader(listName);
+		
+		return listTopHeader + listToolbar + listTopFooter + listHeader;
+	}
+
+	function getListTitle(listName)
+	{
+		listTitle=this.creamObject[listName].titleList;
+		return listTitle;
+	}	
+
+	function getListFilter(listName)
+	{
+		filterContent='<option value="1000">&nbsp;---</option>';
+
+		if (listName==DISTRIBUTOR)
+		{
+			filterContent+='<option value="1001">People</option>';
+			filterContent+='<option value="1002">Institutions</option>';
+			filterContent+='<option value="1003">Prospects</option>';
+			filterContent+='<option value="1004">Active</option>';
+			filterContent+='<option value="1005">Inactive</option>';
+			filterContent+='<option value="1006">My Entries</option>';
+		}
+		else if (listName==LOCATION)
+		{
+			filterContent+='<option value="1001">People</option>';
+			filterContent+='<option value="1002">Institutions</option>';
+			filterContent+='<option value="1003">Prospects</option>';
+			filterContent+='<option value="1004">Active</option>';
+			filterContent+='<option value="1005">Inactive</option>';
+			filterContent+='<option value="1006">My Entries</option>';
+		}
+		else if (listName==PRODUCT)
+		{
+			filterContent+='<option value="1001">Stock Items</option>';
+			filterContent+='<option value="1002">Print Media</option>';
+			filterContent+='<option value="1003">Active</option>';
+			filterContent+='<option value="1004">Inactive</option>';
+			filterContent+='<option value="1005">My Entries</option>';
+		}
+		else if (listName==PROJECT)
+		{
+			filterContent+='<option value="1001">Open</option>';
+			filterContent+='<option value="1002">Closed</option>';
+			filterContent+='<option value="1003">My Entries</option>';
+		}
+		else
+		{
+			filterContent+='<option value="1001">Today</option>';
+			filterContent+='<option value="1002">This Month</option>';
+			filterContent+='<option value="1003">Last Month</option>';
+			filterContent+='<option value="1004">This Year</option>';
+			filterContent+='<option value="1005">Last Year</option>';
+			filterContent+='<option value="1006">Drafts</option>';
+			filterContent+='<option value="1007">Open</option>';
+			filterContent+='<option value="1008">Closed</option>';
+			filterContent+='<option value="1009">My Entries</option>';
+		}
+		
+		return filterContent;
+	}
+
+	function getListHeader(listName)
+	{
+		listHeader='<table width="100%" height="100%" cellpadding=0 cellspacing=0 border=0>';
+		listHeader+='<tr height="100%">';
+//		listHeader+='<form name="toggleHeader">';
+		listHeader+='<td>';
+		listHeader+='<table width="100%" height="100%" cellpadding=2 cellspacing=0 border=0>';
+		listHeader+='<tr class="listhead" height="100%">';
+		listHeader+='<td  width=16 nowrap align=center>';
+		listHeader+='<input type="checkbox" id="toggleCheck" name="toggleCheck" title="Select or deselect all items" onclick="ToggleAll(this);">';
+		listHeader+='</td>';
+		listHeader+='<td valign=middle><img src="$ui.image($ui.space)" width=16 height=16></td>';
+
+		listHeader+=getListHeadings(listName);
+
+		if(NS)
+		{
+			listHeader+='<td>';
+			listHeader+='<img src="$ui.image($ui.space)" width=16>';
+			listHeader+='</td>';
+		}
+		listHeader+='</tr>';
+		listHeader+='</table>';
+		listHeader+='</td>';
+//		listHeader+='<td width=16>';
+//		listHeader+='<table class=listhead width="100%" height="100%" cellpadding=0 cellspacing=0 border=0>';
+//		listHeader+='<tr class=listhead height="100%">';
+//		listHeader+='<td>';
+//		listHeader+='<img src="$ui.image($ui.space)" width=16>';
+//		listHeader+='</td>';
+//		listHeader+='</tr>';
+//		listHeader+='</table>';
+//		listHeader+='</td>';
+//		listHeader+='</form>';
+		listHeader+='</tr>';
+		listHeader+='</table>';
+
+		return listHeader;
+	}
+
+	function getListHeadings(listName)
+	{
+
+		listHeading='';
+		
+		if (listName==DISTRIBUTOR)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="35%"><span class="lhlink" onClick="doSort(2)">Name</span></td>';
+			listHeading+='<td width="25%"><span class="lhlink" onClick="doSort(3)">Category</span></td>';
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(4)">City</span></td>';
+			listHeading+='<td width="10%"><span class="lhlink" onClick="doSort(5)">Country</span></td>';
+		}
+		else if (listName==LOCATION)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="35%"><span class="lhlink" onClick="doSort(2)">Name</span></td>';
+			listHeading+='<td width="25%"><span class="lhlink" onClick="doSort(3)">Distributor</span></td>';
+			listHeading+='<td width="25%"><span class="lhlink" onClick="doSort(4)">District</span></td>';
+		}
+		else if (listName==PROJECT)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="30%"><span class="lhlink" onClick="doSort(2)">Name</span></td>';
+			listHeading+='<td width="30%"><span class="lhlink" onClick="doSort(3)">Category</span></td>';
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(4)">Start</span></td>';
+			listHeading+='<td width="10%" align="right"><span class="lhlink" onClick="doSort(5)">Expenses&nbsp;</span></td>';
+			listHeading+='<td><img src="$ui.image($ui.space)" width=16></td>';
+		}
+		else if (listName==PRODUCT)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="30%"><span class="lhlink" onClick="doSort(2)">Name</span></td>';
+			listHeading+='<td width="25%"><span class="lhlink" onClick="doSort(3)">Category</span></td>';
+			listHeading+='<td width="10%"><span class="lhlink" onClick="doSort(4)">UOM</span></td>';
+			listHeading+='<td width="15%" align="right"><span class="lhlink" onClick="doSort(5)">Price&nbsp;</span></td>';
+			listHeading+='<td><img src="$ui.image($ui.space)" width=16></td>';
+		}
+		else if (listName==DCONTRACT)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="30%"><span class="lhlink" onClick="doSort(2)">Distributor</span></td>';
+			listHeading+='<td width="20%"><span class="lhlink" onClick="doSort(3)">Start</span></td>';
+			listHeading+='<td width="20%"><span class="lhlink" onClick="doSort(4)">End</span></td>';
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(5)">Date</span></td>';
+		}
+		else if (listName==DORDER)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="30%"><span class="lhlink" onClick="doSort(2)">Distributor</span></td>';
+			listHeading+='<td width="25%"><span class="lhlink" onClick="doSort(3)">Product</span></td>';
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(4)">Quantity</span></td>';
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(5)">Date</span></td>';
+		}
+		else if (listName==DSHIPMENT)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="25%"><span class="lhlink" onClick="doSort(2)">Distributor</span></td>';
+			listHeading+='<td width="25%"><span class="lhlink" onClick="doSort(3)">Product</span></td>';
+			listHeading+='<td width="20%"><span class="lhlink" onClick="doSort(4)">Order</span></td>';
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(5)">Date</span></td>';
+		}
+		else if (listName==DRETURN)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="25%"><span class="lhlink" onClick="doSort(2)">Distributor</span></td>';
+			listHeading+='<td width="25%"><span class="lhlink" onClick="doSort(3)">Product</span></td>';
+			listHeading+='<td width="20%"><span class="lhlink" onClick="doSort(4)">Order</span></td>';
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(5)">Date</span></td>';
+		}
+		else if (listName==DINBOX)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="30%"><span class="lhlink" onClick="doSort(2)">Ditributor</span></td>';
+			listHeading+='<td width="40%"><span class="lhlink" onClick="doSort(3)">Subject</span></td>';
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(4)">Date</span></td>';
+		}
+		else if (listName==DOUTBOX)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="30%"><span class="lhlink" onClick="doSort(2)">Distributor</span></td>';
+			listHeading+='<td width="40%"><span class="lhlink" onClick="doSort(3)">Subject</span></td>';
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(4)">Date</span></td>';
+		}
+		else if (listName==DNEWSLETTER)
+		{
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(1)">ID</span></td>';
+			listHeading+='<td width="30%"><span class="lhlink" onClick="doSort(2)">Category</span></td>';
+			listHeading+='<td width="40%"><span class="lhlink" onClick="doSort(3)">Subject</span></td>';
+			listHeading+='<td width="15%"><span class="lhlink" onClick="doSort(4)">Date</span></td>';
+		}
+		else if (listName==SALES_DISTRICT)
+		{
+			listHeading+='<td width="50%"><span class="lhlink" onClick="doSort(1)">Name</span></td>';
+			listHeading+='<td width="50%"><span class="lhlink" onClick="doSort(2)">Area</span></td>';
+		}
+		else if (listName==COUNTRY)
+		{
+			listHeading+='<td width="80%"><span class="lhlink" onClick="doSort(1)">Name</span></td>';
+			listHeading+='<td width="20%"><span class="lhlink" onClick="doSort(2)">Code</span></td>';
+		}
+		else if (listName==LANGUAGE)
+		{
+			listHeading+='<td width="80%"><span class="lhlink" onClick="doSort(1)">Name</span></td>';
+			listHeading+='<td width="20%"><span class="lhlink" onClick="doSort(2)">Code</span></td>';
+		}
+		else if (listName==UOM)
+		{
+			listHeading+='<td width="80%"><span class="lhlink" onClick="doSort(1)">Name</span></td>';
+			listHeading+='<td width="20%"><span class="lhlink" onClick="doSort(2)">Code</span></td>';
+		}
+		else if (listName==USER)
+		{
+			listHeading+='<td width="33%"><span class="lhlink" onClick="doSort(1)">User</span></td>';
+			listHeading+='<td width="33%"><span class="lhlink" onClick="doSort(2)">First Name</span></td>';
+			listHeading+='<td width="33%"><span class="lhlink" onClick="doSort(3)">Last Name</span></td>';
+		}
+		else
+		{
+			listHeading+='<td width="100%"><span class="lhlink" onClick="doSort(1)">Name</span></td>';
+		}
+		
+		return listHeading;
+		
+	}
+
+	function getListTemplate(listName)
+	{
+		listLocation= this.creamObject[listName].listTemplate;
+		return listLocation;
+	}
+
+	function setFindFilter(listName)
+	{
+		
+		if (document.getElementById("ListFilter").options[0].value==999)
+		{
+			document.getElementById("ListFilter").options[0].text="( " + this.creamObject[listName].findString + "... )";
+		}
+		else
+		{
+			findo = new Option();
+			findo.value = 999;
+			findo.text = "( " + this.creamObject[listName].findString + "... )";
+
+			if (document.all) {
+				document.getElementById("ListFilter").add(findo, 0);
+			}else{
+				document.getElementById("ListFilter").add(findo, document.getElementById("ListFilter").options[0]);
+			}
+
+		}
+	}
+
+	function doSort(colNo)
+	{
+		listName= lastScreen;
+
+		if(colNo==this.creamObject[listName].sortColumn)
+		{
+			if (this.creamObject[listName].sortOrder=="ASC")
+			{
+				this.creamObject[listName].sortOrder="DESC"
+			}
+			else
+			{
+				this.creamObject[listName].sortOrder="ASC"
+			}
+		}
+		else
+		{
+			this.creamObject[listName].sortOrder="ASC"
+		}
+
+		this.creamObject[listName].sortColumn= colNo;		
+
+		showList(listName);
+	}
+
+	function doFind()
+	{
+	    nn = prompt("Please, enter a string to find.", this.creamObject[lastScreen].findString);
+	    if(nn == null || nn == "null" || nn == "") {
+	    }
+	    else {
+			listName= lastScreen;
+			this.creamObject[listName].filterNumber= 999;		
+			this.creamObject[listName].findString= nn;		
+			showList(listName);
+	    }
+	}
+
+	function doFilter(filterNo)
+	{
+		listName= lastScreen;
+		this.creamObject[listName].filterNumber=filterNo;		
+		showList(listName);
+	}
+	
+	function doDeleteSelected()
+	{
+		var myListForm= document.getElementById('listData');
+		
+		someChecked=false;
+		len = myListForm.elements.length;
+		for(var i = 0 ; i < len ; i++) {
+		    if (myListForm.elements[i].name == "rowid" && myListForm.elements[i].checked) {
+				someChecked=true;
+		    }
+		}
+
+		if (someChecked){
+			if (confirm("Do you really want to delete selected entries?")){
+				myListAction= myListForm.actname.value;
+				myListUrl= getListUrl(lastScreen) + '/action/' + myListAction;
+				myListForm.action= myListUrl;
+				
+				myListForm.submit();
+			}
+		}else{
+			alert("Please, select some entry!");
+		}
+	}
+
+    function Toggle(e)
+    {
+		if (e.checked) {
+		    document.getElementById('toggleCheck').checked = AllChecked();
+		}
+		else {
+		    document.getElementById('toggleCheck').checked = false;
+		}
+    }
+
+    function ToggleAll(e)
+    {
+		if (e.checked) {
+		    CheckAll();
+		}
+		else {
+		    ClearAll();
+		}
+    }
+
+    function Check(e)
+    {
+		e.checked = true;
+    }
+
+    function Clear(e)
+    {
+		e.checked = false;
+    }
+
+    function CheckAll()
+    {
+		var ml = document.getElementById('listData');
+		var len = ml.elements.length;
+		for (var i = 0; i < len; i++) {
+		    var e = ml.elements[i];
+		    if (e.name == "rowid") {
+			Check(e);
+		    }
+		}
+		document.getElementById('toggleCheck').checked = true;
+    }
+
+    function ClearAll()
+    {
+		var ml = document.getElementById('listData');
+		var len = ml.elements.length;
+		for (var i = 0; i < len; i++) {
+		    var e = ml.elements[i];
+		    if (e.name == "rowid") {
+			Clear(e);
+		    }
+		}
+		document.getElementById('toggleCheck').checked = false;
+    }
+
+
+    function AllChecked()
+    {
+		var ml = document.getElementById('listData');
+		len = ml.elements.length;
+		for(var i = 0 ; i < len ; i++) {
+		    if (ml.elements[i].name == "rowid" && !ml.elements[i].checked) {
+			return false;
+		    }
+		}
+		return true;
+    }

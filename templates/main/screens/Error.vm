@@ -1,0 +1,32 @@
+
+##$page.setTitle("Error")
+
+##$page.setBgColor("#ffffff")
+
+##if ($data.getMessage())
+##	$page.addAttribute("onLoad", "parent.showError('$data.getMessage()');")	
+##else
+##	$page.addAttribute("onLoad", 'parent.showError("Sorry, I tried impossible but wasn't able to finish your request!");')	
+##end
+##$page.addAttribute("onLoad", "parent.copyFormContent();")	
+
+##<font face="verdana,geneva,helvetica">
+
+##<h2>Error</h2>
+
+##$processingException
+<script>
+#if ($data.getMessage())
+	parent.showError("$data.getMessage()")	
+#else
+	parent.showError("Sorry, I tried the impossible but wasn't able to finish your request!")	
+#end
+</script>
+
+##<hr>
+
+##$stackTrace
+
+##</font>
+
+##<br>

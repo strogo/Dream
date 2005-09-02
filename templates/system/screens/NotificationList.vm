@@ -1,0 +1,18 @@
+#set ( $module = "Main" )
+#listCommon()
+#listHeader("OutboxList.vm" "OutboxSQL")
+  
+	#if ($entries)
+		#foreach ($entry in $entries)
+	        <tr class=rowopen valign="center">
+				#addToggle($entry.CustomerId)
+				<td width="25%"><a href="javascript:parent.doEdit('$entry.CustomerId')">$entry.CustomerDisplay</a></td>
+				#listCellPrc (25 $entry.CustomerCategory.CustomerCatName)
+				#listCellPrc (25 $entry.Email)
+				#listCellPrc (15 $entry.City)
+				#listCellPrc (10 $entry.Country.CountryCode)
+	        </tr>        
+		#end
+	#end
+
+#listFooter()

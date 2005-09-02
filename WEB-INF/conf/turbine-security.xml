@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE dataset SYSTEM "file://turbine-security.dtd">
+<dataset name="all">
+
+  <!-- Groups -->
+  
+  <TurbineGroup GroupId="1" GroupName="global"/>
+
+  <!-- Permissions -->
+
+  <TurbinePermission PermissionId="1" PermissionName="admin_users"/>
+  <TurbinePermission PermissionId="2" PermissionName="homepage_access"/>
+
+  <!-- Roles -->
+
+  <TurbineRole RoleId="1" RoleName="turbine_root"/>
+  <TurbineRole RoleId="2" RoleName="Site Administrator"/>
+
+  <!-- Associate Permissions with Roles -->
+
+  <TurbineRolePermission RoleId="1" PermissionId="1"/>
+  <TurbineRolePermission RoleId="1" PermissionId="2"/>
+
+  <!-- Users -->
+
+  <TurbineUser UserId="1" LoginName="admin" PasswordValue="admn00" FirstName="Administrator" LastName="Adminic"/>
+
+  <!-- Associate Users, Groups, and Roles -->
+
+  <TurbineUserGroupRole UserId="1" GroupId="1" RoleId="1"/>
+
+  <!-- Lookups -->
+
+    
+</dataset>

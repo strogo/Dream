@@ -1,0 +1,26 @@
+#set ( $module = "Options" )
+#formCommon()
+
+function formInit(){
+	highlight(myForm.languagename);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.languagename)) return false;
+	if (parent.isEmpty(myForm.languagecode)) return false;
+
+	myForm.languagecode.value = myForm.languagecode.value.toLowerCase();
+	
+	return true;
+}
+
+#formHeader("LanguageForm.vm" "LanguageSQL" "languageid" $!entry.LanguageId $mode)
+
+      <tr>  
+        #formCell ("Name" "languagename" $!entry.LanguageName 50 200 1)
+      </tr>
+      <tr>  
+        #formCell ("Code" "languagecode" $!entry.LanguageCode 2 30 2)
+      </tr>
+
+#formFooter("LanguageForm.vm" "LanguageSQL" "languageid" $!entry.LanguageId $mode)

@@ -1,0 +1,9 @@
+Servlet Info:
+<p>
+serverName -> $serverName
+<br>
+serverScheme -> $serverScheme
+<br>
+serverPort -> $serverPort
+<br>
+contextPath -> $contextPath

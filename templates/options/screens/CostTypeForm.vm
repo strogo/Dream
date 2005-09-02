@@ -1,0 +1,37 @@
+#set ( $module = "Options" )
+#formCommon()
+
+function formInit(){
+	#if ($!mode=="insert")
+	#else
+		myForm.costtypefunction.disabled=true;
+	#end
+	myForm.costtypefunction.value=$!entry.CostTypeFunction;
+	highlight(myForm.costtypename);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.costtypename)) return false;
+	
+	return true;
+}
+
+#formHeader("CostTypeForm.vm" "CostTypeSQL" "costtypeid" $!entry.CostTypeId $mode)
+
+      <tr>  
+        #formCell ("Name" "costtypename" $!entry.CostTypeName 50 200 1)
+      </tr>
+      <tr>  
+		#formLabel("Function")
+		<td align="left">
+		<select name="costtypefunction" tabIndex="2" value="$!entry.CostTypeFunction" width="200" STYLE="width: 200px">
+			<option value="10">Percentage fee per sold copy</option>
+			<option value="20">Percentage fee per delivered copy</option>
+			<option value="30">Amount fee per sold copy</option>
+			<option value="40">Amount fee per delivered copy</option>
+			<option value="50">Amount fee per weight unit</option>
+		</select>
+		</td>
+      </tr>
+
+#formFooter("CostTypeForm.vm" "CostTypeSQL" "costtypeid" $!entry.CostTypeId $mode)

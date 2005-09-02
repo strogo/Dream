@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<project name="project-build" default="init" basedir=".">
+
+  <property file="${user.home}/build.properties"/>
+  <property file="build.properties"/>
+  <property file="project.properties"/>
+  
+  <target name="init">
+    <!--
+    <copy file="${tambora-system.jar}" todir="${build.webappRoot}/WEB-INF/lib"/>
+    -->
+  </target>
+  
+</project>

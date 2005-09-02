@@ -1,0 +1,414 @@
+#set ( $module = "Main" )
+#formCommon()
+
+var rowId=1;
+var tabInd=26;
+
+function ProductObject (unprc, unwg){
+	this.unitPrice=unprc;
+	this.unitWeight=unwg;
+}
+
+var orderProduct= new Array();
+
+#foreach ($product in $products)
+orderProduct[$product.ProductId]=new ProductObject("$!af.format($product.BasePrice)", "$!af.format($product.BaseWeight)");
+#end        	
+
+
+
+
+function formInit(){
+	myForm.status.value=$!entry.Status;
+	myForm.distributorid.value=$!entry.DistributorId;
+	myForm.projectid.value=$!entry.ProjectId;
+	myForm.dcontractid.value=$!entry.DcontractId;
+	myForm.productid.value=$!entry.ProductId;
+
+	#if ($!mode=="insert")
+		doAddItem();
+	#else
+		#foreach ($entryitem in $entryitems)
+			doAddItem();
+			suf= '_' + rowId;
+			myForm['locationid' + suf].value="$!entryitem.LocationId";
+			myForm['locationname' + suf].value="$!entryitem.Location.SalesDistrict.SalesDistrictName" + " - " + "$!entryitem.Location.LocationDisplay";
+			myForm['orderedqty' + suf].value="$!entryitem.OrderedQty";
+	
+		#end
+	#end
+	myForm.distributorid.focus();
+
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.issueddate)) return false;
+	if (parent.isNotDate(myForm.issueddate)) return false;
+	if (parent.isEmpty(myForm.salesdate)) return false;
+	if (parent.isNotDate(myForm.salesdate)) return false;
+	if (parent.isEmpty(myForm.expectedtime)) return false;
+	if (parent.isNotDateTime(myForm.expectedtime)) return false;
+
+	if (myForm.status.value==50){
+		if (parent.isEmpty(myForm.closeddate)) return false;
+		if (parent.isNotDate(myForm.closeddate)) return false;
+	}
+	if (parent.isSelected(myForm.distributorid)) return false;
+	if (parent.isSelected(myForm.productid)) return false;
+
+	if (parent.isEmpty(myForm.unitprice)) return false;
+	if (parent.isNotAmount(myForm.unitprice)) return false;
+	if (parent.isEmpty(myForm.unitweight)) return false;
+	if (parent.isNotAmount(myForm.unitweight)) return false;
+
+	var len = myForm.elements.length;
+	for (var i = 0; i < len; i++) {
+	    var e = myForm.elements[i];
+		if (e.name.substring(0, 10) == "orderedqty") {
+			if (parent.isNotQuantity(e)) return false;
+	    }
+	}
+
+	return true;
+}
+
+function valueChanged(formField){
+	if (formField.name=='distributorid'){
+		doClearItems();
+		checkEmptyTable();
+		loadUtil('$link.setPage("DistributorContracts.vm")', formField.value);
+	}
+	else if (formField.name=='productid'){
+		setProductData();
+	}
+	else if (formField.name=='status'){
+		if (myForm.status.value==50){
+			myForm.closeddate.disabled=false;
+			myForm.closeddate.value="$!df.format($!today)";
+		}
+		else{
+			myForm.closeddate.disabled=true;
+			myForm.closeddate.value="";
+		}
+	}
+	else if (formField.name.substring(0, 10)=='orderedqty'){
+		sufix= formField.name.substring(10, formField.name.length);
+		formField.value= parseInt(formField.value);
+		calcTotal();
+	}
+}
+
+function doAddItem(){
+	rowId++;
+
+	#if ($!mode=="insert")
+		itemstr1='<a href="javascript: void 0" ONCLICK="doDeleteItem(this)"><img src="$ui.image($ui.itemDelete)" width="16" height="16" border=0 alt="Delete Item"></a>';
+		itemstr2='<input type="hidden"  maxLength="10" name="locationid_' + rowId + '"  STYLE="width: 1px; text-align: right;">';
+		itemstr3='<input type="text" READONLY name="locationname_' + rowId + '"  STYLE="width: 379px; text-align: left;color: blue;">';
+		tabInd++;
+		itemstr4='<input type="text" READONLY maxLength="10" name="oldshippedqty_' + rowId + '" value="0" STYLE="width: 40px; text-align: right;color: blue;">';
+		itemstr5='<input type="text" READONLY maxLength="10" name="oldsoldqty_' + rowId + '" value="0" STYLE="width: 40px; text-align: right;color: blue;">';
+		itemstr6='<input type="text" READONLY maxLength="10" name="oldpercentage_' + rowId + '" value="0" STYLE="width: 40px; text-align: right;color: blue;">';
+		itemstr7='<input type="text" tabIndex="' + tabInd + '" maxLength="10" name="orderedqty_' + rowId + '" value="0" onchange="valueChanged(this);" STYLE="width: 40px; text-align: right;">';
+	
+		var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	    var row = table.insertRow(table.rows.length);
+	
+	    var cell1 = row.insertCell(0);
+	    cell1.innerHTML = itemstr1;
+	    var cell2 = row.insertCell(1);
+	    cell2.innerHTML = itemstr2;
+	    var cell3 = row.insertCell(2);
+	    cell3.innerHTML = itemstr3;
+	    var cell4 = row.insertCell(3);
+	    cell4.innerHTML = itemstr4;
+	    var cell5 = row.insertCell(4);
+	    cell5.innerHTML = itemstr5;
+	    var cell6 = row.insertCell(5);
+	    cell6.innerHTML = itemstr6;
+	    var cell7 = row.insertCell(6);
+	    cell7.innerHTML = itemstr7;
+
+	#else
+		itemstr1='<a href="javascript: void 0" ONCLICK="doDeleteItem(this)"><img src="$ui.image($ui.itemDelete)" width="16" height="16" border=0 alt="Delete Item"></a>';
+		itemstr2='<input type="hidden"  maxLength="10" name="locationid_' + rowId + '"  STYLE="width: 1px; text-align: right;">';
+		itemstr3='<input type="text" READONLY name="locationname_' + rowId + '"  STYLE="width: 400px; text-align: left;color: blue;">';
+		tabInd++;
+		itemstr4='<input type="text" tabIndex="' + tabInd + '" maxLength="10" name="orderedqty_' + rowId + '" value="0" onchange="valueChanged(this);" STYLE="width: 139px; text-align: right;">';
+	
+		var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	    var row = table.insertRow(table.rows.length);
+	
+	    var cell1 = row.insertCell(0);
+	    cell1.innerHTML = itemstr1;
+	    var cell2 = row.insertCell(1);
+	    cell2.innerHTML = itemstr2;
+	    var cell3 = row.insertCell(2);
+	    cell3.innerHTML = itemstr3;
+	    var cell4 = row.insertCell(3);
+	    cell4.innerHTML = itemstr4;
+	#end
+
+    
+    return rowId;
+}
+
+function doDeleteItem(cell){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	var rowIndex= document.all ? cell.parentElement.parentElement.rowIndex : cell.parentNode.parentNode.rowIndex;
+
+	table.deleteRow(rowIndex);
+	if (table.rows.length<2){
+		doAddItem();
+	}
+
+	calcTotal();
+}
+
+function doClearItems(){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	var rowIndex= table.rows.length - 1;
+
+	while (rowIndex > 0){
+		table.deleteRow(rowIndex);
+		rowIndex--;
+	}
+	
+	rowId=1;
+	tabInd=26;
+}
+
+
+function checkEmptyTable(){
+	var table = document.all ? document.all["itemList"] : document.getElementById("itemList");
+	if (table.rows.length<2){
+		doAddItem();
+	}
+}
+
+function setProductData(){
+	prid= myForm['productid'].value;
+	
+	myForm['unitprice'].value=this.orderProduct[prid].unitPrice;
+	myForm['unitweight'].value=this.orderProduct[prid].unitWeight;
+
+	myForm['totalamount'].value=formatAmount(myForm['totalquantity'].value * myForm['unitprice'].value);
+	myForm['totalweight'].value=formatAmount(myForm['totalquantity'].value * myForm['unitweight'].value);
+
+	#if ($!mode=="insert")
+		loadUtil3('$link.setPage("DistributorProductOrders.vm")', myForm['distributorid'].value, myForm['productid'].value, 1);
+	#end
+}
+
+
+function getLocations(){
+
+		loadUtil3('$link.setPage("DorderLocations.vm")', myForm['distributorid'].value, myForm['copyorderid'].value, myForm['copyareaid'].value);
+}
+
+
+
+function calcTotal(){
+	var tot=0;
+	var len = myForm.elements.length;
+	for (var i = 0; i < len; i++) {
+	    var e = myForm.elements[i];
+	    if (e.name.substring(0, 10) == "orderedqty") {
+			tot=tot + parseInt(e.value);
+	    }
+	}
+
+	myForm['totalquantity'].value=tot;
+	myForm['totalamount'].value=formatAmount(tot * myForm['unitprice'].value);
+	myForm['totalweight'].value=formatAmount(tot * myForm['unitweight'].value);
+}
+
+#formHeader("DorderForm.vm" "DorderSQL" "dorderid" $!entry.DorderId $mode)
+
+<tr>
+<td>
+    <table align=center cellpadding=0 cellspacing=0 border=0>
+      <tr>  
+   		#formCellDisabled ("ID" "dordercode" $!entry.DorderCode 20 100 1)
+			<td width=16>&nbsp;</td>
+        #formCellDateDefault ("Issued" "issueddate" $!entry.IssuedDate $!today 10 100 2)
+			<td width=16>&nbsp;</td>
+   		#formSelectStatus ("Status" "status" $!entry.Status 100 3)
+      </tr>
+    <tr>
+	<td>
+	&nbsp;
+	</td>
+    </tr>
+
+      <tr>
+   		#formSelectDistributor ("Distributor" "distributorid" $!entry.DistributorId 160 5)
+			<td width=16>&nbsp;</td>
+       	#formCellDateDefault ("Sale date" "salesdate" $!entry.SalesDate $!today 10 100 9)
+			<td width=16>&nbsp;</td>
+		#if ($!entry.Status==50)
+        	#formCellDate ("Closed" "closeddate" $!entry.ClosedDate 10 100 13)
+        #else
+        	#formCellDisabled ("Closed" "closeddate" $!entry.ClosedDate 10 100 13)
+        #end
+      </tr>
+      <tr>
+		#formLabel("Contract")
+		<td align="left">
+		<select name="dcontractid" tabIndex="6" value="$!entry.DcontractId" width="160" STYLE="width: 160px">
+		#foreach ($dcontract in $dcontracts)
+			<option value="$dcontract.DcontractId">$dcontract.DcontractCode</option>
+		#end        	
+		</select>
+		</td>
+			<td width=16>&nbsp;</td>
+       	#formCellDateTimeDefault ("Expected" "expectedtime" $!entry.ExpectedTime $!now 16 100 10)
+			<td width=16>&nbsp;</td>
+        #formCellNumDisabled ("Total Qty" "totalquantity" $!entry.TotalQuantity 10 100 14)
+      </tr>
+      <tr>
+   		#formSelectProduct ("Product" "productid" $!entry.ProductId 160 7)
+			<td width=16>&nbsp;</td>
+        #formCellAmount ("Unit Price" "unitprice" $!entry.UnitPrice 10 100 11)
+			<td width=16>&nbsp;</td>
+        #formCellAmountDisabled ("Total Amount" "totalamount" $!entry.TotalAmount 10 100 15)
+      </tr>
+      <tr>
+   		#formSelectProject ("Campaign" "projectid" $!entry.ProjectId 160 8)
+			<td width=16>&nbsp;</td>
+        #formCellAmount ("Unit Weight" "unitweight" $!entry.UnitWeight 10 100 12)
+			<td width=16>&nbsp;</td>
+        #formCellAmountDisabled ("Total Weight" "totalweight" $!entry.TotalWeight 10 100 16)
+      </tr>
+	</table>
+  </td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+
+	#if ($!mode=="insert")
+
+	<tr>
+	<td>
+			<table align="center" cellpadding=10 width="556" cellspacing=0 border=0 style="border: solid 2px #9CB886;">
+		<tr>
+			<td>
+	
+			<table align="center" cellpadding=0 width="100%" cellspacing=0 border=0>
+			<tr>
+				#formLabel("Locations from Order")
+				<td align="left">
+				<select name="copyorderid" tabIndex="16" value="1000" width="160" STYLE="width: 160px">
+					<option value="1000"> (all active locations)</option>
+				</select>
+				</td>
+				#formLabel("in Sales Area")
+				<td align="right">
+				<select name="copyareaid" tabIndex="16" value="1000" width="160" STYLE="width: 160px">
+					<option value="999">(*)</option>
+				#foreach ($salesarea in $salesareas)
+					<option value="$salesarea.SalesAreaId">$salesarea.SalesAreaName</option>
+				#end        	
+				</select>
+				</td>
+			</tr>
+			</table>
+	
+	
+			</td>
+		</tr>
+		</table>
+			</td>
+		</tr>
+	
+	
+		<tr>
+			<td>
+	
+			<table align="center" cellpadding=0 width="556" cellspacing=0 border=0>
+			<tr>
+			<td>
+			<input type="button" name="okButton" class=fbutton onclick="getLocations()" value="Copy values"  STYLE="width: 556px"/>
+			</td>
+			</tr>
+			</table>
+	
+	
+	</td>
+	</tr>
+	
+	<tr>
+	<td>
+	&nbsp;
+	</td>
+	</tr>
+
+	#end
+	
+<tr>
+<td>
+	<table align=center cellpadding=0 cellspacing=0 border=0>
+	<tr>
+		<td>
+		<table id="itemList" name="itemList" align=center cellpadding=0 cellspacing=0 border=0>
+			<tr class="toolbar" align="center">
+				<td>
+				<img src="$ui.image($ui.space)" width="16" height="16" border="0" alt="Add Item">
+				</td>
+				<td width="1"></td>
+
+	#if ($!mode=="insert")
+				<td width="379">Location</td>
+				<td width="40">Shipp.</td>
+				<td width="40">Sold</td>
+				<td width="40">Ret.</td>
+				<td width="40">Qty</td>
+	#else
+				<td width="400">Location</td>
+				<td width="139">Quantity</td>
+	#end
+
+
+			</tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+
+<input type="hidden" name="dordercode" value="$!entry.DorderCode">
+
+#documentFooter()
+
+	#if ($!mode=="insert")
+	<tr>
+	<td>
+	&nbsp;
+	</td>
+	</tr>
+	
+	<tr>
+	<td>
+			<table align="center" cellpadding=10 width="556" cellspacing=0 border=0>
+		<tr>
+			<td><span  style="color: #9CB886;">This text should be in manual, not here. You can choose from which fulfilled order would you like to copy
+			 values into this new order. Those values contain shipped quantity, sold quantity and return precentage by sales location 
+			 and should help you to enter new quantities for this order. Those values are just for your information.		 
+			 Further you can restrict those values only to specific sales area.</span>
+				</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+	#end
+	
+#formFooter("DorderForm.vm" "DorderSQL" "dorderid" $!entry.DorderId $mode)

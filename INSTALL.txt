@@ -1,0 +1,74 @@
+------------------------------------------------
+WHAT YOU NEED
+------------------------------------------------
+
+** Java SDK (j2sdk-1.4.2._01)
+http://java.sun.com/j2se/downloads.html
+
+** PostgreSQL (7.3.2 or later)
+postgresql-server-7.3.2 (Server)
+postgresql-7.3.2 (Client applications)
+
+** Tomcat (4.1.31)
+http://apache.roweboat.net/jakarta/tomcat-4/v4.1.31/bin/jakarta-tomcat-4.1.31-LE-jdk14.tar.gz
+
+** DReaM
+dream-1.0.0.tar.gz
+
+
+------------------------------------------------
+HOW TO INSTALL
+------------------------------------------------
+
+** Java SDK
+- install Java SDK let's say to /usr/local directory
+- export java home (export JAVA_HOME=/usr/local/j2sdk1.4.2_01)
+- you should probably put this export to '/etc/profile'
+
+** PostgreSQL database
+- login as root
+- change postgresql.conf (tcpip_socket = true)
+- take a look on pg_hba.conf (uncomment rights for localhost)
+- start postgresql server (/etc/init.d/postgresql start)
+- type 'su postgres'
+- create user dreamuser (createuser -a -d -P dreamuser)
+- enter password 'dreampass' for user dreamuser
+- create database dream (createdb dream)
+- start psql (psql dream)
+- create tables for dream (\i dream.sql)
+- don't pay attention on the errors, because script tries to drop some non existing tables before it creates new ones
+- exit from psql (\q)
+- logout from postgres user account (exit)
+- logout from root user account (exit)
+
+** Tomcat & DReaM
+- extract the Tomcat tar and copy files to let's say '/usr/local' directory
+- extract the Dream tar and copy files to Tomcat's '/webapps/dream' directory
+- edit 'TurbineResources.properties' in 'dream/WEB-INF/conf' directory and set these properties:
+  mail.server=
+  mail.smtp.from=
+  mail.pop3.host=
+  mail.pop3.user=
+  mail.pop3.password=
+- to receive emails turn on scheduler (in 'TurbineResources.properties' set 'scheduler.enabled=true')
+- run 'startup.sh' from Tomcat's '/bin' directory
+
+
+------------------------------------------------
+HOW TO RUN
+------------------------------------------------
+
+** Browser
+- open your browser (IE 6.0 or later or Mozilla 1.2 or later)
+- type url 'http://your_server:8080/dream/servlet/dream/'
+- login as user 'admin' password 'admn00'
+- create new roles and new users
+- logout as admin
+- login as some user
+- create some options
+- create some products
+- create some projects
+- create some customers
+- start using Dream
+
+Good luck! :-)

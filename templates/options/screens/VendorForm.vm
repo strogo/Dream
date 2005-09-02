@@ -1,0 +1,20 @@
+#set ( $module = "Options" )
+#formCommon()
+
+function formInit(){
+	highlight(myForm.vendorname);
+}
+
+function formValidate(){
+	if (parent.isEmpty(myForm.vendorname)) return false;
+	
+	return true;
+}
+
+#formHeader("VendorForm.vm" "VendorSQL" "vendorid" $!entry.VendorId $mode)
+
+      <tr>  
+        #formCell ("Name" "vendorname" $!entry.VendorName 50 200 1)
+      </tr>
+
+#formFooter("VendorForm.vm" "VendorSQL" "vendorid" $!entry.VendorId $mode)

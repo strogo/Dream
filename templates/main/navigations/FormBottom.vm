@@ -1,0 +1,32 @@
+<table cellpadding=0 cellspacing=0 border=0 width="100%">
+<tr>
+<td width="5">
+</td>
+<td>
+
+<table cellpadding=4 cellspacing=0 border=0 width="100%">
+<tr>
+<td colspan=2 height=5>
+</td>
+</tr>
+				    
+<tr valign="bottom" class=toolbar>
+<td nowrap>
+<a href=""><img src="$ui.image($ui.navNew)" width="24" height="24" border=0 alt="Add New"></a>
+<a href=""><img src="$ui.image($ui.navDelete)" width="24" height="24" border=0 alt="Delete Selected"></a>
+<a href=""><img src="$ui.image($ui.navPrint)" width="24" height="24" border=0 alt="Print"></a>
+</td>
+<td align=right nowrap>
+</td>
+<td align=right valign=center>
+    <input type="hidden" name="rdfid" value="$entry.RdfId"/>
+    <input type="submit" name="eventSubmit_doUpdate" class=fbutton value="Save"/>
+    <input type="submit" name="eventSubmit_doDelete"  class=fbutton value="Cancel"/>
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
